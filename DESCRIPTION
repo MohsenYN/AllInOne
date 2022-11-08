@@ -1,0 +1,31 @@
+Package: AllInOne
+Title: An Open-Source, Breeder-Friendly, Analytical Package, for Pre-processing Phenotypic Data.
+Version: 1.0.4
+Authors@R: c(person(given = "Mohsen",
+               family = "Yoosefzadeh Najafabadi",
+               role = c("aut","cre"),
+               email = "Myoosefz@uoguelph.ca",
+                  comment = c(ORCID = "0000-0003-3631-4493")),
+           person(given = "Ali",
+               family = "Heidari",
+               role = c("aut","com"),
+               email = "Alihdr@stu.usc.ac.ir",
+               comment = c(ORCID = "0000-0003-2087-4306","author of parallel support")),
+           person(given = "Istvan",
+               family = "Rajcan",
+               role = c("aut"),
+               email = "Irajcan@uoguelph.ca",
+               comment = c(ORCID = "0000-0001-5156-2482")))
+Description: AllInOne is an open-Source, R-Shiny user interface package designed to facilitate pre-processing of phenotypic data using different statistical methods in different pre-processing steps. Pre-processing steps in AllInone can be summarized as 1) detecting missing patterns in the dataset, 2) imputing missing data using different statistical methods, 3) data visualization in order to check data patterns and distribution, 4) detecting and refining outliers using quantile and/or cook’s distance methods, 5) estimating correlations among dependant variables and with and within independent variables, 6) normalizing data based on the optimum normalization methods for a given dataset, 6) estimating heritability and conducting spatial analysis, and finally, 7) calculating best linear unbiased prediction (BLUP) or/and best linear unbiased estimator (BLUE).
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Depends:
+    R (>= 2.10),
+    golem (>= 0.3.4),
+    dplyr (>= 1.0.10),
+    shiny (>= 1.7.2),
+    pkgload (>= 1.3.0),
+    data.table (>= 1.14.4)
+LazyData: true
