@@ -1,0 +1,109 @@
+:root {
+    --theme-color: #000;
+    --main-color: #C20430;
+    --secondary-color: #FFC72A;
+    --secondary2-color: #69A3B9;
+    --Just-color:#FFAA2A ;
+    --W: #FFFFFF;
+}
+
+
+.skin-red .main-header .logo, .skin-red .main-header .logo:hover, .skin-red .main-header .navbar {
+    background-color: var(--main-color);
+    margin: 0;
+}
+
+.skin-red .main-header .logo:hover {
+  transition: all .4s ease-out;
+    background-color: var(--Just-color);
+    color: var(--W);
+    box-shadow: 500px 0 0 rgb(0 0 0 / 30%) inset
+}
+
+
+.skin-red .left-side, .skin-red .main-sidebar, .skin-red .wrapper {
+    background-color: var(--theme-color);
+}
+
+.skin-red .sidebar-menu > li.active > a, .skin-red .sidebar-menu > li:hover > a {
+    border-left-color: var(--main-color);
+    background: var(--main-color);
+}
+
+.treeview-menu {
+    padding-bottom: 10px !important;
+    border: 3px solid var(--main-color) !important;
+}
+
+.title-image {
+    height: 110%;
+}
+
+
+.btn-default {
+    background-color: var(--main-color);
+    color: #fff;
+    box-shadow: 0 0 0 rgb(0 0 0 / 50%) inset
+}
+
+.btn-default:hover {
+    transition: all .4s ease-out;
+    background-color: var(--Just-color);
+    color: var(--Just-color);
+    box-shadow: 500px 0 0 rgb(0 0 0 / 50%) inset
+}
+
+.main-sidebar .btn-default {
+    width: calc(100% - 30px);
+}
+
+
+header.main-header {
+    display: -webkit-flex;
+    display: flex;
+    background-color: var(--main-color);
+}
+
+.skin-red .main-header .logo, .skin-red .main-header .logo:hover {
+    width: unset;
+    order: 1;
+}
+
+.MYNGuelph {
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    z-index: 2;
+    width: 50px;
+}
+
+.MYNHelp {
+    left: 15px;
+    bottom: 15px;
+    z-index: 2;
+    width: 100px;
+}
+
+.skin-red .main-header .navbar .sidebar-toggle:hover {
+    background-color: var(--Just-color);
+}
+
+.shiny-notification {
+    background-color: var(--main-color);
+    color: #fff;
+    border-radius: 6px !important;
+    margin: 10px;
+}
+
+#shiny-notification-panel {
+    padding: 8px;
+    width: 300px;
+}
+
+.shiny-notification-close {
+    color: inherit;
+}
+
+/*.sidebar-menu {*/
+/*    color: var(--secondary2-color);*/
+/*}*/
