@@ -7,7 +7,7 @@
 <br/>
 
 
-AllInOne is an open-Source, R-Shiny user interface package designed in the Plant Agriculture department at the University of Guelph to provide a broad range of pre-processing analysis features for phenotypic breeding datasets. This app uses different R packages, such as mice, VIM, lme4, bestNormalize, etc., to enable plant breeders to use all the mentioned packages simultaneously in an interactive environment. Furthermore, it allows plant breeders to edit, organize, subset, and sort datasets in a live mode.
+The AllInOne is an open-Source, R-Shiny user interface package designed in the Plant Agriculture department at the University of Guelph to provide a broad range of pre-processing analysis features for phenotypic breeding datasets. This app uses different R packages, such as mice, VIM, lme4, bestNormalize, etc., to enable plant breeders to use all the mentioned packages simultaneously in an interactive environment. Furthermore, it allows plant breeders to edit, organize, subset, and sort datasets in a live mode.
 
 ## Demo
 
