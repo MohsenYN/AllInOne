@@ -21,17 +21,16 @@ A running demo is on [shinyapps.io](https://AllInOne.alihdr.ir/app/).
 You can install the AllInOne using its source on your system like so:
 
 ``` r
-utils::install.packages('Path_to_AllInOne_main_folder', repos = NULL, type="source")
+remotes::install_local('E:/Projects/AllInOne-Test/')
 ```
-
+`
 ### Install from GitHub
 
 You can install the AllInOne using its source on you system like so:
 
 ``` r
-remotes::install_github('Myossefz/AllInOne')
+remotes::install_github('Mohsen1080/AllInOne')
 ```
-
 
 ## How to run
 
@@ -54,4 +53,3 @@ Any feedback you can provide would be greatly appreciated.
 <br/>
  
 ### ENJOY!
-   

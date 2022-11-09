@@ -50,7 +50,7 @@ golem::use_recommended_tests()
 
 ## Favicon ----
 # If you want to change the favicon (default is golem's one)
-golem::use_favicon() # path = "path/to/ico". Can be an online file.
+golem::use_favicon(path = "inst/app/Results/favicon.ico") # path = "path/to/ico". Can be an online file.
 # golem::remove_favicon() # Uncomment to remove the default favicon
 
 ## Add helper functions ----
@@ -63,18 +63,5 @@ golem::use_utils_server(with_test = TRUE)
 rstudioapi::navigateToFile("dev/02_dev.R")
 
 #usethis::use_package
-usethis::use_package('lmerTest')
-usethis::use_package('glue')
-usethis::use_package('data.table')
-usethis::use_package('DT')
-usethis::use_package('shinyjs')
-usethis::use_package('shinydisconnect')
-usethis::use_package('shinydashboard')
-usethis::use_package('ggplot2')
-usethis::use_package('gridExtra')
-usethis::use_package('lme4')
-usethis::use_package('VIM')
-usethis::use_package('tibble')
-usethis::use_package('readxl')
-usethis::use_package('dplyr')
-usethis::use_package('SpATS')
+# usethis::use_package('package_name')
+
