@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# <img src="inst/app/www/ALL.png" width="300px" align="left"/>
+# <img src="inst/app/www/Picture.png" width="600px" align="center"/>
 <br/>
 <br/>
 <br/>
