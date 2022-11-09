@@ -21,7 +21,7 @@ A running demo is on [shinyapps.io](https://AllInOne.alihdr.ir/app/).
 You can install the AllInOne using its source on your system like so:
 
 ``` r
-remotes::install_local('E:/Projects/AllInOne-Test/')
+remotes::install_local('E:/Projects/AllInOne/', force = TRUE)
 ```
 `
 ### Install from GitHub
