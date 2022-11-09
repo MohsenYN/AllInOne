@@ -6,3 +6,6 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+/rAvailablePackageCache.xml
+/rGraphicsSettings.xml
+/rSettings.xml
