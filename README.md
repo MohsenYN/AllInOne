@@ -1,4 +1,3 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # <img src="inst/app/www/Picture.png" width="600px" align="center"/>
@@ -21,7 +20,7 @@ A running demo is on [shinyapps.io](https://AllInOne.alihdr.ir/app/).
 You can install the AllInOne using its source on your system like so:
 
 ``` r
-remotes::install_local('path/to/allInOne/', force = TRUE)
+remotes::install_local('path/to/AllInOne/', force = TRUE)
 ```
 `
 ### Install from GitHub
