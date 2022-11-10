@@ -18,67 +18,6 @@ app_server <- function(input, output, session) {
     csv_value = NULL, blup_buffer = NULL, blup_temp = NULL
   )
 
-  upload_db <- function(address) {
-    data = NULL
-    db_flag = TRUE
-    if (base::is.null(address)) {
-      db_flag = FALSE
-      session$sendCustomMessage(
-        type = 'testmessage',
-        message = "Please select a dataset !")
-    }
-    else {
-      postfix = base::substring(address,
-                                base::nchar(address) - 3,
-                                base::nchar(address))
-      if (postfix == "xlsx")
-        data <- readxl::read_xlsx(address, sheet = 1)
-      else if (postfix == ".csv")
-        data <-
-          utils::read.csv(
-            address,
-            header = TRUE,
-            sep = ",",
-            fileEncoding = "UTF-8-BOM"
-          )
-      else if (postfix == ".txt")
-        data <-
-          utils::read.delim(address,
-                            header = TRUE,
-                            fileEncoding = "UTF-8-BOM")
-
-      else {
-        db_flag = FALSE
-        session$sendCustomMessage(type = 'testmessage',
-                                  message = "Please select a valid dataset !")
-      }
-
-      if (db_flag) { # When the database is uploaded correctly
-        # shiny::removeModal()
-        rv$outliers_row = NULL
-        rv$selected.col = NULL
-        rv$review_flag = TRUE
-        for (name in base::c(base::colnames(data), input$project_name)) {
-          str = base::strsplit(name, "")[[1]]
-
-          for (s in str) {
-            if (s %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
-              session$sendCustomMessage(
-                type = 'testmessage',
-                message = 'Column/Project name can not include " \ | ? * : < > and space')
-              db_flag = F
-              break
-            }
-          }
-        }
-        if (db_flag) {
-          rv$review_flag = TRUE
-          rv$data <- base::as.data.frame(data)
-        }
-      }
-    }
-  }
-
   show_slider <- function(str, k = 1) {
     rv$slider.str = str
     rv$slider.k = k

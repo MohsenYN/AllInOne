@@ -76,32 +76,6 @@ ExBLUE <- function(input, rv) {
     units = "cm"
   )
 
-  #####################################################################
-
-  df = stats::anova(Model)
-  df = base::as.data.frame(df)
-
-  df[['VarName']] <- base::row.names.data.frame(df)
-  buf = df[['VarName']]
-  df[['VarName']] = df[[1]]
-  df[[1]] = buf
-
-  buf = base::colnames(df)[[1]]
-  base::colnames(df)[[1]] = 'Variable Name'
-  base::colnames(df)[[base::which(base::colnames(df) == 'VarName')]] = buf
-
-  buf = df[['npar']]
-  df[['npar']] = df[[2]]
-  df[[2]] = buf
-
-  buf = base::colnames(df)[[2]]
-  base::colnames(df)[[2]] = 'Parameter Number'
-  base::colnames(df)[[base::which(base::colnames(df) == 'npar')]] = buf
-
-  utils::write.csv(df, 'Anova Table.csv', row.names = F)
-
-  #####################################################################
-
   if (base::is.null(Cof)) {
     MM.S <- base::eval(base::bquote(lmerTest::lmer(.(fix.F), data = data)))
   } else {
@@ -113,9 +87,17 @@ ExBLUE <- function(input, rv) {
 
   b <- lmerTest::ranova(MM.S)
   bb <- as.data.frame(b)
-
-  utils::write.csv(bb, 'Anova (random) Table.csv')
-
+  bb = bb[-1,]
+  new_rownames = NULL
+  for (i in rownames(bb)){
+    str = base::strsplit(i,'')[[1]][-c(2,3,4,5)]
+    buf = ''
+    for (j in str)
+      buf = paste0(buf, j)
+    new_rownames = c(new_rownames,buf)
+  }
+  rownames(bb) = new_rownames
+  utils::write.csv(bb, paste0(input$project_name, 'Anova (random effects) Table.csv'))
 
   # Sig. Level (Fix)
   # Anova table (fixed effects)
@@ -123,10 +105,11 @@ ExBLUE <- function(input, rv) {
   a <- stats::anova(MM.S)
   aa <- as.data.frame(a)
 
-  utils::write.csv(aa, 'Anova table (fixed effects).csv')
+  utils::write.csv(aa, paste0(input$project_name, 'Anova table (fixed effects).csv'))
 
-
-
+  base::sink("Summary of Model.txt")
+  base::print(base::summary(MM.S))
+  base::sink()
 
   MM.Sresid <- stats::residuals(MM.S, type = "pearson")
   MM.Sactual <- stats::predict(MM.S)
@@ -142,20 +125,20 @@ ExBLUE <- function(input, rv) {
       main = "Predicted vs Residual"
     )
   }
-  filesave('png', input$project_name, 'Predicted vs Residual', callback = p)
-  filesave('pdf', input$project_name, 'Predicted vs Residual', callback = p)
+  filesave('png', input$project_name, ' -- Predicted vs Residual', callback = p)
+  filesave('pdf', input$project_name, ' -- Predicted vs Residual', callback = p)
 
   p <- function(){
     car::qqPlot(MM.Sresid)
   }
-  filesave('png', input$project_name, 'MM_Sresid', callback = p)
-  filesave('pdf', input$project_name, 'MM_Sresid', callback = p)
+  filesave('png', input$project_name, ' -- Quantile Normality', callback = p)
+  filesave('pdf', input$project_name, ' -- Quantile Normality', callback = p)
 
   shapiro.test <- stats::shapiro.test(MM.Sresid)
   buffer <- base::as.data.frame(base::cbind(shapiro.test$statistic, shapiro.test$p.value))
   base::colnames(buffer) <- base::c("statistic (W)", "p.value")
   base::rownames(buffer) <- "Shapiro-Wilk normality test"
-  utils::write.csv(buffer, 'Shapiro-Wilk normality test.csv')
+  utils::write.csv(buffer, paste0(input$project_name, ' -- Shapiro-Wilk normality test.csv'))
 
   set_wd('Blue', 'out')
 }
