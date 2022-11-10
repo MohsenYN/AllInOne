@@ -33,7 +33,8 @@ ExBLUE <- function(input, rv) {
   }
 
   fixed_variables = base::unique(base::c(input$blue_fix, input$blue_fix_interact))
-  #TODO: fixed value should be extracted from input$help_(rand / fix)_blue
+  #in this case fixed value is extracted from checkboxes and are not editable by hand
+  #if fixed value should be extracted from input$help_(rand / fix)_blue you should change this part
 
   for (each_NameG in fixed_variables) {
     ._BLUE <- Model %>%
@@ -100,13 +101,35 @@ ExBLUE <- function(input, rv) {
   utils::write.csv(df, 'Anova Table.csv', row.names = F)
 
   #####################################################################
-  df = lmerTest::ranova(Model)
-  df = base::as.data.frame(df)
 
-  utils::write.csv(df, 'Anova (random) Table.csv', row.names = F)
+  if (base::is.null(Cof)) {
+    MM.S <- base::eval(base::bquote(lmerTest::lmer(.(fix.F), data = data)))
+  } else {
+    MM.S <- base::eval(base::bquote(lmerTest::lmer(.(fix.F), weights = base::get(Cof), data = data)))
+  }
 
-  MM.Sresid <- stats::residuals(Model, type = "pearson")
-  MM.Sactual <- stats::predict(Model)
+  # Sig. Level (Random)
+  # Anova table (random effect)
+
+  b <- lmerTest::ranova(MM.S)
+  bb <- as.data.frame(b)
+
+  utils::write.csv(bb, 'Anova (random) Table.csv')
+
+
+  # Sig. Level (Fix)
+  # Anova table (fixed effects)
+
+  a <- stats::anova(MM.S)
+  aa <- as.data.frame(a)
+
+  utils::write.csv(aa, 'Anova table (fixed effects).csv')
+
+
+
+
+  MM.Sresid <- stats::residuals(MM.S, type = "pearson")
+  MM.Sactual <- stats::predict(MM.S)
 
   # create plot
 
