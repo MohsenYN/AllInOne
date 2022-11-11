@@ -66,43 +66,63 @@ University of Guelph
 
 ##### We are proud of our partners:
 <br/>
+
 [<img src="inst/app/www/1.png" width="400px" align="center"/>](https://agriculture.canada.ca/en)
+
 <br/>
 <br/>
 <br/>
+
 [<img src="inst/app/www/2.png" width="400px" align="center"/>](https://www.uoguelph.ca/)
+
 <br/>
 <br/>
 <br/>
+
 [<img src="inst/app/www/3.png" width="200px" align="center"/>](https://genomecanada.ca/)
+
 <br/>
 <br/>
 <br/>
+
 [<img src="inst/app/www/4.png" width="200px" align="center"/>](https://www.genomequebec.com/)
+
 <br/>
 <br/>
 <br/>
+
 [<img src="inst/app/www/5.png" width="250px" align="center"/>](https://prograin.ca/)
+
 <br/>
 <br/>
 <br/>
+
 [<img src="inst/app/www/6.png" width="100px" align="center"/>](https://gfo.ca/)
+
 <br/>
 <br/>
 <br/>
+
 [<img src="inst/app/www/7.png" width="200px" align="center"/>](http://www.fieldcropresearch.ca/)
+
 <br/>
 <br/>
 <br/>
+
 [<img src="inst/app/www/8.png" width="200px" align="center"/>](https://cerom.qc.ca/)
+
 <br/>
 <br/>
 <br/>
+
 [<img src="inst/app/www/9.png" width="200px" align="center"/>](https://www.barleycanada.com/)
+
 <br/>
 <br/>
 <br/>
+
 [<img src="inst/app/www/10.png" width="200px" align="center"/>](https://sollio.ag/en)
+
 <br/>
 <br/>
 <br/>
@@ -112,7 +132,8 @@ University of Guelph
 <br/>
 <br/>
 <br/>
-<img src="inst/app/www/12.png" width="200px" align="center"/>(https://www.usask.ca/)
+
+[<img src="inst/app/www/12.png" width="200px" align="center"/>](https://www.usask.ca/)
 
 
 
