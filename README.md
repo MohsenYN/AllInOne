@@ -110,7 +110,7 @@ University of Guelph
 <br/>
 <br/>
 <br/>
-# [<img src="inst/app/www/12.png" width="200px" align="center"/>](https://www.usask.ca/)
+<img src="inst/app/www/12.png" width="200px" align="center"/>(https://www.usask.ca/)
 
 
 
