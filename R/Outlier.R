@@ -136,7 +136,7 @@ PoSiBlEoUtLieR <- function(input, rv) {
 
     for (gp in vars) {
       asfct = base::as.factor(rv$data[[gp]][1:base::length(d[[1]])])
-      if (base::length(base::levels(asfct)) <= User_Configuration$Maximum_Level_For_Group_By) {
+      if (base::length(base::levels(asfct)) <= rv$Maximum_Level_For_Group_By) {
         p <- ggplot2::ggplot(d, ggplot2::aes(x = obs, y = cd, label = txt)) +
           ggplot2::geom_bar(width = 0.5, stat = "identity", ggplot2::aes(fill = asfct)) +
           ggplot2::labs(fill = "Observation") +

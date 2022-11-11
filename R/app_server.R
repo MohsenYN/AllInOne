@@ -15,8 +15,15 @@ app_server <- function(input, output, session) {
     active_opt_ = 'db', slider.k = 1, filter.k = base::rep(base::list(base::list(search = "")), 500),
     selected.col = NULL, cor_temp = NULL, slider.str = '', filter_flag = 0,
     pdf_address = NULL, png_address = NULL, csv_address = NULL, review_flag = TRUE,
-    csv_value = NULL, blup_buffer = NULL, blup_temp = NULL
+    csv_value = NULL, blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
+    Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F
   )
+
+  observe({
+    rv$Maximum_Level_For_Group_By = input$Max_levels_GB
+    rv$Ignore_Reserved_Letters = input$Ign_Res_Wrd
+    rv$Replace_Reserved_Letters = input$Rep_Res_Wrd
+  })
 
   show_slider <- function(str, k = 1) {
     rv$slider.str = str
@@ -210,38 +217,43 @@ app_server <- function(input, output, session) {
     })
   })
 
-  check_name <- function(name) {
-    if (User_Configuration$Ignore_Reserved_Letters) {
-      base::return(T)
-    }
-    else if (User_Configuration$Replace_Reserved_Letters) {
-      #TODO: replacment is not applied on the column name yet.
-      #it returns the revised name here however now, caller expect true/false
-      str = base::strsplit(name, '')[[1]]
+  check_name <- function(name, force = F) {
 
-      for (c in 1:base::length(str)) {
-        if (str[c] %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
-          str[c] = '_'
+      if ((rv$Replace_Reserved_Letters | force) & name != '') {
+        str = base::strsplit(name, '')[[1]]
+        for (c in 1:base::length(str)) {
+          if (str[c] %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
+            str[c] = '_'
+          }
+        }
+        buf = ''
+        for (j in str)
+          buf = paste0(buf, j)
+        base::return(buf)
+      }
+
+      if (rv$Ignore_Reserved_Letters) {
+        base::return(name)
+      }
+
+      if (name == '')
+        base::return('')
+      str = base::strsplit(name, '')[[1]]
+      for (s in str) {
+        if (s %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
+          base::return('')
         }
       }
-      base::return(str)
-    }
-    if (name == '')
-      base::return(F)
-    str = base::strsplit(name, '')[[1]]
-    for (s in str) {
-      if (s %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
-        base::return(F)
-      }
-    }
-    base::return(T)
+      base::return(name)
+
+
   }
 
   shiny::observeEvent(input$new_col_name_btn, {
-    if (check_name(input$new_col_name)) {
-      base::colnames(rv$dataC)[base::which(base::names(rv$dataC) == input$columns_name_list)] <- input$new_col_name
+    if (check_name(input$new_col_name) != '') {
+      base::colnames(rv$dataC)[base::which(base::names(rv$dataC) == input$columns_name_list)] <- check_name(input$new_col_name)
     }else {
-      shiny::showNotification(shiny::helpText('Column names can not include " \ | ? * : < > and space'))
+      shiny::showNotification('Column names can not include " \ | ? * : < > and space')
     }
   })
 
@@ -523,7 +535,7 @@ app_server <- function(input, output, session) {
       #Remove variables with too much levels
       indep_cols = input$main_db_indep_val
       for (i in indep_cols) {
-        if (base::length(base::unique(rv$data[[i]])) > User_Configuration$Maximum_Level_For_Group_By) {
+        if (base::length(base::unique(rv$data[[i]])) > rv$Maximum_Level_For_Group_By) {
           indep_cols = base::subset(indep_cols, indep_cols != i)
         }
       }
@@ -621,13 +633,13 @@ app_server <- function(input, output, session) {
       else if (input$active_opt_2 == 'plots') {
         indep_cols = input$main_db_indep_val
         for (i in indep_cols) {
-          if (base::length(base::unique(rv$data[[i]])) > User_Configuration$Maximum_Level_For_Group_By) {
+          if (base::length(base::unique(rv$data[[i]])) > rv$Maximum_Level_For_Group_By) {
             indep_cols = base::subset(indep_cols, indep_cols != i)
             shiny::showNotification(
               base::paste0(
                 'The variable <<', i,
                 '>> is removed from independent variables list as it has more than ',
-                User_Configuration$Maximum_Level_For_Group_By, ' levels!'
+                rv$Maximum_Level_For_Group_By, ' levels!'
               )
             )
           }
@@ -676,13 +688,13 @@ app_server <- function(input, output, session) {
                            '>> is removed from independent variables list as it has less then two levels!'
               )
             )
-          } else if (base::length(base::unique(rv$data[[i]])) > User_Configuration$Maximum_Level_For_Group_By) {
+          } else if (base::length(base::unique(rv$data[[i]])) > rv$Maximum_Level_For_Group_By) {
             indep_cols = base::subset(indep_cols, indep_cols != i)
             shiny::showNotification(
               base::paste0(
                 'The variable <<', i,
                 '>> is removed from independent variables list as it has more than ',
-                User_Configuration$Maximum_Level_For_Group_By, ' levels!'
+                rv$Maximum_Level_For_Group_By, ' levels!'
               )
             )
           }
@@ -1477,11 +1489,18 @@ app_server <- function(input, output, session) {
     show_slider("Outlier")
   })
 
+  observeEvent(input$project_name, {
+    shiny::updateTextInput(
+      inputId = 'project_name',
+      label = "Project Name",
+      value = check_name(input$project_name, T))
+  })
+
   shiny::observeEvent(input$create_db, {
     if(!is.null(rv$dataC)){
       flag = T
       for (col in base::c(base::colnames(rv$dataC), input$project_name)) {
-        if (!check_name(col)) {
+        if (check_name(col) == '') {
           flag = F
           break
         }
@@ -1489,7 +1508,6 @@ app_server <- function(input, output, session) {
       if (flag) {
         shiny::removeModal()
         rv$data <- base::as.data.frame(rv$dataC)
-        # User_Configuration$Path_For_Saving_Results = input$Results_dir
         rv$outliers_row = NULL
         rv$selected.col = NULL
         rv$review_flag = TRUE
@@ -1596,7 +1614,7 @@ app_server <- function(input, output, session) {
 
   shiny::observeEvent(input$filter_outlier_reset, {
     rv$selected.col = NULL
-    for (i in 1:base::length(base::colnames(rv$data))) {
+    for (i in 1:base::length(rv$filter.k)) {
       rv$filter.k[[i]]$search = 'k'
       rv$filter.k[[i]]$search = ''
     }

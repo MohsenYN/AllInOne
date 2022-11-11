@@ -54,6 +54,31 @@ interface <- shiny::fluidPage(
   shiny::uiOutput('information')
 )
 
+menu_setting <- shinydashboard::menuItem(
+  "Setting",
+  icon = shiny::icon("wrench", lib = 'glyphicon'),
+  tabName = "Setting",
+  numericInput(
+    'Max_levels_GB',
+    'The maximum level number for groupby:',
+    20,
+    5,
+    100,
+    '100%'
+  ),
+  checkboxInput(
+    'Ign_Res_Wrd',
+    'Ignore reserved words in names?',
+    T
+  )
+  ,
+  checkboxInput(
+    'Rep_Res_Wrd',
+    'Replace reserved words in names?',
+    F
+  )
+)
+
 menu_db <- shinydashboard::menuItem(
   "Dataset",
   icon = shiny::icon("download"),
@@ -98,6 +123,7 @@ sidebar <- shinydashboard::dashboardSidebar({
     menu_operators,
     shiny::uiOutput('content_3'), #Outliers content
     shiny::uiOutput('content_7'), #apply changes outliers
+    menu_setting,
     shiny::a(href="mailto:myoosefz@uoguelph.ca",shiny::img(src="www/Picture3.png", class="MYNHelp"))
   )
 })

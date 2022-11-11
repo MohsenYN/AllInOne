@@ -55,7 +55,7 @@ CheckMissing <- function(input, rv) {
            func_pp)
 
   indepV <- base::as.data.frame(input$main_db_indep_val)
-  for (i in 1:base::nrow(indepV)) if (base::length(base::unique(rv$data[[i]])) <= User_Configuration$Maximum_Level_For_Group_By) {
+  for (i in 1:base::nrow(indepV)) if (base::length(base::unique(rv$data[[i]])) <= rv$Maximum_Level_For_Group_By) {
 
     A <- indepV[i,] #Each single independent variables names
     SelectedV <- rv$data %>%
