@@ -61,10 +61,9 @@ University of Guelph
 ### ENJOY!
 <br/>
 <br/>
-<br/>
-<br/>
 
-##### We are proud of our partners:
+
+#### We are proud of our partners:
 <br/>
 
 [<img src="inst/app/www/1.png" width="400px" align="center"/>](https://agriculture.canada.ca/en)
