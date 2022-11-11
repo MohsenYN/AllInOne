@@ -218,35 +218,33 @@ app_server <- function(input, output, session) {
   })
 
   check_name <- function(name, force = F) {
+    if (name == '')
+      base::return('')
 
-      if ((rv$Replace_Reserved_Letters | force) & name != '') {
-        str = base::strsplit(name, '')[[1]]
-        for (c in 1:base::length(str)) {
-          if (str[c] %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
-            str[c] = '_'
-          }
-        }
-        buf = ''
-        for (j in str)
-          buf = paste0(buf, j)
-        base::return(buf)
-      }
-
-      if (rv$Ignore_Reserved_Letters) {
-        base::return(name)
-      }
-
-      if (name == '')
-        base::return('')
+    if (rv$Replace_Reserved_Letters | force) {
       str = base::strsplit(name, '')[[1]]
-      for (s in str) {
-        if (s %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
-          base::return('')
+      for (c in 1:base::length(str)) {
+        if (str[c] %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
+          str[c] = '_'
         }
       }
+      buf = ''
+      for (j in str)
+        buf = base::paste0(buf, j)
+      base::return(buf)
+    }
+
+    if (rv$Ignore_Reserved_Letters) {
       base::return(name)
+    }
 
-
+    str = base::strsplit(name, '')[[1]]
+    for (s in str) {
+      if (s %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
+        base::return('')
+      }
+    }
+    base::return(name)
   }
 
   shiny::observeEvent(input$new_col_name_btn, {
