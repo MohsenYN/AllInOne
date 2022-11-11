@@ -54,7 +54,7 @@ app_server <- function(input, output, session) {
               '<img
           src="',file_address,'" ,
           style="width:100%;height:auto;object-fit:contain",
-          alt = "This plot is not availabe due to your data or arguments!",
+          alt = " This plot is not availabe based on your data or the used arguments!",
           >'
             )
           )
@@ -163,10 +163,10 @@ app_server <- function(input, output, session) {
       shiny::tagList(
         shiny::helpText(mice_help[[input$impute_method]]),
         shiny::textInput('mice_input_m',
-                         'Please specify the Number of multiple imputations',
+                         'Please specify the number of multiple imputations',
                          value = 5),
         shiny::textInput('mice_input_maxit',
-                         'Please specify the maxit number',
+                         'Please specify the number of iteration',
                          value = 5, placeholder = 'A scalar giving the number of iterations'),
         shiny::textInput('mice_input_seed',
                          'Please specify the seed number',
@@ -409,7 +409,7 @@ app_server <- function(input, output, session) {
         if (User_Configuration$Debuge_Mode)
           shiny::showNotification(e$message)
         else
-          shiny::showNotification('Incorrect arguments, Please review your data!')
+          shiny::showNotification('Incorrect arguments, please review your data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -452,7 +452,7 @@ app_server <- function(input, output, session) {
         if (User_Configuration$Debuge_Mode)
           shiny::showNotification(e$message)
         else
-          shiny::showNotification('Incorrect arguments, Please review your data!')
+          shiny::showNotification('Incorrect arguments, please review your data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -652,7 +652,7 @@ app_server <- function(input, output, session) {
               str = base::paste0(str, ' and ', n)
         }
         if (!base::is.null(str))
-          shiny::showNotification(base::paste0('Not being continuous, it is not possible to draw plots for the following trait(s) : ', str))
+          shiny::showNotification(base::paste0('Only continuous variables, it is not possible to draw plots for the following variable(s) : ', str))
         shiny::showModal(
           shiny::modalDialog(
             title = 'Data Visualization',
@@ -909,7 +909,7 @@ app_server <- function(input, output, session) {
       else if (input$her_action == 'blup') {
         shiny::showModal(shiny::modalDialog(
           shiny::selectInput('blup_resp',
-                             'Please select response variable',
+                             'Please select dependant variable',
                              choices = dep_cols
           ),
           shiny::selectInput('blup_indep',
@@ -918,7 +918,7 @@ app_server <- function(input, output, session) {
           ),
           if (base::length(dep_cols) > 1)
             shiny::selectInput('blup_cof',
-                               'Please select a cofactor variable (if there is any)',
+                               'Please select cofactor variable (if there is any)',
                                choices = dep_cols, multiple = TRUE
             ),
           shiny::checkboxGroupInput('her_rand',
@@ -980,7 +980,7 @@ app_server <- function(input, output, session) {
 
   shiny::observeEvent(input$indep_blue_btn, {
     if (base::length(input$blue_cof) > 2)
-      shiny::showNotification('You can not select more than 1 co-factor!')
+      shiny::showNotification('You can only select one co-factor!')
     else if (base::is.null(input$rv_blue_rand))
       shiny::showNotification('Please select variable(s) first!')
     else {
@@ -1103,7 +1103,7 @@ app_server <- function(input, output, session) {
       res = base::paste0(res, f)
     }
 
-    shiny::textInput('rv_blue_fix', value = res, label = 'BLUE fixed formula')
+    shiny::textInput('rv_blue_fix', value = res, label = 'BLUE fixed equation')
   })
 
   output$help_rand_blue <- shiny::renderUI({
@@ -1135,7 +1135,7 @@ app_server <- function(input, output, session) {
       }
       res = base::paste0(res, f)
     }
-    shiny::textInput('rv_blue_rand', value = res, label = 'BLUE Random formula')
+    shiny::textInput('rv_blue_rand', value = res, label = 'BLUE Random equation')
   })
 
   output$help_fix_outlier <- shiny::renderUI({
@@ -1169,7 +1169,7 @@ app_server <- function(input, output, session) {
       res = base::paste0(res, f)
     }
 
-    shiny::textInput('rv_outlier_fix', value = res, label = 'Fixed formula')
+    shiny::textInput('rv_outlier_fix', value = res, label = 'Fixed equation')
   })
 
   output$help_rand_outlier <- shiny::renderUI({
@@ -1201,7 +1201,7 @@ app_server <- function(input, output, session) {
       }
       res = base::paste0(res, f)
     }
-    shiny::textInput('rv_outlier_rand', value = res, label = 'Random formula')
+    shiny::textInput('rv_outlier_rand', value = res, label = 'Random equation')
   })
 
   output$help_her <- shiny::renderUI({
@@ -1244,7 +1244,7 @@ app_server <- function(input, output, session) {
         if (User_Configuration$Debuge_Mode)
           shiny::showNotification(e$message)
         else
-          shiny::showNotification('Incorrect arguments, Please review your data!')
+          shiny::showNotification('Incorrect arguments, please review your data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1256,7 +1256,7 @@ app_server <- function(input, output, session) {
     if (input$rv_her == '')
       shiny::showNotification('Please select variable(s) first!')
     else if (base::length(input$blup_cof) > 1)
-      shiny::showNotification('You can not select more than 1 co-factor!')
+      shiny::showNotification('You can only select one co-factor!')
     else {
       shiny::removeModal()
       if (base::dir.exists(app_sys("app/Results/blup")))
@@ -1268,7 +1268,7 @@ app_server <- function(input, output, session) {
         if (User_Configuration$Debuge_Mode)
           shiny::showNotification(e$message)
         else
-          shiny::showNotification('Incorrect arguments, Please review your data!')
+          shiny::showNotification('Incorrect arguments, please review your data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1280,7 +1280,7 @@ app_server <- function(input, output, session) {
   shiny::observeEvent(input$indep_cor_btn, {
     if ((input$cor_opt == 'Intra correlation' && base::length(input$indep_cor) == 0) |
       (input$cor_opt == 'Intra correlation' && base::length(input$dep_cor) != 2)) {
-      shiny::showNotification('Please selecet 2 dependent variables and at least one independent variable')
+      shiny::showNotification('Please selecet two dependent variables and at least one independent variable')
     }else {
       if (base::dir.exists(app_sys("app/Results/Correlation")))
         base::unlink(app_sys("app/Results/Correlation"), recursive = TRUE)
@@ -1292,7 +1292,7 @@ app_server <- function(input, output, session) {
         if (User_Configuration$Debuge_Mode)
           shiny::showNotification(e$message)
         else
-          shiny::showNotification('Incorrect arguments, Please review your data!')
+          shiny::showNotification('Incorrect arguments, please review your data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1313,7 +1313,7 @@ app_server <- function(input, output, session) {
         if (User_Configuration$Debuge_Mode)
           shiny::showNotification(e$message)
         else
-          shiny::showNotification('Incorrect arguments, Please review your data!')
+          shiny::showNotification('Incorrect arguments, please review your data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1338,7 +1338,7 @@ app_server <- function(input, output, session) {
           if (User_Configuration$Debuge_Mode)
             shiny::showNotification(e$message)
           else
-            shiny::showNotification('Incorrect arguments, Please review your data!')
+            shiny::showNotification('Incorrect arguments, please review your data!')
           # base::setwd("../../")
         })
         waiter$hide()
@@ -1356,7 +1356,7 @@ app_server <- function(input, output, session) {
           if (User_Configuration$Debuge_Mode)
             shiny::showNotification(e$message)
           else
-            shiny::showNotification('Incorrect arguments, Please review your data!')
+            shiny::showNotification('Incorrect arguments, please review your data!')
           # base::setwd("../../")
         })
         waiter$hide()
@@ -1373,7 +1373,7 @@ app_server <- function(input, output, session) {
           if (User_Configuration$Debuge_Mode)
             shiny::showNotification(e$message)
           else
-            shiny::showNotification('Incorrect arguments, Please review your data!')
+            shiny::showNotification('Incorrect arguments, please review your data!')
           # base::setwd("../../")
         })
         waiter$hide()
@@ -1390,7 +1390,7 @@ app_server <- function(input, output, session) {
           if (User_Configuration$Debuge_Mode)
             shiny::showNotification(e$message)
           else
-            shiny::showNotification('Incorrect arguments, Please review your data!')
+            shiny::showNotification('Incorrect arguments, please review your data!')
           # base::setwd("../../")
           waiter$hide()
         })
@@ -1415,7 +1415,7 @@ app_server <- function(input, output, session) {
       if (User_Configuration$Debuge_Mode)
         shiny::showNotification(e$message)
       else
-        shiny::showNotification('Incorrect arguments, Please review your data!')
+        shiny::showNotification('Incorrect arguments, please review your data!')
       # base::setwd("../../")
     })
     waiter$hide()
@@ -1435,7 +1435,7 @@ app_server <- function(input, output, session) {
       if (User_Configuration$Debuge_Mode)
         shiny::showNotification(e$message)
       else
-        shiny::showNotification('Incorrect arguments, Please review your data!')
+        shiny::showNotification('Incorrect arguments, please review your data!')
       # base::setwd("../../")
     })
     waiter$hide()
@@ -1572,7 +1572,7 @@ app_server <- function(input, output, session) {
     } else if (ath_flag) {
       session$sendCustomMessage(
         type = 'testmessage',
-        message = 'Please select at least 2 variables to interact!')
+        message = 'Please select at least two variables to interact!')
     }
 
   })
@@ -1664,7 +1664,7 @@ app_server <- function(input, output, session) {
         if (User_Configuration$Debuge_Mode)
           shiny::showNotification(e$message)
         else
-          shiny::showNotification('Incorrect arguments, Please review your data!')
+          shiny::showNotification('Incorrect arguments, please review your data!')
         # base::setwd("../../")
       })
       waiter$hide()
