@@ -104,6 +104,10 @@ header.main-header {
     color: inherit;
 }
 
+body {
+    padding-right: 0 !important;
+}
+
 /*.sidebar-menu {*/
 /*    color: var(--secondary2-color);*/
 /*}*/
