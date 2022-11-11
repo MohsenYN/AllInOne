@@ -43,12 +43,19 @@ You can run the application by just running `app.R` without installing the packa
 AllInOne::run_app()
 ```
 
-## Let us know
-What do you think about AllInOne?
+## What do you think about AllInOne?
+
+Let us know :)
 <br/>
-Is there anything you particularly like or don't?
+
+[Mohsen Yoosefzadeh Najafabadi](mailto:myoosefz@uoguelph.ca?subject=[GitHub]%20question/feedback%20about%20AllInOne)
+
+Soybean Breeding & Computational Biology
 <br/>
-Any feedback you can provide would be greatly appreciated.
+Department of Plant Agriculture
 <br/>
+University of Guelph
+<br/>
+
  
 ### ENJOY!
