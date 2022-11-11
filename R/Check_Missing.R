@@ -81,5 +81,5 @@ CheckMissing <- function(input, rv) {
 
   }
 
-  set_wd('Missing Values', 'out')
+  set_wd('Missing Values', rv)
 }

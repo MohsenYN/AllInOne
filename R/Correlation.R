@@ -648,5 +648,5 @@ CoReLaTiOnSS <- function(input, rv) {
     }
   }
 
-  set_wd('Correlation', 'out')
+  set_wd('Correlation', rv)
 }

@@ -83,5 +83,5 @@ BLUP <- function(input, rv) {
             base::paste0(input$project_name, " -- Variance poportaion for ", input$blup_resp, ".csv"),
             row.names = FALSE)
 
-  set_wd('Blup', 'out')
+  set_wd('Blup', rv)
 }

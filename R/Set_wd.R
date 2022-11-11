@@ -4,21 +4,21 @@
 #'
 #' @noRd
 
-set_wd <- function (str, set = 'in'){
-  if (set == 'in') {
+set_wd <- function (str, rv = NULL){
+  if (is.null(rv)) {
     base::setwd(app_sys("app/Results"))
     if (!base::dir.exists(str))
       base::dir.create(str)
     base::setwd(str)
   }
-  else if(set == 'out'){
-    if(!base::dir.exists(User_Configuration$Path_For_Saving_Results))
+  else{
+    if(!base::dir.exists(rv$Path_For_Saving_Results))
       shiny::showNotification(paste0('There is no directory for Results'))
     else{
       base::setwd('../')
       base::file.copy(
         str,
-        User_Configuration$Path_For_Saving_Results,
+        rv$Path_For_Saving_Results,
         recursive = T,
         overwrite = T
       )

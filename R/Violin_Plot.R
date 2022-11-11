@@ -41,5 +41,5 @@ CheckVIO <- function(input, rv) {
       }
     }
   }
-  set_wd('Box Plots', 'out')
+  set_wd('Box Plots', rv)
 }

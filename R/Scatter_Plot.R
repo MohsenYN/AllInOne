@@ -17,5 +17,5 @@ CheckSatterplot <- function(input, rv) {
   filesave('png', input$project_name, " -- Scatter plot ", p)
   filesave('pdf', input$project_name, " -- Scatter plot ", p)
 
-  set_wd('Box Plots', 'out')
+  set_wd('Box Plots', rv)
 }

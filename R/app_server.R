@@ -16,7 +16,7 @@ app_server <- function(input, output, session) {
     selected.col = NULL, cor_temp = NULL, slider.str = '', filter_flag = 0,
     pdf_address = NULL, png_address = NULL, csv_address = NULL, review_flag = TRUE,
     csv_value = NULL, blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
-    Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F
+    Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F, Path_For_Saving_Results = 'C:/Users/Alihdr/Desktop/Results'
   )
 
   observe({

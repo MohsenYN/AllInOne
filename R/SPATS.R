@@ -176,5 +176,5 @@ ExSPATS <- function(input, rv) {
     height = 15,
     units = "cm"
   )
-  set_wd('spatial analysis', 'out')
+  set_wd('spatial analysis', rv)
 }

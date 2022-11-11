@@ -265,5 +265,5 @@ NormaLiZaTIoN <- function(input, rv) {
     }
   }
 
-  set_wd('Normalization', 'out')
+  set_wd('Normalization', rv)
 }
