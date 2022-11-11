@@ -61,4 +61,5 @@ Depends:
     lme4,
     readxl ,
     VIM ,
-    waiter
+    waiter,
+    lmerTest
