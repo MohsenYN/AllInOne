@@ -59,3 +59,7 @@ University of Guelph
 
  
 ### ENJOY!
+
+##### We are proud of our partners:
+# [<img src="inst/app/www/PictureRM.png" width="600px" align="center"/>](https://github.com/Mohsen1080)
+<br/>
