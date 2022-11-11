@@ -60,4 +60,5 @@ Depends:
     DT (>= 0.26),
     lme4,
     readxl (>= 1.4.1),
-    VIM (>= 6.2.2)
+    VIM (>= 6.2.2),
+    waiter
