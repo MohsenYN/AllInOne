@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/inst/app/Results/Blue" />
+      <excludeFolder url="file://$MODULE_DIR$/inst/app/Results/Box Plots" />
+      <excludeFolder url="file://$MODULE_DIR$/inst/app/Results/Outlier" />
+      <excludeFolder url="file://$MODULE_DIR$/inst/app/Results/Refine" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
