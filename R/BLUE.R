@@ -97,7 +97,7 @@ ExBLUE <- function(input, rv) {
     new_rownames = c(new_rownames,buf)
   }
   rownames(bb) = new_rownames
-  utils::write.csv(bb, paste0(input$project_name, 'Anova (random effects) Table.csv'))
+  utils::write.csv(bb, paste0(input$project_name, '-- Anova (random effects) Table.csv'))
 
   # Sig. Level (Fix)
   # Anova table (fixed effects)
@@ -105,7 +105,7 @@ ExBLUE <- function(input, rv) {
   a <- stats::anova(MM.S)
   aa <- as.data.frame(a)
 
-  utils::write.csv(aa, paste0(input$project_name, 'Anova table (fixed effects).csv'))
+  utils::write.csv(aa, paste0(input$project_name, '-- Anova table (fixed effects).csv'))
 
   base::sink("Summary of Model.txt")
   base::print(base::summary(MM.S))
