@@ -13,7 +13,7 @@ ExSPATS <- function(input, rv) {
     utils::install.packages("viridis")
   pkgs = base::rownames(utils::installed.packages())
   if(!('SpATS' %in% pkgs) | !('viridis' %in% pkgs)){
-    shiny::showNotification('Installing SpATS and/or viridis package(s) failed!')
+    shiny_showNotification(rv ,'Installing SpATS and/or viridis package(s) failed!')
     return(F)
   }
   set_wd('spatial analysis')

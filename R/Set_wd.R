@@ -13,7 +13,7 @@ set_wd <- function (str, rv = NULL){
   }
   else{
     if(!base::dir.exists(rv$Path_For_Saving_Results))
-      shiny::showNotification(paste0('There is no directory for Results'))
+      shiny_showNotification(rv ,paste0('There is no directory for Results'))
     else{
       base::setwd('../')
       base::file.copy(

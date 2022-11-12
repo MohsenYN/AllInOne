@@ -96,8 +96,8 @@ header.main-header {
 }
 
 #shiny-notification-panel {
-    padding: 8px;
-    width: 300px;
+    padding: 4px;
+    width: 400px;
 }
 
 .shiny-notification-close {

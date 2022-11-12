@@ -139,7 +139,7 @@ PoSiBlEoUtLieR <- function(input, rv) {
       if (base::length(base::levels(asfct)) <= rv$Maximum_Level_For_Group_By) {
         p <- ggplot2::ggplot(d, ggplot2::aes(x = obs, y = cd, label = txt)) +
           ggplot2::geom_bar(width = 0.5, stat = "identity", ggplot2::aes(fill = asfct)) +
-          ggplot2::labs(fill = "Observation") +
+          ggplot2::labs(fill = gp) +
           ggplot2::ylim(0, k$maxx) +
           ggplot2::ylab("Cook's D") +
           ggplot2::xlab("Observation") +
@@ -151,27 +151,29 @@ PoSiBlEoUtLieR <- function(input, rv) {
                             colour = "darkred", label = base::paste("Threshold:", base::round(k$ts, 3))) +
           ggplot2::theme_classic()
 
-        grDevices::png(base::paste0(input$project_name, ' -- cooks distance plot grouped by ', gp, '.png'))
+        grDevices::png(base::paste0(input$project_name, ' -- cooks distance plot grouped by ', gp, '.png'),
+                       width = get_width(rv, 3))
         base::invisible(base::print(p))
         grDevices::dev.off()
 
-        grDevices::pdf(base::paste0(input$project_name, ' -- cooks distance plot grouped by ', gp, '.pdf'))
-        base::invisible(base::print(p))
-        grDevices::dev.off()
+        # grDevices::pdf(base::paste0(input$project_name, ' -- cooks distance plot grouped by ', gp, '.pdf'))
+        # base::invisible(base::print(p))
+        # grDevices::dev.off()
       }else {
-        shiny::showNotification(base::paste0('As the ', gp, ' column has ',
+        shiny_showNotification(rv ,base::paste0('As the ', gp, ' column has ',
                                              base::length(base::levels(asfct)), ' Levels we ignore it for grouped by plots'))
       }
     }
 
     ##############################
-    grDevices::png(base::paste0(input$project_name, ' --  DFFIT plot.png'))
+    grDevices::png(base::paste0(input$project_name, ' --  DFFIT plot.png'),
+                   width = get_width(rv, 3))
     base::invisible(base::print(olsrr::ols_plot_dffits(model)))
     grDevices::dev.off()
 
-    grDevices::pdf(base::paste0(input$project_name, ' --  DFFIT plot.pdf'))
-    base::invisible(base::print(olsrr::ols_plot_dffits(model)))
-    grDevices::dev.off()
+    # grDevices::pdf(base::paste0(input$project_name, ' --  DFFIT plot.pdf'))
+    # base::invisible(base::print(olsrr::ols_plot_dffits(model)))
+    # grDevices::dev.off()
     ##############################
     p <- ggplot2::ggplot(d, ggplot2::aes(x = obs, y = cd, label = txt)) +
       ggplot2::geom_bar(width = 0.5,
@@ -192,13 +194,14 @@ PoSiBlEoUtLieR <- function(input, rv) {
                         colour = "darkred", label = base::paste("Threshold:",
                                                                 base::round(k$ts, 3))) +
       ggplot2::theme_classic()
-    grDevices::png(base::paste0(input$project_name, ' -- cooks distance bar.png'))
+    grDevices::png(base::paste0(input$project_name, ' -- cooks distance bar.png'),
+                   width = get_width(rv, 3))
     base::invisible(base::print(p))
     grDevices::dev.off()
 
-    grDevices::pdf(base::paste0(input$project_name, ' -- cooks distance bar.pdf'))
-    base::invisible(base::print(p))
-    grDevices::dev.off()
+    # grDevices::pdf(base::paste0(input$project_name, ' -- cooks distance bar.pdf'))
+    # base::invisible(base::print(p))
+    # grDevices::dev.off()
     ##############################
     p <- ggplot2::ggplot(d, ggplot2::aes(x = obs, y = cd, label = txt, ymin = base::min(cd), ymax = cd)) +
       ggplot2::geom_linerange(colour = "blue") +
@@ -213,21 +216,21 @@ PoSiBlEoUtLieR <- function(input, rv) {
                         fontface = "italic", colour = "darkred",
                         label = base::paste("Threshold:", base::round(k$ts, 3))) +
       ggplot2::theme_classic()
-    grDevices::png(base::paste0(input$project_name, ' -- cooks distance chart.png'))
+    grDevices::png(base::paste0(input$project_name, ' -- cooks distance chart.png'), width = get_width(rv, 3))
     base::invisible(base::print(p))
     grDevices::dev.off()
 
-    grDevices::pdf(base::paste0(input$project_name, ' -- cooks distance chart.pdf'))
-    base::invisible(base::print(p))
-    grDevices::dev.off()
+    # grDevices::pdf(base::paste0(input$project_name, ' -- cooks distance chart.pdf'))
+    # base::invisible(base::print(p))
+    # grDevices::dev.off()
     ##############################
-    grDevices::png(base::paste0(input$project_name, ' -- cooks distance Hadi plot.png'))
+    grDevices::png(base::paste0(input$project_name, ' -- cooks distance Hadi plot.png'), width = get_width(rv, 3))
     base::invisible(base::print(olsrr::ols_plot_hadi(model)))
     grDevices::dev.off()
 
-    grDevices::pdf(base::paste0(input$project_name, ' -- cooks distance Hadi plot.pdf'))
-    base::invisible(base::print(olsrr::ols_plot_hadi(model)))
-    grDevices::dev.off()
+    # grDevices::pdf(base::paste0(input$project_name, ' -- cooks distance Hadi plot.pdf'))
+    # base::invisible(base::print(olsrr::ols_plot_hadi(model)))
+    # grDevices::dev.off()
     ##############################
     grDevices::png(base::paste0(input$project_name, ' -- cooks distance resid plot.png'))
     base::invisible(base::print(olsrr::ols_plot_resid_pot(model)))

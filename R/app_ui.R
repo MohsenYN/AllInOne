@@ -66,6 +66,26 @@ menu_setting <- shinydashboard::menuItem(
     100,
     '100%'
   ),
+  numericInput(
+    'notif_delay',
+    'Number of seconds to display the alert message',
+    8,
+    1,
+    60,
+    '100%'
+  ),
+  selectInput(
+    'notif_size',
+    'Size of the alert message',
+    choices = base::list(
+      'Very Big' = '2',
+      'Big' = '3',
+      'Normal Interactions' = '4',
+      'Small' = '5',
+      'Very Small' = '6'
+    ),
+    selected = '4'
+  ),
   checkboxInput(
     'Ign_Res_Wrd',
     'Ignore reserved words in names?',
