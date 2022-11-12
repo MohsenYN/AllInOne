@@ -71,8 +71,8 @@ BLUP <- function(input, rv) {
     base::invisible(base::print(var))
   }
 
-  filesave('png', input$project_name, ' - Variance Porportion', p1)
-  filesave('pdf', input$project_name, ' - Variance Porportion', p1)
+  filesave('png', input$project_name, ' -- Variance Porportion', p1)
+  filesave('pdf', input$project_name, ' -- Variance Porportion', p1)
 
 
   utils::write.csv(rv$blup_temp,
