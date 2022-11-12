@@ -1506,6 +1506,13 @@ app_server <- function(input, output, session) {
     show_slider("Outlier")
   })
 
+  observeEvent(input$new_col_name, {
+    shiny::updateTextInput(
+      inputId = 'new_col_name',
+      label = 'New Name:',
+      value = check_name(input$new_col_name, T))
+  })
+
   observeEvent(input$project_name, {
     shiny::updateTextInput(
       inputId = 'project_name',
