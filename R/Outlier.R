@@ -117,24 +117,24 @@ PoSiBlEoUtLieR <- function(input, rv) {
 
     fix.F <- stats::as.formula(base::paste(input$outlier_resp, base::paste(vars, collapse = " + "), sep = " ~ "))
 
-    model <- lm(fix.F, data = rv$data)
+    model <- stats::lm(fix.F, data = rv$data)
     k <- olsrr::ols_prep_cdplot_data(model)
     d <- olsrr::ols_prep_outlier_obs(k)
     f <- olsrr::ols_prep_cdplot_outliers(k)
 
     buf = k$ckd
-    buf[['obs']] <- NULL
+    buf[['obs']] <- rownames(buf)
     utils::write.csv(buf, 'Cooks distance values.csv', row.names = F)
-    utils::write.csv(f, 'Cooks distance outliers.csv', row.names = F)
+    utils::write.csv(f, 'Cooks distance outliers.csv')
 
     rv$outliers <- NULL
-    rv$outliers_row <- k$ckd$obs[base::which(k$ckd$color == 'outlier')]
+    rv$outliers_row <- buf[['obs']][k$ckd$obs[base::which(k$ckd$color == 'outlier')]]
 
-    for (i in k$ckd$obs[base::which(k$ckd$color == 'outlier')])
-      rv$outliers = base::c(rv$outliers, input$outlier_resp, i, rv$data[['Yield']][i])
+    rv$outliers_row = as.numeric(rv$outliers_row)
+    for (i in rv$outliers_row)
+      rv$outliers = base::c(rv$outliers, input$outlier_resp, i, rv$data[[input$outlier_resp]][i])
 
-
-    for (gp in vars) {
+         for (gp in vars) {
       asfct = base::as.factor(rv$data[[gp]][1:base::length(d[[1]])])
       if (base::length(base::levels(asfct)) <= rv$Maximum_Level_For_Group_By) {
         p <- ggplot2::ggplot(d, ggplot2::aes(x = obs, y = cd, label = txt)) +
