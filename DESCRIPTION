@@ -24,7 +24,7 @@ Imports:
     golem (>= 0.3.4),
     pkgload ,
     data.table ,
-    shiny (>= 1.7.2),
+    shiny,
     shinydashboard (>= 0.7.2),
     shinydisconnect (>= 0.1.0),
     shinyjs (>= 2.1.0),
