@@ -33,8 +33,8 @@ ExBLUE <- function(input, rv) {
   }
 
   fixed_variables = base::unique(base::c(input$blue_fix, input$blue_fix_interact))
-  #in this case fixed value is extracted from checkboxes and are not editable by hand
-  #if fixed value should be extracted from input$help_(rand / fix)_blue you should change this part
+  # In this case fixed value is extracted from checkboxes and are not editable by hand
+  # If fixed value should be extracted from input$help_(rand / fix)_blue you should change this part
 
   for (each_NameG in fixed_variables) {
     ._BLUE <- Model %>%
@@ -82,9 +82,6 @@ ExBLUE <- function(input, rv) {
     MM.S <- base::eval(base::bquote(lmerTest::lmer(.(fix.F), weights = base::get(Cof), data = data)))
   }
 
-  # Sig. Level (Random)
-  # Anova table (random effect)
-
   b <- lmerTest::ranova(MM.S)
   bb <- as.data.frame(b)
   bb = bb[-1,]
@@ -98,9 +95,6 @@ ExBLUE <- function(input, rv) {
   }
   rownames(bb) = new_rownames
   utils::write.csv(bb, paste0(input$project_name, '-- Anova (random effects) Table.csv'))
-
-  # Sig. Level (Fix)
-  # Anova table (fixed effects)
 
   a <- stats::anova(MM.S)
   aa <- as.data.frame(a)
