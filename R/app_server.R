@@ -992,11 +992,6 @@ app_server <- function(input, output, session) {
     #   rv$spat_buffer should be NULL again but if you NULL it now it will be disappeared
   })
 
-  shiny::observeEvent(input$blue_show, {
-    shiny::removeModal()
-    show_slider('Blue')
-  })
-
   shiny::observeEvent(input$indep_blue_btn, {
     if (base::length(input$blue_cof) > 2)
       shiny_showNotification(rv ,'You can only select one co-factor!')
@@ -1020,9 +1015,35 @@ app_server <- function(input, output, session) {
         # base::setwd("../../")
       })
       waiter$hide()
-      show_slider('Blue')
+      base::tryCatch({
+        sum = ''
+        for (i in readLines('./Blue/Summary of Model.txt')){
+            sum = paste0(sum, '<br/>',i)
+        }
+        showModal(
+          modalDialog(
+            title = tagList(
+              helpText('Summary of Model'),
+              actionButton('show_slider_blue','See Results')
+            ),
+            helpText(HTML(sum)),
+            footer = actionButton('show_slider_blue2','See Results')
+          )
+        )
+      },error = function(e) {
+        shiny_showNotification(rv ,'Something went wrong!')
+      })
     }
+  })
 
+  observeEvent(input$show_slider_blue,{
+    removeModal()
+    show_slider('Blue')
+  })
+
+  observeEvent(input$show_slider_blue2,{
+    removeModal()
+    show_slider('Blue')
   })
 
   output$help_fix <- shiny::renderUI({
