@@ -46,70 +46,70 @@ information_ui <- shiny::column(
         shiny::tags$li("Visualization is the most important part of AllInOne. Some of the expected graphs are shown below:"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Missing Pattern "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Missing Pattern "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/MP.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Missing data imputation "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Missing data imputation "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/MII1.png', align = "center", width = "60%", height = "60%"),
         shiny::img(src = 'www/MII2.png', align = "center", width = "60%", height = "60%"),
         shiny::img(src = 'www/MII3.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Density plot "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Density plot "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/DPP.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Box plot "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Box plot "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/BPP.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Violin plot "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Violin plot "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/VPP.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Scatter Plot "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Scatter Plot "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/SCAT.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Detecting Outlier -Quantile- "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Detecting Outlier -Quantile- "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/DOUQ.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Detecting Outlier -Cook's Distance- "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Detecting Outlier -Cook's Distance- "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/COQ.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Normalization "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Normalization "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/NO.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("General Correaltion "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("General Correaltion "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/GCORR.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Inter Correaltion "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Inter Correaltion "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/INTERCORR.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Intra Correaltion "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Intra Correaltion "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/INTRACORR.png', align = "center", width = "60%", height = "60%"),
         shiny::img(src = 'www/INTRACORR2.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Variance Proportion "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Variance Proportion "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/VPOR.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("BLUP/BLUE "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("BLUP/BLUE "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/BLUPE.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Spatial Analysis "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Spatial Analysis "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/SPAA.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Heritability "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/ZZCkvIlEcl4',style = "font-size: 22px"),shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Heritability "),shiny::tags$a("(Video Tutorial)",href='https://youtu.be/vCdu-_WyuJU',style = "font-size: 22px"),shiny::strong(" : "))),
         shiny::img(src = 'www/HER.png', align = "center", width = "60%", height = "60%"),
         shiny::hr()), style = "font-size: 16px; line-height: 1.7;"),
     shiny::hr(),
