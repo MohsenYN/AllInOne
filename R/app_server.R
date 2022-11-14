@@ -19,8 +19,10 @@ app_server <- function(input, output, session) {
     Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F, User_Config_notif_delay = 8, User_Config_notif_size = 4
     , Path_For_Saving_Results = 'C:/Users/Alihdr/Desktop/Results', Show_Errors = T,
   )
-  shinyjs::disable('Rep_Res_Wrd')
-  observe({
+
+  shinyjs::hideElement('Rep_Res_Wrd')
+
+  shiny::observe({
     rv$User_Config_notif_delay = input$notif_delay
     rv$User_Config_notif_size = input$notif_size
     rv$Maximum_Level_For_Group_By = input$Max_levels_GB
@@ -1512,14 +1514,21 @@ app_server <- function(input, output, session) {
     show_slider("Outlier")
   })
 
-  observeEvent(input$new_col_name, {
+  shiny::observeEvent(input$interacted_name, {
+    shiny::updateTextInput(
+      inputId = 'interacted_name',
+      label = 'New column name',
+      value = check_name(input$interacted_name, T))
+  })
+
+  shiny::observeEvent(input$new_col_name, {
     shiny::updateTextInput(
       inputId = 'new_col_name',
       label = 'New Name:',
       value = check_name(input$new_col_name, T))
   })
 
-  observeEvent(input$project_name, {
+  shiny::observeEvent(input$project_name, {
     shiny::updateTextInput(
       inputId = 'project_name',
       label = "Project Name",
