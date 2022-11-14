@@ -1542,7 +1542,7 @@ app_server <- function(input, output, session) {
         rv$selected.col = NULL
         rv$review_flag = TRUE
       }else {
-        shiny_showNotification(rv ,'Column/Project name can not include " \ | ? * : < > ans space')
+        shiny_showNotification(rv ,'Column/Project name can not include " \ | ? * : < > and space')
       }
       base::rm(flag)
     }

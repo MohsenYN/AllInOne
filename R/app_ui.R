@@ -82,7 +82,7 @@ menu_setting <- shinydashboard::menuItem(
       'Normal Interactions' = '5',
       'Small' = '6'
     ),
-    selected = '4'
+    selected = '5'
   ),
   checkboxInput(
     'Ign_Res_Wrd',
