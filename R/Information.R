@@ -7,7 +7,7 @@ information_ui <- shiny::column(
   shiny::tags$body(
     shiny::h2(shiny::strong('Welcome to the AllInOne')),
     shiny::h3(shiny::strong('An Open-Source Breeder-Friendly Analytical Package for Pre-processing Phenotypic Data')),
-    shiny::h4(shiny::strong('Version 1.0.2')),
+    shiny::h4(shiny::strong('Version 1.0.5')),
     shiny::hr(),
     shiny::tags$blockquote(
       shiny::img(src = 'www/Picture.png', align = "center", width = "100%", height = "100%")
