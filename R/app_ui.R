@@ -36,21 +36,8 @@ interface <- shiny::fluidPage(
           -moz-column-fill: auto;
           -column-fill: auto;
       }
-
-      .shiny-notification {
-             top: calc(100%);
-             left: calc(100%);
-      }
-
     "))
   ) },
-
-  {
-    shiny::tags$style(
-      type = "text/css",
-      ".shiny-output-error { visibility: hidden; }",
-      ".shiny-output-error:before { visibility: hidden; }")
-  },
   shiny::uiOutput('information')
 )
 
