@@ -78,11 +78,9 @@ menu_setting <- shinydashboard::menuItem(
     'notif_size',
     'Size of the alert message',
     choices = base::list(
-      'Very Big' = '2',
-      'Big' = '3',
-      'Normal Interactions' = '4',
-      'Small' = '5',
-      'Very Small' = '6'
+      'Big' = '4',
+      'Normal Interactions' = '5',
+      'Small' = '6'
     ),
     selected = '4'
   ),
