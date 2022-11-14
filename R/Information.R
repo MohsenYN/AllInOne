@@ -47,7 +47,7 @@ information_ui <- shiny::column(
         shiny::hr(),
         shiny::tags$ul(
           shiny::h3(shiny::strong("Missing Pattern:"))),
-        shiny::img(src = 'www/MPP.png', align = "center", width = "60%", height = "60%"),
+        shiny::img(src = 'www/MP.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
           shiny::h3(shiny::strong("Missing data imputation:"))),
