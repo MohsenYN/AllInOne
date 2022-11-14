@@ -131,7 +131,7 @@ information_ui <- shiny::column(
     shiny::tags$a('myoosefz@uoguelph.ca',href='mailto:myoosefz@uoguelph.ca', style = "font-size: 14px"),
     shiny::tags$p(' ', style = "font-size: 14px"),
     shiny::tags$p(shiny::strong('Alternative Contact:', style = "font-size: 20px")),
-    shiny::tags$a(shiny::strong('Ali Heidari', style = "font-size: 16px"),href='Alihdr.ir'),
+    shiny::tags$a(shiny::strong('Ali Heidari', style = "font-size: 16px"),href='https://www.Alihdr.ir'),
     shiny::tags$p('Master of Science in Bioinformatics', style = "font-size: 14px"),
     shiny::tags$p('University of Science and Culture', style = "font-size: 14px"),
     shiny::tags$a('alihdr@stu.usc.ac.ir',href='mailto:alihdr@stu.usc.ac.ir', style = "font-size: 14px"),
