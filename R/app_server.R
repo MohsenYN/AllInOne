@@ -132,13 +132,6 @@ app_server <- function(input, output, session) {
     rv$VarPYSL <-
       rv$data %>% dplyr::select(dplyr::all_of(input$main_db_indep_val))
 
-    a = head(rv$data)
-    res = NULL
-    for(i in c(108,118)){
-      b = subset(a, Maturity == i)
-      res = rbind(res,b)
-    }
-
     # include Dependent variables
     rv$SelectedTraits <-
       rv$data %>% dplyr::select(dplyr::all_of(input$main_db_dep_val))
