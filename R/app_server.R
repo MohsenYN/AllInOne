@@ -17,9 +17,9 @@ app_server <- function(input, output, session) {
     pdf_address = NULL, png_address = NULL, csv_address = NULL, txt_address = NULL, review_flag = TRUE,
     csv_value = NULL, blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
     Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F, User_Config_notif_delay = 8, User_Config_notif_size = 4
-    , Path_For_Saving_Results = 'C:/Users/Alihdr/Desktop/Results'
+    , Path_For_Saving_Results = 'C:/Users/Alihdr/Desktop/Results', Show_Errors = T,
   )
-
+  shinyjs::disable('Rep_Res_Wrd')
   observe({
     rv$User_Config_notif_delay = input$notif_delay
     rv$User_Config_notif_size = input$notif_size
@@ -293,11 +293,11 @@ app_server <- function(input, output, session) {
                                   message = "Please select the main detaset first !")
       } else {
         temp_indep = input$main_db_indep_val
-        if (User_Configuration$Debuge_Mode)if (base::is.null(temp_indep)) {
+        if (rv$Show_Errors)if (base::is.null(temp_indep)) {
           temp_indep = base::c('Province', 'Site', 'Year', 'Line', 'MaturityZone', 'MultiYear', 'Location', 'Rep', 'Row', 'Col', 'Entry', 'Plot')
         }
         temp_dep = input$main_db_dep_val
-        if (User_Configuration$Debuge_Mode)if (base::is.null(temp_dep)) {
+        if (rv$Show_Errors)if (base::is.null(temp_dep)) {
           temp_dep = base::c('Yield', 'Oil', 'Maturity', 'Seedweight', 'Height', 'Protein')
           # temp_dep = base::names(rv$data)
         }
@@ -426,7 +426,7 @@ app_server <- function(input, output, session) {
       base::tryCatch({
         NormaLiZaTIoN(input, rv)
       }, error = function(e) {
-        if (User_Configuration$Debuge_Mode)
+        if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
           shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -469,7 +469,7 @@ app_server <- function(input, output, session) {
         CheckMissing(input, rv)
       }, error = function(e) {
 
-        if (User_Configuration$Debuge_Mode)
+        if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
           shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -971,7 +971,7 @@ app_server <- function(input, output, session) {
       ExSPATS(input, rv)
     }, error = function(e) {
       waiter$hide()
-      if (User_Configuration$Debuge_Mode)
+      if (rv$Show_Errors)
         shiny_showNotification(rv ,e$message)
       else
         shiny_showNotification(rv ,'Something went wrong!')
@@ -1014,7 +1014,7 @@ app_server <- function(input, output, session) {
 
       }, error = function(e) {
 
-        if (User_Configuration$Debuge_Mode)
+        if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
           shiny_showNotification(rv ,'Something went wrong!')
@@ -1266,7 +1266,7 @@ app_server <- function(input, output, session) {
       base::tryCatch({
         Heritability(input, rv)
       }, error = function(e) {
-        if (User_Configuration$Debuge_Mode)
+        if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
           shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -1290,7 +1290,7 @@ app_server <- function(input, output, session) {
       base::tryCatch({
         BLUP(input, rv)
       }, error = function(e) {
-        if (User_Configuration$Debuge_Mode)
+        if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
           shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -1314,7 +1314,7 @@ app_server <- function(input, output, session) {
       base::tryCatch({
         CoReLaTiOnSS(input, rv)
       }, error = function(e) {
-        if (User_Configuration$Debuge_Mode)
+        if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
           shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -1335,7 +1335,7 @@ app_server <- function(input, output, session) {
       base::tryCatch({
         DensityPlot(input, rv)
       }, error = function(e) {
-        if (User_Configuration$Debuge_Mode)
+        if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
           shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -1360,7 +1360,7 @@ app_server <- function(input, output, session) {
         base::tryCatch({
           CheckBOXVIO(input, rv)
         }, error = function(e) {
-          if (User_Configuration$Debuge_Mode)
+          if (rv$Show_Errors)
             shiny_showNotification(rv ,e$message)
           else
             shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -1378,7 +1378,7 @@ app_server <- function(input, output, session) {
         base::tryCatch({
           DensityPlot(input, rv)
         }, error = function(e) {
-          if (User_Configuration$Debuge_Mode)
+          if (rv$Show_Errors)
             shiny_showNotification(rv ,e$message)
           else
             shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -1395,7 +1395,7 @@ app_server <- function(input, output, session) {
         base::tryCatch({
           CheckVIO(input, rv)
         }, error = function(e) {
-          if (User_Configuration$Debuge_Mode)
+          if (rv$Show_Errors)
             shiny_showNotification(rv ,e$message)
           else
             shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -1412,7 +1412,7 @@ app_server <- function(input, output, session) {
         base::tryCatch({
           CheckSatterplot(input, rv)
         }, error = function(e) {
-          if (User_Configuration$Debuge_Mode)
+          if (rv$Show_Errors)
             shiny_showNotification(rv ,e$message)
           else
             shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -1437,7 +1437,7 @@ app_server <- function(input, output, session) {
     base::tryCatch({
       ImputeMissing(input, rv, session)
     }, error = function(e) {
-      if (User_Configuration$Debuge_Mode)
+      if (rv$Show_Errors)
         shiny_showNotification(rv ,e$message)
       else
         shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -1457,7 +1457,7 @@ app_server <- function(input, output, session) {
     base::tryCatch({
       PoSiBlEoUtLieR(input, rv)
     }, error = function(e) {
-      if (User_Configuration$Debuge_Mode)
+      if (rv$Show_Errors)
         shiny_showNotification(rv ,e$message)
       else
         shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
@@ -1501,7 +1501,7 @@ app_server <- function(input, output, session) {
                                   message = 'Congratulations! There is no outlier')
       }
     }, error = function(e) {
-      if (User_Configuration$Debuge_Mode)
+      if (rv$Show_Errors)
         shiny_showNotification(rv ,e$message)
       else
         shiny_showNotification(rv ,'Error in applying outlier tools')
@@ -1693,7 +1693,7 @@ app_server <- function(input, output, session) {
       base::tryCatch({
         Refine(input, rv)
       }, error = function(e) {
-        if (User_Configuration$Debuge_Mode)
+        if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
           shiny_showNotification(rv ,'Incorrect arguments, please review your data!')

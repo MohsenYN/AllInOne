@@ -45,25 +45,44 @@ menu_setting <- shinydashboard::menuItem(
   "Setting",
   icon = shiny::icon("wrench", lib = 'glyphicon'),
   tabName = "Setting",
-  numericInput(
+
+  shiny::numericInput(
     'Max_levels_GB',
-    'The maximum level number for groupby:',
+    label = tags$span(
+      'The maximum level number for groupby:',
+      tags$i(
+       class = "glyphicon glyphicon-info-sign",
+       style = "color: var(--Just-color);",
+       title = 'The columns with level number more than this will be ignored for groupby'
+      )),
     20,
     5,
     100,
     '100%'
   ),
-  numericInput(
+  shiny::numericInput(
     'notif_delay',
-    'Number of seconds to display the alert message',
-    8,
+    label = tags$span(
+      'Number of seconds to display the alert message:',
+      tags$i(
+       class = "glyphicon glyphicon-info-sign",
+       style = "color: var(--Just-color);",
+       title = 'How long the alert message will be appears on the screen'
+      )),
+    6,
     1,
     60,
     '100%'
   ),
-  selectInput(
+  shiny::selectInput(
     'notif_size',
-    'Size of the alert message',
+    label = tags$span(
+      'Size of the alert message',
+      tags$i(
+       class = "glyphicon glyphicon-info-sign",
+       style = "color: var(--Just-color);",
+       title = 'Size of the alert message which appears on the right-bottom of screen in case of facing error'
+      )),
     choices = base::list(
       'Big' = '4',
       'Normal Interactions' = '5',
@@ -71,15 +90,29 @@ menu_setting <- shinydashboard::menuItem(
     ),
     selected = '5'
   ),
-  checkboxInput(
+  shiny::checkboxInput(
     'Ign_Res_Wrd',
-    'Ignore reserved words in names?',
+    label = shiny::tags$span(
+      'Ignore reserved characters in column names',
+      shiny::tags$i(
+       class = "glyphicon glyphicon-info-sign",
+       style = "color: var(--Just-color);",
+       title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
+       By checking this option, we ignore this limitation. however, we highly recommend you not to do this!'
+      )),
     T
   )
   ,
-  checkboxInput(
+  shiny::checkboxInput(
     'Rep_Res_Wrd',
-    'Replace reserved words in names?',
+    label = shiny::tags$span(
+      'Replace reserved characters in column names',
+      shiny::tags$i(
+       class = "glyphicon glyphicon-info-sign",
+       style = "color: var(--Just-color);",
+       title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
+       By checking this option, we automatically replace reserved letters by the hyphen.'
+      )),
     F
   )
 )
