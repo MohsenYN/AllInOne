@@ -14,7 +14,7 @@ app_server <- function(input, output, session) {
     indep_col = NULL, outliers = NULL, outliers_row = NULL,
     active_opt_ = 'db', slider.k = 1, filter.k = base::rep(base::list(base::list(search = "")), 500),
     selected.col = NULL, cor_temp = NULL, slider.str = '', filter_flag = 0,
-    pdf_address = NULL, png_address = NULL, csv_address = NULL, review_flag = TRUE,
+    pdf_address = NULL, png_address = NULL, csv_address = NULL, txt_address = NULL, review_flag = TRUE,
     csv_value = NULL, blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
     Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F, User_Config_notif_delay = 8, User_Config_notif_size = 4
     , Path_For_Saving_Results = 'C:/Users/Alihdr/Desktop/Results'
@@ -34,7 +34,7 @@ app_server <- function(input, output, session) {
 
     imgs <-
       base::list.files(app_sys(base::paste0("app/Results/", str)),
-                       pattern = stringr::regex("*.(png|csv)"))
+                       pattern = stringr::regex("*.(png|csv|txt)"))
     imgs = put_csv_last(imgs)
 
     if (base::is.null(rv$slider.k))
@@ -45,12 +45,13 @@ app_server <- function(input, output, session) {
       rv$png_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.png')
       rv$pdf_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.pdf')
       rv$csv_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.csv')
+      rv$txt_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.txt')
 
       file_address = base::paste0('Results/', str, '/', imgs[k], '?', runif(1, 1, 2))
 
       extention = base::substring(imgs[k], base::nchar(imgs[k]) - 2, base::nchar(imgs[k]))
       shiny::showModal(shiny::modalDialog(
-        title = base::substring(imgs[k], 1, base::nchar(imgs[k]) - 4),
+        title = shiny::tags$b(base::substring(imgs[k], 1, base::nchar(imgs[k]) - 4)),
         if (extention == 'png') {
           shiny::HTML(
             paste0(
@@ -70,7 +71,14 @@ app_server <- function(input, output, session) {
             rv$csv_value,
             options = base::list(
               scrollX = TRUE,
-              scrollCollapse = TRUE, autoWidth = TRUE, dom = 'ltip'))
+              scrollCollapse = TRUE, autoWidth = TRUE, dom = 'ltip')
+          )
+        }else if (extention == 'txt') {
+          sum = ''
+          for (i in readLines(rv$txt_address)) {
+            sum = paste0(sum, '<br/>', i)
+          }
+          helpText(HTML(sum))
         },
         easyClose = TRUE,
         footer = shiny::tagList(
@@ -439,7 +447,7 @@ app_server <- function(input, output, session) {
   shiny::observeEvent(input$slider_next, {
     imgs <-
       base::list.files(app_sys(base::paste0("app/Results/", rv$slider.str)),
-                       pattern = stringr::regex("*.(png|csv)"))
+                       pattern = stringr::regex("*.(png|csv|txt)"))
     imgs = put_csv_last(imgs)
     if (rv$slider.k >= base::length(imgs)) {
       show_slider(rv$slider.str, 1)
@@ -452,7 +460,7 @@ app_server <- function(input, output, session) {
     if (rv$slider.k <= 1) {
       imgs <-
         base::list.files(app_sys(base::paste0("app/Results/", rv$slider.str)),
-                         pattern = stringr::regex("*.(png|csv)"))
+                         pattern = stringr::regex("*.(png|csv|txt)"))
       imgs = put_csv_last(imgs)
       show_slider(rv$slider.str, base::length(imgs))
     }else
@@ -1020,35 +1028,8 @@ app_server <- function(input, output, session) {
         # base::setwd("../../")
       })
       waiter$hide()
-      base::tryCatch({
-        sum = ''
-        for (i in readLines('./Blue/Summary of Model.txt')){
-            sum = paste0(sum, '<br/>',i)
-        }
-        showModal(
-          modalDialog(
-            title = tagList(
-              helpText('Summary of Model'),
-              actionButton('show_slider_blue','See Results')
-            ),
-            helpText(HTML(sum)),
-            footer = actionButton('show_slider_blue2','See Results')
-          )
-        )
-      },error = function(e) {
-        shiny_showNotification(rv ,'Something went wrong!')
-      })
+      show_slider('Blue')
     }
-  })
-
-  observeEvent(input$show_slider_blue,{
-    removeModal()
-    show_slider('Blue')
-  })
-
-  observeEvent(input$show_slider_blue2,{
-    removeModal()
-    show_slider('Blue')
   })
 
   output$help_fix <- shiny::renderUI({
