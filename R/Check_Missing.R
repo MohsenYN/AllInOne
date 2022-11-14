@@ -54,32 +54,5 @@ CheckMissing <- function(input, rv) {
            " -- Missing values percentage and pattern",
            func_pp)
 
-  indepV <- base::as.data.frame(input$main_db_indep_val)
-  for (i in 1:base::nrow(indepV)) if (base::length(base::unique(rv$data[[i]])) <= rv$Maximum_Level_For_Group_By) {
-
-    A <- indepV[i,] #Each single independent variables names
-    SelectedV <- rv$data %>%
-      dplyr::select(A = dplyr::all_of(A), dplyr::all_of(input$main_db_dep_val))
-    SelectedV[1,] <- base::as.character(SelectedV[1,])
-
-    p <- naniar::gg_miss_fct(SelectedV, A) +
-      ggplot2::labs(title = base::paste0(" -- Heatmap -- missing pattern for each ", A),
-           x = A) +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1))
-
-    f = function()base::print(p)
-    filesave("png",
-             input$project_name,
-             base::paste0(" -- Heatmap -- missing pattern for each ", A),
-             f)
-
-
-    filesave("pdf",
-             input$project_name,
-             base::paste0(" -- Heatmap -- missing pattern for each ", A),
-             f)
-
-  }
-
   set_wd('Missing Values', rv)
 }
