@@ -995,8 +995,13 @@ app_server <- function(input, output, session) {
   shiny::observeEvent(input$indep_blue_btn, {
     if (base::length(input$blue_cof) > 2)
       shiny_showNotification(rv ,'You can only select one co-factor!')
-    else if (base::is.null(input$rv_blue_rand))
-      shiny_showNotification(rv ,'Please select variable(s) first!')
+    else if (
+      input$rv_blue_rand == '' | input$rv_blue_fix == '' |
+        base::length(input$blue_fix_interact) %% 2 != 0 | base::length(input$blue_rand_interact) %% 2 != 0 |
+        base::length(input$blue_fix) + base::length(input$blue_fix_interact) == 0 |
+        base::length(input$blue_rand) + base::length(input$blue_rand_interact) == 0
+    )
+      shiny_showNotification(rv ,'Error in formula')
     else {
       shiny::removeModal()
       if (base::dir.exists(app_sys("app/Results/Blue")))
@@ -1163,17 +1168,23 @@ app_server <- function(input, output, session) {
     f = ''
     a = input$blue_rand_interact
     if (base::length(a) %% 2 == 0 && base::length(a) != 0) {
+      flag = T
       for (i in base::seq(from = 1, to = base::length(a), by = 2))
       {
         s = base::paste0('(1|', a[i], ':', a[i + 1], ')')
+
         if (flag) {
-          f = base::paste0('~', s)
+          f = s
           flag = F
         }else {
           f = base::paste0(f, ' + ', s)
         }
       }
-      res = base::paste0(res, f)
+
+      if(res == '')
+        res = f
+      else
+        res = base::paste0(res,' + ', f)
     }
     shiny::textInput('rv_blue_rand', value = res, label = 'BLUE Random equation')
   })
