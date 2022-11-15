@@ -71,5 +71,5 @@ Heritability <- function(input, rv) {
   filesave('png', input$project_name, ' -  Heritability', p)
   filesave('pdf', input$project_name, ' -  Heritability', p)
 
-  set_wd('Heritability', rv)
+  set_wd('Heritability', rv, input$save_results)
 }

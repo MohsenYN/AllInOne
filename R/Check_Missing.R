@@ -54,5 +54,5 @@ CheckMissing <- function(input, rv) {
            " -- Missing values percentage and pattern",
            func_pp)
 
-  set_wd('Missing Values', rv)
+  set_wd('Missing Values', rv, input$save_results)
 }

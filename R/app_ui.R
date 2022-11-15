@@ -114,6 +114,25 @@ menu_setting <- shinydashboard::menuItem(
        By checking this option, we automatically replace reserved letters by the hyphen.'
       )),
     F
+  ),
+
+  shiny::checkboxInput(
+    'save_results',
+    label = shiny::tags$span(
+      'Save all outputs',
+      shiny::tags$i(
+       class = "glyphicon glyphicon-info-sign",
+       style = "color: var(--Just-color);",
+       title = 'Some users tend to save all the output.
+Therefore we provide them with this option.
+Thereby, they can have all the output in a spesific folder.'
+      )),
+    F
+  )
+  ,
+  shiny::actionButton(
+    'results_folder',
+    'Select a folder'
   )
 )
 

@@ -116,5 +116,5 @@ DensityPlot <- function(input, rv) {
     }
   }
 
-  set_wd('Box Plots',rv)
+  set_wd('Box Plots', rv, input$save_results)
 }

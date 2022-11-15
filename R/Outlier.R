@@ -248,5 +248,5 @@ PoSiBlEoUtLieR <- function(input, rv) {
     base::invisible(base::print(olsrr::ols_plot_resid_lev(model)))
     grDevices::dev.off()
   }
-  set_wd('Outlier', rv)
+  set_wd('Outlier', rv, input$save_results)
 }

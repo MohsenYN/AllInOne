@@ -48,5 +48,5 @@ Refine <- function(input, rv) {
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
   }
-  set_wd('Refine', rv)
+  set_wd('Refine', rv, input$save_results)
 }

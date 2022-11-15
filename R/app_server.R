@@ -17,8 +17,14 @@ app_server <- function(input, output, session) {
     pdf_address = NULL, png_address = NULL, csv_address = NULL, txt_address = NULL, review_flag = TRUE,
     csv_value = NULL, blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
     Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F, User_Config_notif_delay = 8, User_Config_notif_size = 4
-    , Path_For_Saving_Results = 'C:/Users/Alihdr/Desktop/Results', Show_Errors = T,
+    , Path_For_Saving_Results = '', Show_Errors = T,
   )
+
+  # shiny::observe({
+  #   shinyFiles::shinyDirChoose(
+  #     input, 'results_folder',
+  #     roots = c('wd' = '../../../../../../../../../../../../../../../../'))
+  # })
 
   shinyjs::hideElement('Rep_Res_Wrd')
 
@@ -28,6 +34,17 @@ app_server <- function(input, output, session) {
     rv$Maximum_Level_For_Group_By = input$Max_levels_GB
     rv$Ignore_Reserved_Letters = input$Ign_Res_Wrd
     rv$Replace_Reserved_Letters = input$Rep_Res_Wrd
+  })
+
+  shiny::observeEvent(input$save_results,{
+    if(!input$save_results)
+      shinyjs::disable('results_folder')
+    else
+      shinyjs::enable('results_folder')
+  })
+
+  observeEvent(input$results_folder,{
+    rv$Path_For_Saving_Results = utils::choose.dir()
   })
 
   show_slider <- function(str, k = 1) {

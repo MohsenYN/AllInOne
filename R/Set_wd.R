@@ -4,14 +4,14 @@
 #'
 #' @noRd
 
-set_wd <- function (str, rv = NULL){
+set_wd <- function (str, rv = NULL, save = F){
   if (is.null(rv)) {
     base::setwd(app_sys("app/Results"))
     if (!base::dir.exists(str))
       base::dir.create(str)
     base::setwd(str)
   }
-  else{
+  else if(save){
     if(!base::dir.exists(rv$Path_For_Saving_Results))
       shiny_showNotification(rv ,paste0('There is no directory for Results'))
     else{

@@ -134,5 +134,5 @@ ExBLUE <- function(input, rv) {
   base::rownames(buffer) <- "Shapiro-Wilk normality test"
   utils::write.csv(buffer, paste0(input$project_name, ' -- Shapiro-Wilk normality test.csv'))
 
-  set_wd('Blue', rv)
+  set_wd('Blue', rv, input$save_results)
 }

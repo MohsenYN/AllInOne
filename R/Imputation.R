@@ -81,5 +81,5 @@ ImputeMissing <- function(input, rv, session) {
   #     message = "Please select a valid option!")
   # }
 
-  set_wd('Missing Imputation', rv)
+  set_wd('Missing Imputation', rv, input$save_results)
 }
