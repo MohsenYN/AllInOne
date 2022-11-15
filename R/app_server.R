@@ -1636,23 +1636,39 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$apply_db, {
-    shiny::removeModal()
-    # include Independent variables
-    rv$VarPYSL <-
-      rv$data %>% dplyr::select(dplyr::all_of(input$main_db_indep_val))
+    if (base::length(base::c(input$main_db_indep_val, input$main_db_dep_val)) != base::length(base::unique(base::c(input$main_db_indep_val, input$main_db_dep_val)))) {
+      shiny_showNotification(
+        rv,
+        'You can not select a variable as both dependent and independent'
+      )
+    }else if (base::length(input$main_db_indep_val) == 0) {
+      shiny_showNotification(
+        rv,
+        'At least select one independent variable'
+      )
+    }else if (base::length(input$main_db_dep_val) == 0 ) {
+      shiny_showNotification(
+        rv,
+        'At least select one dependent variable'
+      )
+    }else {
+      shiny::removeModal()
+      # include Independent variables
+      rv$VarPYSL <-
+        rv$data %>% dplyr::select(dplyr::all_of(input$main_db_indep_val))
 
-    # include Dependent variables
-    rv$SelectedTraits <-
-      rv$data %>% dplyr::select(dplyr::all_of(input$main_db_dep_val))
+      # include Dependent variables
+      rv$SelectedTraits <-
+        rv$data %>% dplyr::select(dplyr::all_of(input$main_db_dep_val))
 
-    # include Independent variables TOO
-    rv$independent_variables <-
-      rv$data %>% dplyr::select(input$main_db_indep_val)
+      # include Independent variables TOO
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
 
-    # include Dependent variables TOO
-    rv$dependent_variables <-
-      rv$data %>% dplyr::select(input$main_db_dep_val)
-
+      # include Dependent variables TOO
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+    }
   })
 
   shiny::observeEvent(input$show_res_outlier, {
