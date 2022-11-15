@@ -176,11 +176,11 @@ menu_operators <- shinydashboard::menuItem(
 )
 sidebar <- shinydashboard::dashboardSidebar({
   shinydashboard::sidebarMenu(
+    menu_setting,
     menu_db,
     menu_operators,
     shiny::uiOutput('content_3'), #Outliers content
     shiny::uiOutput('content_7'), #apply changes outliers
-    menu_setting,
     shiny::a(href="mailto:myoosefz@uoguelph.ca",shiny::img(src="www/Picture3.png", class="MYNHelp"))
   )
 })
@@ -214,7 +214,7 @@ app_ui <- function(request) {
       Header,
       sidebar,
       body,
-      skin = "red",
+      skin = "red",# Don't Remove this!
       title="AllInOne"
     )
   )
