@@ -3,7 +3,7 @@
 #' @noRd
 #'
 information_ui <- shiny::column(
-  12,
+  10,
   shiny::tags$body(
     shiny::h2(shiny::strong('Welcome to the AllInOne')),
     shiny::h3(shiny::strong('An Open-Source Breeder-Friendly Analytical Package for Pre-processing Phenotypic Data')),
