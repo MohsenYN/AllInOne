@@ -23,21 +23,17 @@ Imports:
     config ,
     golem (>= 0.3.4),
     pkgload ,
+    tidyverse ,
+    dplyr ,
+    ggplot2 ,
+    DT ,
+    lme4,
+    VIM ,
     data.table ,
     shiny,
     shinydashboard (>= 0.7.2),
     shinydisconnect (>= 0.1.0),
     shinyjs (>= 2.1.0),
-    dplyr ,
-    ggplot2 
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-URL: https://github.com/Mohsen1080/AllInOne
-BugReports: https://github.com/Mohsen1080/AllInOne/issues
-RoxygenNote: 7.2.1
-Depends:
-    R (>= 2.10),
-    tidyverse ,
     ggpubr ,
     forcats ,
     tidyr ,
@@ -57,8 +53,12 @@ Depends:
     car ,
     usethis ,
     testthat ,
-    DT ,
-    lme4,
     readxl ,
-    VIM ,
     waiter
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+URL: https://github.com/Mohsen1080/AllInOne
+BugReports: https://github.com/Mohsen1080/AllInOne/issues
+RoxygenNote: 7.2.1
+Depends:
+    R (>= 2.10)
