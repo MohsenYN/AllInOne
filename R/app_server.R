@@ -674,8 +674,8 @@ app_server <- function(input, output, session) {
             indep_cols = base::subset(indep_cols, indep_cols != i)
             shiny_showNotification(rv ,
               base::paste0(
-                'The variable <<', i,
-                '>> is removed from independent variables list as it has more than ',
+                'The variable {', i,
+                '} is removed from independent variables list as it has more than ',
                 rv$Maximum_Level_For_Group_By, ' levels!'
               )
             )
@@ -721,16 +721,16 @@ app_server <- function(input, output, session) {
           if (base::length(base::unique(rv$data[[i]])) < 2) {
             indep_cols = base::subset(indep_cols, indep_cols != i)
             shiny_showNotification(rv ,
-              base::paste0('The variable <<', i,
-                           '>> is removed from independent variables list as it has less then two levels!'
+              base::paste0('The variable {', i,
+                           '} is removed from independent variables list as it has less then two levels!'
               )
             )
           } else if (base::length(base::unique(rv$data[[i]])) > rv$Maximum_Level_For_Group_By) {
             indep_cols = base::subset(indep_cols, indep_cols != i)
             shiny_showNotification(rv ,
               base::paste0(
-                'The variable <<', i,
-                '>> is removed from independent variables list as it has more than ',
+                'The variable {', i,
+                '} is removed from independent variables list as it has more than ',
                 rv$Maximum_Level_For_Group_By, ' levels!'
               )
             )
