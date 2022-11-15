@@ -53,7 +53,7 @@ menu_setting <- shinydashboard::menuItem(
       tags$i(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
-       title = 'The columns with level number more than this will be ignored for groupby'
+       title = 'The columns with a level number more than this will be ignored for groupby'
       )),
     20,
     5,
@@ -67,7 +67,7 @@ menu_setting <- shinydashboard::menuItem(
       tags$i(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
-       title = 'How long the alert message will be appears on the screen'
+       title = 'How long the alert message will appear on the screen'
       )),
     6,
     1,
@@ -81,7 +81,7 @@ menu_setting <- shinydashboard::menuItem(
       tags$i(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
-       title = 'Size of the alert message which appears on the right-bottom of screen in case of facing error'
+       title = 'Size of the alert message which appears on the right-bottom of the screen in case of facing an error'
       )),
     choices = base::list(
       'Big' = '4',
@@ -98,7 +98,7 @@ menu_setting <- shinydashboard::menuItem(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
        title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
-       By checking this option, we ignore this limitation. however, we highly recommend you not to do this!'
+       By checking this option, we ignore this limitation. however, we highly recommend you not do this!'
       )),
     T
   )
@@ -111,7 +111,7 @@ menu_setting <- shinydashboard::menuItem(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
        title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
-       By checking this option, we automatically replace reserved letters by the hyphen.'
+       By checking this option, we automatically replace reserved letters with the hyphen.'
       )),
     F
   ),
@@ -123,9 +123,9 @@ menu_setting <- shinydashboard::menuItem(
       shiny::tags$i(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
-       title = 'Some users tend to save all the output.
+       title = 'Some users tend to save all the outputs.
 Therefore we provide them with this option.
-Thereby, they can have all the output in a spesific folder.'
+Thereby, they can have all the outputs in a specific folder.'
       )),
     F
   )
