@@ -12,23 +12,19 @@ BLUP <- function(input, rv) {
 
   formula_str = input$rv_her
   A2 <- base::list()
-  # varComp <- base::list()
   i = input$blup_resp
 
+  data_buf = dplyr::select(rv$data, dplyr::all_of(c(input$main_db_indep_val, input$blup_resp, input$blup_cof)))
+
   if (base::is.null(input$blup_cof))
-    B2 <- lme4::lmer(formula = base::paste0(i, ' ~ ', formula_str), data = stats::na.omit(rv$data))
+    B2 <- lme4::lmer(formula = base::paste0(input$blup_resp, ' ~ ', formula_str), data = stats::na.omit(data_buf))
   else{
-    data_buf = rv$data
     base::colnames(data_buf)[[base::which(base::colnames(data_buf) == input$blup_cof)]] <- 'Cof'
-    B2 <- lme4::lmer(formula = base::paste0(i, ' ~ ', formula_str), data = stats::na.omit(data_buf), weights = Cof)
+    B2 <- lme4::lmer(formula = base::paste0(input$blup_resp, ' ~ ', formula_str), data = stats::na.omit(data_buf), weights = Cof)
   }
 
-  # varComp[[i]] <- base::as.data.frame(lme4::VarCorr(B2, comp = "vcov"))
-  # varComp <- base::as.data.frame(varComp)
-  # rv$blup_buffer = varComp
-
-  A2[[i]] = stats::coef(B2)[[input$blup_indep]]
-  base::colnames(A2[[i]]) <- i
+  A2[[input$blup_resp]] = stats::coef(B2)[[input$blup_indep]]
+  base::colnames(A2[[input$blup_resp]]) <- input$blup_resp
   A2 <- base::as.data.frame(A2)
   A2[[input$blup_indep]] <- base::row.names.data.frame(A2)
   buf = A2[[1]]
@@ -73,7 +69,6 @@ BLUP <- function(input, rv) {
 
   filesave('png', input$project_name, ' -- Variance Porportion', p1)
   filesave('pdf', input$project_name, ' -- Variance Porportion', p1)
-
 
   utils::write.csv(rv$blup_temp,
             base::paste0(input$project_name, " -- BLUP value for ", input$blup_resp, ".csv"),
