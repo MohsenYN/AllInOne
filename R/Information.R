@@ -2,7 +2,7 @@
 #'
 #' @noRd
 #'
-information_ui <- shiny::column(
+information_ui <- shinyy::column(
   12,
   shiny::tags$body(
     shiny::h2(shiny::strong('Welcome to the AllInOne')),
