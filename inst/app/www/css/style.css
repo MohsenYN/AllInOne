@@ -111,3 +111,18 @@ body {
 /*.sidebar-menu {*/
 /*    color: var(--secondary2-color);*/
 /*}*/
+
+.supporters .supporter {
+    flex: 1 1 200px;
+    max-width: 400px;
+    min-height: 100px;
+    max-height: 150px;
+    object-fit: contain;
+}
+
+.supporters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 30px;
+}
