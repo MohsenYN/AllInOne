@@ -114,7 +114,7 @@ ExSPATS <- function(input, rv) {
   utils::write.csv(P,
             file = base::paste0(input$project_name, " -- Spatial analysis parameter for ", response, ".csv"), row.names = FALSE)
 
-  p <- ggplot2::ggplot(Data, ggplot2::aes(Col, Row, fill = RawValue)) +
+  p <- ggplot2::ggplot(Data, ggplot2::aes(get(Col), get(Row), fill = RawValue)) +
     ggplot2::geom_tile() +
     viridis::scale_fill_viridis(discrete = F) +
     ggplot2::theme_classic() +
@@ -135,7 +135,7 @@ ExSPATS <- function(input, rv) {
     units = "cm"
   )
 
-  p <- ggplot2::ggplot(Data, ggplot2::aes(Col, Row, fill = FittedValue)) +
+  p <- ggplot2::ggplot(Data, ggplot2::aes(get(Col), get(Row), fill = FittedValue)) +
     ggplot2::geom_tile() +
     viridis::scale_fill_viridis(discrete = FALSE) +
     ggplot2::theme_classic() +
@@ -156,7 +156,7 @@ ExSPATS <- function(input, rv) {
     units = "cm"
   )
 
-  p <- ggplot2::ggplot(Data, ggplot2::aes(Col, Row, fill = ResidualValue)) +
+  p <- ggplot2::ggplot(Data, ggplot2::aes(get(Col), get(Row), fill = ResidualValue)) +
     ggplot2::geom_tile() +
     viridis::scale_fill_viridis(discrete = FALSE) +
     ggplot2::theme_classic() +
