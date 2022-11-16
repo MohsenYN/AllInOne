@@ -20,8 +20,8 @@ ExSPATS <- function(input, rv) {
 
   response = input$spat_resp
   NameG = input$spat_gen
-  Row = input$spat_row
-  Col = input$spat_col
+  spat_row = input$spat_row
+  spat_col = input$spat_col
   Fixedv = input$rv_spat_fix
   Randv = input$rv_spat_rand
 
@@ -40,11 +40,11 @@ ExSPATS <- function(input, rv) {
   ._RanV <- stats::as.formula(base::paste(Randv))
 
   ._data <- base::as.data.frame(data)
-  ._data[['RowF']] <- base::as.numeric(._data[, Row])
-  ._data[['ColF']] <- base::as.numeric(._data[, Col])
+  ._data[['RowF']] <- base::as.numeric(._data[, input$spat_row])
+  ._data[['ColF']] <- base::as.numeric(._data[, input$spat_col])
 
-  Lrow <- base::nlevels(base::as.factor(._data[, Row]))
-  Lcol <- base::nlevels(base::as.factor(._data[, Col]))
+  Lrow <- base::nlevels(base::as.factor(._data[, input$spat_row]))
+  Lcol <- base::nlevels(base::as.factor(._data[, input$spat_col]))
   spat_nseg = base::c(Lcol, Lrow)
 
   Model <- SpATS::SpATS(response = response,
@@ -59,8 +59,8 @@ ExSPATS <- function(input, rv) {
   Data <- base::data.frame(ResidualValue = stats::residuals(Model))
 
   Data[[NameG]] <- ._Dataset[, Model$model$geno$genotype]
-  Data[[Col]] <- ._Dataset[, Model$terms$spatial$terms.formula$x.coord]
-  Data[[Row]] <- ._Dataset[, Model$terms$spatial$terms.formula$y.coord]
+  Data[[input$spat_col]] <- ._Dataset[, Model$terms$spatial$terms.formula$x.coord]
+  Data[[input$spat_row]] <- ._Dataset[, Model$terms$spatial$terms.formula$y.coord]
   Data[['FittedValue']] <- stats::fitted.values(Model)
   Data[['RawValue']] <- ._Dataset[, Model$model$response]
 
@@ -114,7 +114,7 @@ ExSPATS <- function(input, rv) {
   utils::write.csv(P,
             file = base::paste0(input$project_name, " -- Spatial analysis parameter for ", response, ".csv"), row.names = FALSE)
 
-  p <- ggplot2::ggplot(Data, ggplot2::aes(get(Col), get(Row), fill = RawValue)) +
+  p <- ggplot2::ggplot(Data, ggplot2::aes(get(input$spat_col), get(input$spat_row), fill = RawValue)) +
     ggplot2::geom_tile() +
     viridis::scale_fill_viridis(discrete = F) +
     ggplot2::theme_classic() +
@@ -135,7 +135,7 @@ ExSPATS <- function(input, rv) {
     units = "cm"
   )
 
-  p <- ggplot2::ggplot(Data, ggplot2::aes(get(Col), get(Row), fill = FittedValue)) +
+  p <- ggplot2::ggplot(Data, ggplot2::aes(base::get(input$spat_col), base::get(input$spat_row), fill = FittedValue)) +
     ggplot2::geom_tile() +
     viridis::scale_fill_viridis(discrete = FALSE) +
     ggplot2::theme_classic() +
@@ -156,7 +156,7 @@ ExSPATS <- function(input, rv) {
     units = "cm"
   )
 
-  p <- ggplot2::ggplot(Data, ggplot2::aes(get(Col), get(Row), fill = ResidualValue)) +
+  p <- ggplot2::ggplot(Data, ggplot2::aes(get(input$spat_col), get(input$spat_row), fill = ResidualValue)) +
     ggplot2::geom_tile() +
     viridis::scale_fill_viridis(discrete = FALSE) +
     ggplot2::theme_classic() +
