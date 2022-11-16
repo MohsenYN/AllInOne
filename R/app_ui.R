@@ -63,7 +63,7 @@ menu_setting <- shinydashboard::menuItem(
   shiny::numericInput(
     'notif_delay',
     label = tags$span(
-      'Maximum duration (seconds) to display the notifications:',
+      'Duration (seconds) to display the notifications:',
       tags$i(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
@@ -93,7 +93,7 @@ menu_setting <- shinydashboard::menuItem(
   shiny::checkboxInput(
     'Ign_Res_Wrd',
     label = shiny::tags$span(
-      'Ignore reserved characters',
+      'Ignore special characters',
       shiny::tags$i(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
@@ -106,7 +106,7 @@ menu_setting <- shinydashboard::menuItem(
   shiny::checkboxInput(
     'Rep_Res_Wrd',
     label = shiny::tags$span(
-      'Replace reserved characters',
+      'Replace special characters',
       shiny::tags$i(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
