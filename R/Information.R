@@ -150,13 +150,8 @@ information_ui <- shiny::column(
     shiny::tags$p("Any feedback you can provide would be greatly appreciated.", style = "font-size: 16px"),
     style = "font-size: 18px"),
   shiny::hr(),
-  shiny::h3(shiny::strong('Supported By:')),
-  shiny::tags$div(
-    lapply(1:12, function(i) {
-      shiny::img(src = paste0('www/', i, '.png'), class = "supporter")
-    }),
-    class = "supporters"
-  ),
+  shiny::h3(shiny::strong('We are proud of our partners and supporters:')),
+  shiny::img(src = 'www/Partners.png', align = "center", width = "60%", height = "60%"),
   shiny::hr(),
   shiny::h3(shiny::strong('ENJOY!')),
   shiny::hr()
