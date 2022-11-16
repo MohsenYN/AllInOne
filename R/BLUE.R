@@ -33,8 +33,6 @@ ExBLUE <- function(input, rv) {
   }
 
   fixed_variables = base::unique(base::c(input$blue_fix, input$blue_fix_interact))
-  # In this case fixed value is extracted from checkboxes and are not editable by hand
-  # If fixed value should be extracted from input$help_(rand / fix)_blue you should change this part
 
   for (each_NameG in fixed_variables) {
     ._BLUE <- Model %>%
@@ -50,8 +48,6 @@ ExBLUE <- function(input, rv) {
                      file = base::paste0(input$project_name, " -- ", each_NameG, " based BLUE value for ", response, ".csv"), row.names = FALSE)
 
   }
-
-  rv$cor_temp = ._BLUE
 
   A <- base::as.data.frame(Model@resp$y)
 
