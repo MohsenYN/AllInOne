@@ -111,7 +111,7 @@ menu_setting <- shinydashboard::menuItem(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
        title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
-       By checking this option, AllInOne automatically replace reserved letters with the hyphen (_) .'
+       By checking this option, AllInOne automatically replace reserved letters with the underline (_) .'
       )),
     F
   ),

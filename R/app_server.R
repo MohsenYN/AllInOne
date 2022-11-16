@@ -20,11 +20,9 @@ app_server <- function(input, output, session) {
     , Path_For_Saving_Results = '', Show_Errors = T,
   )
 
-  # shiny::observe({
-  #   shinyFiles::shinyDirChoose(
-  #     input, 'results_folder',
-  #     roots = c('wd' = '../../../../../../../../../../../../../../../../'))
-  # })
+  forbidden_characters <- base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"',
+                                  ' ', '!', ';', ',', '|', '!', '@', '#', '$',
+                                  '%', '^', '&', '*', '(', ')', '+', '-')
 
   shinyjs::hideElement('Rep_Res_Wrd')
 
@@ -259,7 +257,7 @@ app_server <- function(input, output, session) {
     if (rv$Replace_Reserved_Letters | force) {
       str = base::strsplit(name, '')[[1]]
       for (c in 1:base::length(str)) {
-        if (str[c] %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
+        if (str[c] %in% forbidden_characters) {
           str[c] = '_'
         }
       }
@@ -275,7 +273,7 @@ app_server <- function(input, output, session) {
 
     str = base::strsplit(name, '')[[1]]
     for (s in str) {
-      if (s %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"', ' ')) {
+      if (s %in% forbidden_characters) {
         base::return('')
       }
     }
@@ -1580,7 +1578,7 @@ app_server <- function(input, output, session) {
     interacted_name = input$interacted_name
     str = base::strsplit(interacted_name, '')[[1]]
     for (s in str) {
-      if (s %in% base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"')) {
+      if (s %in% forbidden_characters) {
         session$sendCustomMessage(
           type = 'testmessage',
           message = 'Column names can not include " \ | ? * : < > and space')
