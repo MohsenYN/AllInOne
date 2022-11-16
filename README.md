@@ -15,6 +15,19 @@ A running demo is on [shinyapps.io](https://AllInOne.alihdr.ir/app/).
 
 ## Installation
 
+Required: [R](https://cran.r-project.org/) version 4.0.0 or later
+<br/>
+Required: [Rstudio](https://posit.co/download/rstudio-desktop/)
+<br/>
+Required: [golem](https://github.com/ThinkR-open/golem) R package version 0.3.4 or later
+<br/>
+Required: [shinydashboard](https://rstudio.github.io/shinydashboard/) R package version 0.7.2 or later
+<br/>
+Required: [shinydisconnect](https://github.com/daattali/shinydisconnect) R package version 0.1.0 or later
+<br/>
+Required: [shinyjs](https://deanattali.com/shinyjs/) R package version 2.1.0 or later
+<br/>
+
 ### Install using source
 
 You can install the AllInOne using its source on your system like so:
