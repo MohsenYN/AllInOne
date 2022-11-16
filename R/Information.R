@@ -11,7 +11,7 @@ information_ui <- shiny::column(
     shiny::h4(shiny::strong('Version 1.0.5')),
     shiny::hr(),
     shiny::tags$blockquote(
-      shiny::img(src = 'www/AllInOne3.gif', align = "right", width = "40%", height = "40%")
+      shiny::img(src = 'www/AllInOne.gif', align = "right", width = "40%", height = "40%")
     ),
     shiny::hr(),
     #br(),
