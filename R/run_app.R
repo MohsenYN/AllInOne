@@ -15,6 +15,8 @@ run_app <- function(
   uiPattern = "/",
   ...
 ) {
+  library(dplyr)
+  library(data.table)
   golem::with_golem_options(
     app = shinyApp(
       ui = app_ui,
