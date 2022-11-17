@@ -1499,7 +1499,7 @@ app_server <- function(input, output, session) {
                 shiny::actionButton('ref_outlier', "Auto Refine Outliers"),
 
                 shiny::selectInput(
-                  "outl_select_input",
+                  'outl_select_input',
                   label = shiny::h5("Select An Outlier"),
                   choices = base::unique(base::sort(rv$outliers_row))
                 ),
@@ -1854,7 +1854,6 @@ app_server <- function(input, output, session) {
       if (!base::is.null(input[[base::paste0("OTL_", i)]])) {
         db.edit(input$outl_select_input, i, input[[base::paste0("OTL_", i)]], col_type = 'name')
       }
-
     }
   })
 
@@ -1874,6 +1873,13 @@ app_server <- function(input, output, session) {
       args1 = ''
       for (i in COLN) {
         if (i %in% o_cln) {
+          str_temp = base::paste0('<h4>', i, ' (', input$indep_outlier_2, ')</h4>')
+          args1 = base::append(args1, base::list(shiny::textInput(
+            base::paste0("OTL_", i),
+            label = shiny::HTML(str_temp),
+            value = rv$data[k, base::paste0(i)]
+          )))
+        }else{
           str_temp = base::paste0('<h4>', i, ' (', input$indep_outlier_2, ')</h4>')
           args1 = base::append(args1, base::list(shiny::textInput(
             base::paste0("OTL_", i),
@@ -1905,6 +1911,21 @@ app_server <- function(input, output, session) {
     }
   })
 
+  shiny::observeEvent(input$outl_select_input, {
+    k = input$outl_select_input
+    COLN = base::colnames(rv$data)
+    o_cln <- NULL
+    len = base::length(rv$outliers)
+    for (x in base::seq(2, len, 3)) {
+      if (base::as.numeric(rv$outliers[x]) == k) {
+        o_cln <- base::append(o_cln, rv$outliers[x - 1])
+      }
+    }
+
+    for (i in COLN)
+      if (!(i %in% o_cln))
+        shiny::removeUI(selector = paste0("div:has(> #", base::paste0("OTL_", i), ")"))
+  })
 
   shiny::observeEvent(input$csvs_use, {
 
