@@ -9,7 +9,9 @@ The AllInOne is an open-Source, R-Shiny user interface package designed in the [
 Just click [HERE](https://allinone-test.shinyapps.io/allinone-test/).
 <br/>
 <br/>
-# [<img src="inst/app/www/Website.png" width="600px" align="center"/>](https://allinone-test.shinyapps.io/allinone-test/)
+
+[<img src="inst/app/www/Website.png" width="600px" align="center"/>](https://allinone-test.shinyapps.io/allinone-test/)
+
 <br/>
 <br/>
 
