@@ -18,7 +18,7 @@ filesave <- function(fileformat,
     base::invisible(callback())
     base::invisible(grDevices::dev.off())
   }, error = function(e) {
-    shiny_showNotification(rv ,base::paste0(e$message,' Error in saving file: ', name))
+    shiny::showNotification(base::paste0(e$message,' Error in saving file: ', name))
     base::invisible(grDevices::dev.off())
   })
 }
