@@ -15,7 +15,7 @@ Required: [R](https://cran.r-project.org/) version 4.0.0 or later
 <br/>
 Required: [Rstudio](https://posit.co/download/rstudio-desktop/)
 <br/>
-Required: [golem](https://github.com/ThinkR-open/golem) R package version 0.3.4 or later
+Required: [golem](https://github.com/ThinkR-open/golem) R package version 0.3.4 or later:
 <br/>
 Required: [shinydashboard](https://rstudio.github.io/shinydashboard/) R package version 0.7.2 or later
 <br/>
@@ -23,6 +23,13 @@ Required: [shinydisconnect](https://github.com/daattali/shinydisconnect) R packa
 <br/>
 Required: [shinyjs](https://deanattali.com/shinyjs/) R package version 2.1.0 or later
 <br/>
+Required: [remotes](https://cran.r-project.org/web/packages/remotes/index.html) R package
+<br/>
+
+``` r
+install.packages(c("remotes","golem","shinydashboard","shinydisconnect","shinyjs"))
+```
+
 
 ### Install using source
 
@@ -31,7 +38,7 @@ You can install the AllInOne using its source on your system like so:
 ``` r
 remotes::install_local('path/to/AllInOne/', force = TRUE)
 ```
-`
+
 ### Install from GitHub
 
 You can install the AllInOne from GitHub like so:
