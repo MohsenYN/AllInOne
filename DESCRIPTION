@@ -61,8 +61,8 @@ Imports:
     waiter
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-URL: https://github.com/Mohsen1080/AllInOne
-BugReports: https://github.com/Mohsen1080/AllInOne/issues
+URL: https://github.com/MohsenYN/AllInOne
+BugReports: https://github.com/MohsenYN/AllInOne/issues
 RoxygenNote: 7.2.1
 Depends:
     R (>= 2.10)
