@@ -196,7 +196,7 @@ app_server <- function(input, output, session) {
       shiny::tagList(
         shiny::helpText(mice_help[[input$impute_method]]),
         shiny::textInput('mice_input_m',
-                         'Please specify the number of multiple imputations',
+                         'Please specify the number of imputation',
                          value = 5),
         shiny::textInput('mice_input_maxit',
                          'Please specify the number of iteration',
@@ -284,7 +284,7 @@ app_server <- function(input, output, session) {
     if (check_name(input$new_col_name) != '') {
       base::colnames(rv$dataC)[base::which(base::names(rv$dataC) == input$columns_name_list)] <- check_name(input$new_col_name)
     }else {
-      shiny_showNotification(rv ,'Column names can not include " \ | ? * : < > and space')
+      shiny_showNotification(rv ,'Column names can not include " \ | ? * : < > () and space')
     }
   })
 
@@ -311,11 +311,32 @@ app_server <- function(input, output, session) {
       } else {
         temp_indep = input$main_db_indep_val
         if (rv$Show_Errors)if (base::is.null(temp_indep)) {
-          temp_indep = base::c('Province', 'Site', 'Year', 'Line', 'MaturityZone', 'MultiYear', 'Location', 'Rep', 'Row', 'Col', 'Entry', 'Plot')
+          temp_indep = base::c('T',
+                               'Treatment',
+                               'Column',
+                               'Rows',
+                               'Genotype',
+                               'Province',
+                               'Site',
+                               'Year',
+                               'Line',
+                               'MultiYear',
+                               'Location',
+                               'Rep',
+                               'Row',
+                               'Col',
+                               'Entry',
+                               'Plot')
         }
         temp_dep = input$main_db_dep_val
         if (rv$Show_Errors)if (base::is.null(temp_dep)) {
-          temp_dep = base::c('Yield', 'Oil', 'Maturity', 'Seedweight', 'Height', 'Protein')
+          temp_dep = base::c('Yield',
+                             'Oil',
+                             'Maturity',
+                             'Seedweight',
+                             'Height',
+                             'Protein',
+                             'Disease')
           # temp_dep = base::names(rv$data)
         }
         coln = base::colnames(rv$data)
@@ -336,7 +357,7 @@ app_server <- function(input, output, session) {
                             class = cls,
                             shiny::checkboxGroupInput(
                               inputId = 'main_db_dep_val',
-                              label = 'Select dependent Variables',
+                              label = 'Select dependent/response variables',
                               choices = coln,
                               selected = temp_dep
                             )),
@@ -553,7 +574,7 @@ app_server <- function(input, output, session) {
     if ('scatterplot' %in% input$plots_name) {
       shiny::checkboxGroupInput(
         'scatter_vars',
-        'Please select two variables for scatterplot',
+        'Please select two dependant/response variables for scatterplot',
         choices = input$main_db_dep_val,
         selected = input$scatter_vars
       )
@@ -627,13 +648,13 @@ app_server <- function(input, output, session) {
 
               shiny::textInput(
                 'minp',
-                "What is your desired minimum threshold for detecting outlier?",
+                "Set the minimum quantile for detecting outlier:",
                 value = 0.25
               ),
 
               shiny::textInput(
                 'maxp',
-                "What is your desired maximum threshold for detecting outlier?",
+                "Set the maximum quantile for detecting outlier:",
                 value = 0.75
               ))
         })
@@ -653,7 +674,7 @@ app_server <- function(input, output, session) {
 
         shiny::showModal(shiny::modalDialog(
           shiny::radioButtons(
-            inputId = 'outlier_method',
+            inputId = 'Outlier_method',
             label = 'Please select the method for outlier',
             choices = base::c('One dependent base' = 'A', "Cook\'s Distance" = 'B')),
           shiny::uiOutput('cooksdistance_ui'),
@@ -689,7 +710,7 @@ app_server <- function(input, output, session) {
               str = base::paste0(str, ' and ', n)
         }
         if (!base::is.null(str))
-          shiny_showNotification(rv ,base::paste0('Only continuous variables, it is not possible to draw plots for the following variable(s) : ', str))
+          shiny_showNotification(rv ,base::paste0('Only continuous variables, it is not possible to draw plots for ', str))
         shiny::showModal(
           shiny::modalDialog(
             title = 'Data Visualization',
@@ -751,13 +772,13 @@ app_server <- function(input, output, session) {
           if (input$cor_opt == 'Inter correlation') {
             shiny::radioButtons(
               inputId = 'dep_cor',
-              label = 'Please select a dependent variable',
+              label = 'Please select one dependent/response variable',
               choices = dep_cols)
           }
           else if (input$cor_opt == 'Intra correlation') {
             shiny::checkboxGroupInput(
               inputId = 'dep_cor',
-              label = 'Please select 2 dependent variables',
+              label = 'Please select two dependent/response variables',
               choices = dep_cols)
           }
         })
@@ -767,8 +788,8 @@ app_server <- function(input, output, session) {
             inputId = 'cor_opt',
             label = 'Please select an option',
             choices = base::c('Non-independent-based correlation',
-                              'Inter correlation',
-                              'Intra correlation')),
+                              'Inter - correlation',
+                              'Intra - correlation')),
           shiny::uiOutput('cor_intera_indep'),
           shiny::uiOutput('cor_intera_dep'),
           footer = shiny::tagList(shiny::actionButton('indep_cor_btn', 'OK'),
@@ -778,7 +799,7 @@ app_server <- function(input, output, session) {
 
       else if (input$active_opt_2 == 'normalize') {
         shiny::showModal(shiny::modalDialog(
-          shiny::textInput('nbin', "What is your desired number of bins for normalization process?"),
+          shiny::textInput('nbin', "Set the number of bins"),
           footer = shiny::tagList(
             shiny::actionButton('run_normalize', 'Run'),
             shiny::modalButton('Dismiss')),
@@ -808,7 +829,7 @@ app_server <- function(input, output, session) {
     }
     else {
       session$sendCustomMessage(type = 'testmessage',
-                                message = "Please select dependent and independent variables!!!")
+                                message = "Please select dependent and independent variables!")
     }
   })
 
@@ -847,22 +868,22 @@ app_server <- function(input, output, session) {
       if (input$her_action == 'spatial') {
         shiny::showModal(shiny::modalDialog(
           shiny::selectInput('spat_resp',
-                             'Please select response variable',
+                             'Please select dependent/response variable',
                              choices = dep_cols
           ),
           shiny::selectInput(
             inputId = 'spat_gen',
-            label = 'Please select the genotype column',
+            label = 'Please select the genotype variable',
             choices = indep_cols),
           shiny::selectInput(
             inputId = 'spat_row',
-            label = 'Please select the row',
+            label = 'Please select the row variable',
             choices = indep_cols,
             selected = 'Row'),
 
           shiny::selectInput(
             inputId = 'spat_col',
-            label = 'Please select the column',
+            label = 'Please select the column variable',
             choices = indep_cols,
             selected = 'Col'),
           shiny::checkboxGroupInput('spat_fix',
@@ -946,11 +967,11 @@ app_server <- function(input, output, session) {
       else if (input$her_action == 'blup') {
         shiny::showModal(shiny::modalDialog(
           shiny::selectInput('blup_resp',
-                             'Please select dependant variable',
+                             'Please select dependant/response variable',
                              choices = dep_cols
           ),
           shiny::selectInput('blup_indep',
-                             'Please select independent variable',
+                             'Please select independent variable for estimating BLUP',
                              choices = indep_cols
           ),
           if (base::length(dep_cols) > 1)
@@ -991,7 +1012,7 @@ app_server <- function(input, output, session) {
       if (rv$Show_Errors)
         shiny_showNotification(rv ,e$message)
       else
-        shiny_showNotification(rv ,'Something went wrong!')
+        shiny_showNotification(rv ,'Something is wrong! Would like to check everything again? ')
       # base::setwd("../../")
     })
 
@@ -1034,7 +1055,7 @@ app_server <- function(input, output, session) {
         if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
-          shiny_showNotification(rv ,'Something went wrong!')
+          shiny_showNotification(rv ,'Something is wrong! Would like to check everything again? ')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1177,7 +1198,7 @@ app_server <- function(input, output, session) {
       else
         res = base::paste0(res,' + ', f)
     }
-    shiny::textInput('rv_blue_rand', value = res, label = 'BLUE Random equation')
+    shiny::textInput('rv_blue_rand', value = res, label = 'BLUE random equation')
   })
 
   output$help_fix_outlier <- shiny::renderUI({
@@ -1286,7 +1307,7 @@ app_server <- function(input, output, session) {
         if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+          shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1310,7 +1331,7 @@ app_server <- function(input, output, session) {
         if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+          shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1334,7 +1355,7 @@ app_server <- function(input, output, session) {
         if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+          shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1355,7 +1376,7 @@ app_server <- function(input, output, session) {
         if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+          shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1363,7 +1384,7 @@ app_server <- function(input, output, session) {
     }else {
       session$sendCustomMessage(
         type = 'testmessage',
-        message = 'At least one variable should be selected')
+        message = 'At least one variable need to be selected')
     }
   })
 
@@ -1380,12 +1401,12 @@ app_server <- function(input, output, session) {
           if (rv$Show_Errors)
             shiny_showNotification(rv ,e$message)
           else
-            shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+            shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
           # base::setwd("../../")
         })
         waiter$hide()
       }else
-        shiny_showNotification(rv ,'At least one independent variable should be selected')
+        shiny_showNotification(rv ,'At least one independent variable need to be selected')
     }
     if ('densityplot' %in% input$plots_name) {
       if (!base::is.null(input$boxplot_vars))
@@ -1398,12 +1419,12 @@ app_server <- function(input, output, session) {
           if (rv$Show_Errors)
             shiny_showNotification(rv ,e$message)
           else
-            shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+            shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
           # base::setwd("../../")
         })
         waiter$hide()
       }else
-        shiny_showNotification(rv ,'At least one independent variable should be selected')
+        shiny_showNotification(rv ,'At least one independent variable need to be selected')
     }
     if ('violinplot' %in% input$plots_name) {
       if (!base::is.null(input$boxplot_vars)) {
@@ -1415,12 +1436,12 @@ app_server <- function(input, output, session) {
           if (rv$Show_Errors)
             shiny_showNotification(rv ,e$message)
           else
-            shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+            shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
           # base::setwd("../../")
         })
         waiter$hide()
       }else
-        shiny_showNotification(rv ,'At least one independent variable should be selected')
+        shiny_showNotification(rv ,'At least one independent variable need to be selected')
     }
     if ('scatterplot' %in% input$plots_name) {
       if (base::length(input$scatter_vars) == 2) {
@@ -1432,16 +1453,16 @@ app_server <- function(input, output, session) {
           if (rv$Show_Errors)
             shiny_showNotification(rv ,e$message)
           else
-            shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+            shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
           # base::setwd("../../")
           waiter$hide()
         })
         waiter$hide()
       }else
-        shiny_showNotification(rv ,'Two dependent variables is required in order to generate the Scatterplot')
+        shiny_showNotification(rv ,'Two dependent/response variables are required for creating Scatterplot')
     }
     if (base::is.null(input$plots_name)) {
-      shiny_showNotification(rv ,'Please select at least one option!!')
+      shiny_showNotification(rv ,'Please select at least one option!')
     }
     show_slider("Box Plots")
   })
@@ -1457,7 +1478,7 @@ app_server <- function(input, output, session) {
       if (rv$Show_Errors)
         shiny_showNotification(rv ,e$message)
       else
-        shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+        shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
       # base::setwd("../../")
     })
     waiter$hide()
@@ -1477,7 +1498,7 @@ app_server <- function(input, output, session) {
       if (rv$Show_Errors)
         shiny_showNotification(rv ,e$message)
       else
-        shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+        shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
       # base::setwd("../../")
     })
     waiter$hide()
@@ -1566,7 +1587,7 @@ app_server <- function(input, output, session) {
         rv$selected.col = NULL
         rv$review_flag = TRUE
       }else {
-        shiny_showNotification(rv ,'Column/Project name can not include " \ | ? * : < > and space')
+        shiny_showNotification(rv ,'Column/Project name can not include " \ | ? * : < > () and space')
       }
       base::rm(flag)
     }
@@ -1581,7 +1602,7 @@ app_server <- function(input, output, session) {
       if (s %in% forbidden_characters) {
         session$sendCustomMessage(
           type = 'testmessage',
-          message = 'Column names can not include " \ | ? * : < > and space')
+          message = 'Column names can not include " \ | ? * : < > () and space')
         ath_flag = F
         break
       }
@@ -1614,7 +1635,7 @@ app_server <- function(input, output, session) {
       waiter$hide()
       session$sendCustomMessage(
         type = 'testmessage',
-        message = 'Interaction is done! Please review independent variables!')
+        message = 'Interaction is done! Please review independent variables.')
 
       shiny::showModal(shiny::modalDialog(
         shiny::checkboxGroupInput(
@@ -1628,7 +1649,7 @@ app_server <- function(input, output, session) {
     } else if (ath_flag) {
       session$sendCustomMessage(
         type = 'testmessage',
-        message = 'Please select at least two variables to interact!')
+        message = 'Please select at least two independent variables to interact!')
     }
 
   })
@@ -1637,17 +1658,17 @@ app_server <- function(input, output, session) {
     if (base::length(base::c(input$main_db_indep_val, input$main_db_dep_val)) != base::length(base::unique(base::c(input$main_db_indep_val, input$main_db_dep_val)))) {
       shiny_showNotification(
         rv,
-        'You can not select a variable as both dependent and independent'
+        'It is not possible to select a variable as dependent and independent, simultaneously'
       )
     }else if (base::length(input$main_db_indep_val) == 0) {
       shiny_showNotification(
         rv,
-        'At least select one independent variable'
+        'At least one independent variable should be selected'
       )
     }else if (base::length(input$main_db_dep_val) == 0 ) {
       shiny_showNotification(
         rv,
-        'At least select one dependent variable'
+        'At least one dependent/response variable should be selected'
       )
     }else {
       shiny::removeModal()
@@ -1736,7 +1757,7 @@ app_server <- function(input, output, session) {
         if (rv$Show_Errors)
           shiny_showNotification(rv ,e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+          shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1948,7 +1969,7 @@ app_server <- function(input, output, session) {
         ),
         shiny::checkboxGroupInput(
           inputId = 'main_db_dep_val',
-          label = 'Select dependent Variables',
+          label = 'Select dependent/response variables',
           choices = base::names(rv$data),
           selected = temp_dep
         ),
