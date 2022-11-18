@@ -6,7 +6,7 @@ The AllInOne is an open-Source, R-Shiny user interface package designed in the [
 
 ## Demo
 
-A running demo is on [shinyapps.io](https://AllInOne.alihdr.ir/app/).
+Just click on [AllInOne](https://allinone-test.shinyapps.io/allinone-test/).
 
 
 ## Installation
