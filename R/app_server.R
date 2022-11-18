@@ -674,7 +674,7 @@ app_server <- function(input, output, session) {
 
         shiny::showModal(shiny::modalDialog(
           shiny::radioButtons(
-            inputId = 'Outlier_method',
+            inputId = 'outlier_method',
             label = 'Please select the method for outlier',
             choices = base::c('One dependent base' = 'A', "Cook\'s Distance" = 'B')),
           shiny::uiOutput('cooksdistance_ui'),
