@@ -323,10 +323,15 @@ app_server <- function(input, output, session) {
                                'MultiYear',
                                'Location',
                                'Rep',
+                               'rep',
                                'Row',
+                               'row',
+                               'col',
                                'Col',
                                'Entry',
-                               'Plot')
+                               'Plot',
+                               'Block',
+                               'block')
         }
         temp_dep = input$main_db_dep_val
         if (rv$Show_Errors)if (base::is.null(temp_dep)) {
