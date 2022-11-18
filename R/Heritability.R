@@ -68,8 +68,8 @@ Heritability <- function(input, rv) {
     base::invisible(base::print(var))
   }
 
-  filesave('png', input$project_name, ' -  Heritability', p)
-  filesave('pdf', input$project_name, ' -  Heritability', p)
+  filesave('png', input$project_name, ' -  Heritability', p, rv)
+  filesave('pdf', input$project_name, ' -  Heritability', p, rv)
 
   set_wd('Heritability', rv, input$save_results)
 }
