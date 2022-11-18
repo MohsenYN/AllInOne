@@ -10,7 +10,7 @@ Just click [HERE](https://allinone-test.shinyapps.io/allinone-test/).
 <br/>
 <br/>
 
-[<img src="inst/app/www/Website.png" width="600px" align="center"/>](https://allinone-test.shinyapps.io/allinone-test/)
+[<img src="inst/app/www/Website.PNG" width="600px" align="center"/>](https://allinone-test.shinyapps.io/allinone-test/)
 
 <br/>
 <br/>
