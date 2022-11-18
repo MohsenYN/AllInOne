@@ -93,7 +93,7 @@ menu_setting <- shinydashboard::menuItem(
   shiny::checkboxInput(
     'Ign_Res_Wrd',
     label = shiny::tags$span(
-      'Ignore special characters',
+      'Ignore special character',
       shiny::tags$i(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
@@ -106,7 +106,7 @@ menu_setting <- shinydashboard::menuItem(
   shiny::checkboxInput(
     'Rep_Res_Wrd',
     label = shiny::tags$span(
-      'Replace special characters',
+      'Replace special character',
       shiny::tags$i(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
