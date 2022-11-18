@@ -759,7 +759,7 @@ app_server <- function(input, output, session) {
           if (input$cor_opt == 'Inter correlation') {
             shiny::radioButtons(
               inputId = 'indep_cor',
-              label = 'Please select an independent variable',
+              label = 'Please select one independent variable',
               choices = indep_cols)
           }else if (input$cor_opt == 'Intra correlation') {
             shiny::checkboxGroupInput(
@@ -788,8 +788,8 @@ app_server <- function(input, output, session) {
             inputId = 'cor_opt',
             label = 'Please select an option',
             choices = base::c('Non-independent-based correlation',
-                              'Inter - correlation',
-                              'Intra - correlation')),
+                              'Inter correlation',
+                              'Intra correlation')),
           shiny::uiOutput('cor_intera_indep'),
           shiny::uiOutput('cor_intera_dep'),
           footer = shiny::tagList(shiny::actionButton('indep_cor_btn', 'OK'),
