@@ -48,7 +48,7 @@ remotes::install_local('path/to/AllInOne/', force = TRUE)
 You can install the AllInOne from GitHub like so:
 
 ``` r
-remotes::install_github('Mohsen1080/AllInOne')
+remotes::install_github('MohsenYN/AllInOne')
 ```
 
 ## How to run
