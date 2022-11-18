@@ -115,14 +115,14 @@ ExBLUE <- function(input, rv) {
       main = "Predicted vs Residual"
     )
   }
-  filesave('png', input$project_name, ' -- Predicted vs Residual', callback = p)
-  filesave('pdf', input$project_name, ' -- Predicted vs Residual', callback = p)
+  filesave('png', input$project_name, ' -- Predicted vs Residual', callback = p, rv)
+  filesave('pdf', input$project_name, ' -- Predicted vs Residual', callback = p, rv)
 
   p <- function(){
     car::qqPlot(MM.Sresid)
   }
-  filesave('png', input$project_name, ' -- Quantile Normality', callback = p)
-  filesave('pdf', input$project_name, ' -- Quantile Normality', callback = p)
+  filesave('png', input$project_name, ' -- Quantile Normality', callback = p, rv)
+  filesave('pdf', input$project_name, ' -- Quantile Normality', callback = p, rv)
 
   shapiro.test <- stats::shapiro.test(MM.Sresid)
   buffer <- base::as.data.frame(base::cbind(shapiro.test$statistic, shapiro.test$p.value))

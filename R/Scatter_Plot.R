@@ -14,8 +14,8 @@ CheckSatterplot <- function(input, rv) {
   p <- function()
     base::print(VIM::marginplot(Scatter))
 
-  filesave('png', input$project_name, " -- Scatter plot ", p)
-  filesave('pdf', input$project_name, " -- Scatter plot ", p)
+  filesave('png', input$project_name, " -- Scatter plot ", p, rv)
+  filesave('pdf', input$project_name, " -- Scatter plot ", p, rv)
 
   set_wd('Box Plots', rv, input$save_results)
 }

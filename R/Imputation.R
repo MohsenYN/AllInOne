@@ -39,26 +39,26 @@ ImputeMissing <- function(input, rv, session) {
     p <- function()
       base::print(mice::bwplot(PMM_MD))
 
-    filesave('png', input$project_name, " -- Box-and-whisker plots ", p)
-    filesave('pdf', input$project_name, " -- Box-and-whisker plots ", p)
+    filesave('png', input$project_name, " -- Box-and-whisker plots ", p, rv)
+    filesave('pdf', input$project_name, " -- Box-and-whisker plots ", p, rv)
 
     p <- function()
       base::print(base::plot(PMM_MD))
 
-    filesave('png', input$project_name, " -- Mean of the imputed varibales based on the number of multiple imputations  ", p)
-    filesave('pdf', input$project_name, " -- Mean of the imputed varibales based on the number of multiple imputations  ", p)
+    filesave('png', input$project_name, " -- Mean of the imputed varibales based on the number of multiple imputations  ", p, rv)
+    filesave('pdf', input$project_name, " -- Mean of the imputed varibales based on the number of multiple imputations  ", p, rv)
 
     p <- function()
       base::print(mice::densityplot(PMM_MD))
 
-    filesave('png', input$project_name, " -- Density plot based on the number of multiple imputations  ", p)
-    filesave('pdf', input$project_name, " -- Density plot based on the number of multiple imputations  ", p)
+    filesave('png', input$project_name, " -- Density plot based on the number of multiple imputations  ", p, rv)
+    filesave('pdf', input$project_name, " -- Density plot based on the number of multiple imputations  ", p, rv)
 
     p <- function()
       base::print(mice::stripplot(PMM_MD))
 
-    filesave('png', input$project_name, " -- Strip plot based on the number of multiple imputations  ", p)
-    filesave('pdf', input$project_name, " -- Strip plot based on the number of multiple imputations  ", p)
+    filesave('png', input$project_name, " -- Strip plot based on the number of multiple imputations  ", p, rv)
+    filesave('pdf', input$project_name, " -- Strip plot based on the number of multiple imputations  ", p, rv)
 
 
     CPMMData <- mice::complete(PMM_MD)

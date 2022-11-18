@@ -20,11 +20,11 @@ CheckMissing <- function(input, rv) {
   filesave("png",
            input$project_name,
            " -- Missing values in each trait",
-           func_mplot)
+           func_mplot, rv)
   filesave("pdf",
            input$project_name,
            " -- Missing values in each trait",
-           func_mplot)
+           func_mplot, rv)
 
 
   P <- finalfit::ff_glimpse(rv$dependent_variables)
@@ -48,11 +48,11 @@ CheckMissing <- function(input, rv) {
   filesave('png',
            input$project_name,
            " -- Missing values percentage and pattern",
-           func_pp)
+           func_pp, rv)
   filesave('pdf',
            input$project_name,
            " -- Missing values percentage and pattern",
-           func_pp)
+           func_pp, rv)
 
   set_wd('Missing Values', rv, input$save_results)
 }

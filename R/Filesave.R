@@ -12,13 +12,14 @@
 filesave <- function(fileformat,
                      outputPrefix,
                      name,
-                     callback) {
+                     callback,
+                     rv) {
   base::tryCatch({
     base::get(fileformat)(file = base::paste0(outputPrefix, name, ".", fileformat))
     base::invisible(callback())
     base::invisible(grDevices::dev.off())
   }, error = function(e) {
-    shiny::showNotification(base::paste0(e$message,' Error in saving file: ', name))
+    shiny_showNotification(rv, base::paste0(e$message,' Error in saving file: ', name))
     base::invisible(grDevices::dev.off())
   })
 }
