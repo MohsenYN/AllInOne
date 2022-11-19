@@ -24,14 +24,14 @@ app_server <- function(input, output, session) {
                                   ' ', '!', ';', ',', '|', '!', '@', '#', '$',
                                   '%', '^', '&', '*', '(', ')', '+', '-')
 
-  shinyjs::hideElement('Rep_Res_Wrd')
+  # shinyjs::hideElement('Rep_Res_Wrd')
 
   shiny::observe({
     rv$User_Config_notif_delay = input$notif_delay
     rv$User_Config_notif_size = input$notif_size
     rv$Maximum_Level_For_Group_By = input$Max_levels_GB
     rv$Ignore_Reserved_Letters = input$Ign_Res_Wrd
-    rv$Replace_Reserved_Letters = input$Rep_Res_Wrd
+    # rv$Replace_Reserved_Letters = input$Rep_Res_Wrd
   })
 
   shiny::observeEvent(input$save_results,{

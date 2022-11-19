@@ -101,20 +101,19 @@ menu_setting <- shinydashboard::menuItem(
        By checking the box, AllInOne ignores the limitation. however, it is highly recommended not to check the box!'
       )),
     T
-  )
-  ,
-  shiny::checkboxInput(
-    'Rep_Res_Wrd',
-    label = shiny::tags$span(
-      'Replace special characters',
-      shiny::tags$i(
-       class = "glyphicon glyphicon-info-sign",
-       style = "color: var(--Just-color);",
-       title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
-       By checking this option, AllInOne automatically replace reserved letters with the underline (_) .'
-      )),
-    F
   ),
+  # shiny::checkboxInput(
+  #   'Rep_Res_Wrd',
+  #   label = shiny::tags$span(
+  #     'Replace special characters',
+  #     shiny::tags$i(
+  #      class = "glyphicon glyphicon-info-sign",
+  #      style = "color: var(--Just-color);",
+  #      title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
+  #      By checking this option, AllInOne automatically replace reserved letters with the underline (_) .'
+  #     )),
+  #   F
+  # ),
 
   shiny::checkboxInput(
     'save_results',
