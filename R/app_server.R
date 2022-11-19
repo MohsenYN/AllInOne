@@ -1702,11 +1702,20 @@ app_server <- function(input, output, session) {
         rv$outliers_row = NULL
         rv$selected.col = NULL
         rv$review_flag = TRUE
+
       }else {
         shiny_showNotification(rv, 'Column/Project name can not include " \ | ? * : < > () and space')
       }
       base::rm(flag)
     }
+  })
+
+  shiny::observeEvent(input$data_summary, {
+    showModal(
+      modalDialog(
+          shiny::renderTable(base::summary(rv$data), rownames = T, colnames = F)
+      )
+    )
   })
 
   shiny::observeEvent(input$interaction_btn_apply, {
@@ -1891,7 +1900,8 @@ app_server <- function(input, output, session) {
   output$content_save_db <- shiny::renderUI({
     if (!base::is.null(rv$data)) {
       shiny::tagList(shiny::downloadButton('download_db', 'Save as the dataset'),
-                     shiny::actionButton('filter_outlier_reset', "Revert filters"))
+                     shiny::actionButton('filter_outlier_reset', "Revert filters"),
+                     shiny::actionButton('data_summary', "Summary"))
     }
   })
 
