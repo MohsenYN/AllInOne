@@ -624,7 +624,6 @@ app_server <- function(input, output, session) {
       base::tryCatch({
         CheckMissing(input, rv)
       }, error = function(e) {
-
         if (rv$Show_Errors)
           shiny_showNotification(rv, e$message)
         else
@@ -634,57 +633,22 @@ app_server <- function(input, output, session) {
       waiter$hide()
       show_slider("Missing Values")
     }
-
     else if (input$missing_handler_opt == 'impute') {
-      shiny::showModal(
-        shiny::modalDialog(
-          shiny::selectInput(
-            'impute_method',
-            'Please select the method for imputation',
-            base::c(
-              'Remove Missing Point' = 'rm',
-              # 'Random Forest' = 'rand',
-              # 'MI' = 'mi',
-              'Predictive mean matching' = 'pmm',
-              'Weighted predictive mean matching' = 'midastouch',
-              'Random sample from observed values' = 'sample',
-              'Classification and regression trees' = 'cart',
-              'Random forest imputations' = 'rf',
-              'Unconditional mean imputation' = 'mean',
-              'Bayesian linear regression' = 'norm',
-              'Linear regression ignoring model error' = 'norm.nob',
-              'Linear regression using bootstrap' = 'norm.boot',
-              'Linear regression, predicted values' = 'norm.predict',
-              'Lasso linear regression' = 'lasso.norm',
-              'Lasso select and linear regression' = 'lasso.select.norm',
-              'Imputation of quadratic terms' = 'quadratic',
-              'Random indicator for nonignorable data' = 'ri',
-              'Logistic regression' = 'logreg',
-              'Logistic regression with bootstrap' = 'logreg.boot',
-              'Lasso logistic regression' = 'lasso.logreg',
-              'Lasso select and logistic regression' = 'lasso.select.logreg',
-              'Proportional odds model' = 'polr',
-              'Polytomous logistic regression' = 'polyreg',
-              'Linear discriminant analysis' = 'lda',
-              'Level-1 normal heteroscedastic' = '2l.norm',
-              'Level-1 normal homoscedastic, lmer' = '2l.lmer',
-              'Level-1 normal homoscedastic, pan' = '2l.pan',
-              'Level-1 logistic, glmer' = '2l.bin',
-              'Level-2 class mean' = '2lonly.mean',
-              'Level-2 class normal' = '2lonly.norm',
-              'Level-2 class predictive mean matching' = '2lonly.pmm'
-            ),
-            selected = 'rm'
-          ),
-          shiny::uiOutput('mice_input'),
-
-          footer = shiny::tagList(
-            shiny::actionButton('impute_method_btn', 'Impute'),
-            shiny::modalButton('Dismiss')
-          ),
-          easyClose = FALSE
-        )
-      )
+      shiny::removeModal()
+      if (base::dir.exists(app_sys("app/Results/Missing Imputation")))
+        base::unlink(app_sys("app/Results/Missing Imputation"), recursive = TRUE)
+      waiter$show()
+      base::tryCatch({
+        ImputeMissing(input, rv, session)
+      }, error = function(e) {
+        if (rv$Show_Errors)
+          shiny_showNotification(rv, e$message)
+        else
+          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
+        # base::setwd("../../")
+      })
+      waiter$hide()
+      show_slider('Missing Imputation')
     }
   })
 
@@ -742,17 +706,66 @@ app_server <- function(input, output, session) {
     if (!rv$review_flag | base::file.exists('debug_mode/ignore_review_flag'))
     {
       if (input$active_opt_2 == 'missing_handler') {
-        shiny::showModal(shiny::modalDialog(
-          shiny::radioButtons('missing_handler_opt',
-                              'Please select whether you want to see the missing pattern or impute them',
-                              choices = base::c('See Missing Pattern' = 'missing',
-                                                'Impute Missing Value' = 'impute')),
-          easyClose = FALSE,
-          footer = shiny::tagList(
-            shiny::actionButton('missing_handler_btn', 'Done'),
-            shiny::modalButton('Dismiss')
+        shiny::showModal(
+          shiny::modalDialog(
+            shiny::radioButtons(
+              inputId = 'missing_handler_opt',
+              label = 'Please select whether you want to see the missing pattern or impute them',
+              choices = base::c('See Missing Pattern' = 'missing',
+                                'Impute Missing Value' = 'impute')),
+            uiOutput('mice_input2'),
+            easyClose = FALSE,
+            footer = shiny::tagList(
+              shiny::actionButton('missing_handler_btn', 'Done'),
+              shiny::modalButton('Dismiss')
+            )
           )
-        ))
+        )
+        output$mice_input2 <- renderUI({
+          if(input$missing_handler_opt == 'impute'){
+            shiny::tagList(
+            shiny::selectInput(
+              'impute_method',
+              'Please select the method for imputation',
+              base::c(
+                'Remove Missing Point' = 'rm',
+                # 'Random Forest' = 'rand',
+                # 'MI' = 'mi',
+                'Predictive mean matching' = 'pmm',
+                'Weighted predictive mean matching' = 'midastouch',
+                'Random sample from observed values' = 'sample',
+                'Classification and regression trees' = 'cart',
+                'Random forest imputations' = 'rf',
+                'Unconditional mean imputation' = 'mean',
+                'Bayesian linear regression' = 'norm',
+                'Linear regression ignoring model error' = 'norm.nob',
+                'Linear regression using bootstrap' = 'norm.boot',
+                'Linear regression, predicted values' = 'norm.predict',
+                'Lasso linear regression' = 'lasso.norm',
+                'Lasso select and linear regression' = 'lasso.select.norm',
+                'Imputation of quadratic terms' = 'quadratic',
+                'Random indicator for nonignorable data' = 'ri',
+                'Logistic regression' = 'logreg',
+                'Logistic regression with bootstrap' = 'logreg.boot',
+                'Lasso logistic regression' = 'lasso.logreg',
+                'Lasso select and logistic regression' = 'lasso.select.logreg',
+                'Proportional odds model' = 'polr',
+                'Polytomous logistic regression' = 'polyreg',
+                'Linear discriminant analysis' = 'lda',
+                'Level-1 normal heteroscedastic' = '2l.norm',
+                'Level-1 normal homoscedastic, lmer' = '2l.lmer',
+                'Level-1 normal homoscedastic, pan' = '2l.pan',
+                'Level-1 logistic, glmer' = '2l.bin',
+                'Level-2 class mean' = '2lonly.mean',
+                'Level-2 class normal' = '2lonly.norm',
+                'Level-2 class predictive mean matching' = '2lonly.pmm'
+              ),
+              selected = 'rm'
+            ),
+            shiny::uiOutput('mice_input')
+          )
+          }
+        })
       }
 
       else if (input$active_opt_2 == 'outlier') {
@@ -1587,23 +1600,6 @@ app_server <- function(input, output, session) {
     show_slider("Box Plots")
   })
 
-  shiny::observeEvent(input$impute_method_btn, {
-    shiny::removeModal()
-    if (base::dir.exists(app_sys("app/Results/Missing Imputation")))
-      base::unlink(app_sys("app/Results/Missing Imputation"), recursive = TRUE)
-    waiter$show()
-    base::tryCatch({
-      ImputeMissing(input, rv, session)
-    }, error = function(e) {
-      if (rv$Show_Errors)
-        shiny_showNotification(rv, e$message)
-      else
-        shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
-      # base::setwd("../../")
-    })
-    waiter$hide()
-    show_slider('Missing Imputation')
-  })
 
   shiny::observeEvent(input$run_outlier, {
     shiny::removeModal()
