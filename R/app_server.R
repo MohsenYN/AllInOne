@@ -47,16 +47,16 @@ app_server <- function(input, output, session) {
 
   })
 
-  observeEvent(input$results_folder,{
+  observeEvent(input$results_folder, {
     base::tryCatch({
       shiny::updateTextInput(inputId = 'results_folder_path', value = utils::choose.dir())
-    }, error = function(e){
-      shiny_showNotification(rv , e$message)
-      shiny_showNotification(rv , 'As some thing went wrong in selecting the path, please copy it in the folowing inputbox')
+    }, error = function(e) {
+      shiny_showNotification(rv, e$message)
+      shiny_showNotification(rv, 'As some thing went wrong in selecting the path, please copy it in the folowing inputbox')
     })
   })
 
-  observeEvent(input$results_folder_path,{
+  observeEvent(input$results_folder_path, {
     rv$Path_For_Saving_Results = input$results_folder_path
   })
 
@@ -158,9 +158,9 @@ app_server <- function(input, output, session) {
       rv$outliers = NULL
       rv$outliers_row = NULL
       res = NULL
-      for(i in input$subset_levels){
+      for (i in input$subset_levels) {
         buffer = base::subset(rv$data, base::get(input$subset_indep) == i)
-        res = rbind(res,buffer)
+        res = rbind(res, buffer)
       }
       rv$data <- res
       base::rownames(rv$data) = 1:base::nrow(rv$data)
@@ -245,14 +245,14 @@ app_server <- function(input, output, session) {
           shiny::selectInput('sheet_number', 'Sheet Number', 1:100, selected = 1)
         })
       }
-      else if (postfix == ".csv"){
+      else if (postfix == ".csv") {
         rv$dataC <-
-        utils::read.csv(
-          address,
-          header = TRUE,
-          sep = ",",
-          fileEncoding = "UTF-8-BOM"
-        )
+          utils::read.csv(
+            address,
+            header = TRUE,
+            sep = ",",
+            fileEncoding = "UTF-8-BOM"
+          )
         output$dataC_sheet <- shiny::renderUI({
           shiny::tagList(
             shiny::selectInput(
@@ -314,8 +314,8 @@ app_server <- function(input, output, session) {
 
   observeEvent(
     ignoreInit = TRUE, c(
-    input$dataC_delimiter,
-    input$dataC_header), {
+      input$dataC_delimiter,
+      input$dataC_header), {
     tryCatch({
       address = input$file$data
       postfix = base::substring(
@@ -323,7 +323,7 @@ app_server <- function(input, output, session) {
         base::nchar(address) - 3,
         base::nchar(address)
       )
-      if (postfix == ".csv"){
+      if (postfix == ".csv") {
         rv$dataC <-
           utils::read.csv(
             address,
@@ -356,7 +356,7 @@ app_server <- function(input, output, session) {
         base::nchar(address) - 3,
         base::nchar(address)
       )
-      if (postfix == "xlsx"){
+      if (postfix == "xlsx") {
         rv$dataC <- readxl::read_xlsx(address, sheet = as.numeric(input$sheet_number))
       }else {
         session$sendCustomMessage(type = 'testmessage',
@@ -401,7 +401,7 @@ app_server <- function(input, output, session) {
     if (check_name(input$new_col_name) != '') {
       base::colnames(rv$dataC)[base::which(base::names(rv$dataC) == input$columns_name_list)] <- check_name(input$new_col_name)
     }else {
-      shiny_showNotification(rv ,'Column names can not include " \ | ? * : < > () and space')
+      shiny_showNotification(rv, 'Column names can not include " \ | ? * : < > () and space')
     }
   })
 
@@ -554,7 +554,7 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$subset_btn, {
-    if(!is.null(input$subset_levels) & !is.null(input$subset_indep)){
+    if (!is.null(input$subset_levels) & !is.null(input$subset_indep)) {
       shiny::removeModal()
       db.edit(1, 1, 1, 'subset_dataset')
     }
@@ -583,9 +583,9 @@ app_server <- function(input, output, session) {
         NormaLiZaTIoN(input, rv)
       }, error = function(e) {
         if (rv$Show_Errors)
-          shiny_showNotification(rv ,e$message)
+          shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+          shiny_showNotification(rv, 'Incorrect arguments, please review your data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -626,9 +626,9 @@ app_server <- function(input, output, session) {
       }, error = function(e) {
 
         if (rv$Show_Errors)
-          shiny_showNotification(rv ,e$message)
+          shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review your data!')
+          shiny_showNotification(rv, 'Incorrect arguments, please review your data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -809,12 +809,12 @@ app_server <- function(input, output, session) {
         for (i in indep_cols) {
           if (base::length(base::unique(rv$data[[i]])) > rv$Maximum_Level_For_Group_By) {
             indep_cols = base::subset(indep_cols, indep_cols != i)
-            shiny_showNotification(rv ,
-              base::paste0(
-                'The variable {', i,
-                '} is removed from independent variables list as it has more than ',
-                rv$Maximum_Level_For_Group_By, ' levels!'
-              )
+            shiny_showNotification(rv,
+                                   base::paste0(
+                                     'The variable {', i,
+                                     '} is removed from independent variables list as it has more than ',
+                                     rv$Maximum_Level_For_Group_By, ' levels!'
+                                   )
             )
           }
         }
@@ -828,7 +828,7 @@ app_server <- function(input, output, session) {
               str = base::paste0(str, ' and ', n)
         }
         if (!base::is.null(str))
-          shiny_showNotification(rv ,base::paste0('Only continuous variables, it is not possible to draw plots for ', str))
+          shiny_showNotification(rv, base::paste0('Only continuous variables, it is not possible to draw plots for ', str))
         shiny::showModal(
           shiny::modalDialog(
             title = 'Data Visualization',
@@ -857,19 +857,19 @@ app_server <- function(input, output, session) {
         for (i in indep_cols) {
           if (base::length(base::unique(rv$data[[i]])) < 2) {
             indep_cols = base::subset(indep_cols, indep_cols != i)
-            shiny_showNotification(rv ,
-              base::paste0('The variable {', i,
-                           '} is removed from independent variables list as it has less then two levels!'
-              )
+            shiny_showNotification(rv,
+                                   base::paste0('The variable {', i,
+                                                '} is removed from independent variables list as it has less then two levels!'
+                                   )
             )
           } else if (base::length(base::unique(rv$data[[i]])) > rv$Maximum_Level_For_Group_By) {
             indep_cols = base::subset(indep_cols, indep_cols != i)
-            shiny_showNotification(rv ,
-              base::paste0(
-                'The variable {', i,
-                '} is removed from independent variables list as it has more than ',
-                rv$Maximum_Level_For_Group_By, ' levels!'
-              )
+            shiny_showNotification(rv,
+                                   base::paste0(
+                                     'The variable {', i,
+                                     '} is removed from independent variables list as it has more than ',
+                                     rv$Maximum_Level_For_Group_By, ' levels!'
+                                   )
             )
           }
         }
@@ -974,10 +974,10 @@ app_server <- function(input, output, session) {
     for (i in indep_cols) {
       if (base::length(base::unique(rv$data[[i]])) < 2) {
         indep_cols = base::subset(indep_cols, indep_cols != i)
-        shiny_showNotification(rv ,
-          base::paste0(i,
-                       ' is removed from independent variables list as it has less then two levels!'
-          )
+        shiny_showNotification(rv,
+                               base::paste0(i,
+                                            ' is removed from independent variables list as it has less then two levels!'
+                               )
         )
       }
     }
@@ -1128,9 +1128,9 @@ app_server <- function(input, output, session) {
     }, error = function(e) {
       waiter$hide()
       if (rv$Show_Errors)
-        shiny_showNotification(rv ,e$message)
+        shiny_showNotification(rv, e$message)
       else
-        shiny_showNotification(rv ,'Something is wrong! Would like to check everything again? ')
+        shiny_showNotification(rv, 'Something is wrong! Would like to check everything again? ')
       # base::setwd("../../")
     })
 
@@ -1151,14 +1151,16 @@ app_server <- function(input, output, session) {
 
   shiny::observeEvent(input$indep_blue_btn, {
     if (base::length(input$blue_cof) > 2)
-      shiny_showNotification(rv ,'You can only select one co-factor!')
+      shiny_showNotification(rv, 'You can only select one co-factor!')
     else if (
-      input$rv_blue_rand == '' | input$rv_blue_fix == '' |
-        base::length(input$blue_fix_interact) %% 2 != 0 | base::length(input$blue_rand_interact) %% 2 != 0 |
+      input$rv_blue_rand == '' |
+        input$rv_blue_fix == '' |
+        base::length(input$blue_fix_interact) %% 2 != 0 |
+        base::length(input$blue_rand_interact) %% 2 != 0 |
         base::length(input$blue_fix) + base::length(input$blue_fix_interact) == 0 |
         base::length(input$blue_rand) + base::length(input$blue_rand_interact) == 0
     )
-      shiny_showNotification(rv ,'Error in formula')
+      shiny_showNotification(rv, 'Error in formula')
     else {
       shiny::removeModal()
       if (base::dir.exists(app_sys("app/Results/Blue")))
@@ -1171,9 +1173,9 @@ app_server <- function(input, output, session) {
       }, error = function(e) {
 
         if (rv$Show_Errors)
-          shiny_showNotification(rv ,e$message)
+          shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv ,'Something is wrong! Would like to check everything again? ')
+          shiny_showNotification(rv, 'Something is wrong! Would like to check everything again? ')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1311,10 +1313,10 @@ app_server <- function(input, output, session) {
         }
       }
 
-      if(res == '')
+      if (res == '')
         res = f
       else
-        res = base::paste0(res,' + ', f)
+        res = base::paste0(res, ' + ', f)
     }
     shiny::textInput('rv_blue_rand', value = res, label = 'BLUE random equation')
   })
@@ -1423,9 +1425,9 @@ app_server <- function(input, output, session) {
         Heritability(input, rv)
       }, error = function(e) {
         if (rv$Show_Errors)
-          shiny_showNotification(rv ,e$message)
+          shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1435,9 +1437,9 @@ app_server <- function(input, output, session) {
 
   shiny::observeEvent(input$indep_blup_btn, {
     if (input$rv_her == '')
-      shiny_showNotification(rv ,'Please select variable(s) first!')
+      shiny_showNotification(rv, 'Please select variable(s) first!')
     else if (base::length(input$blup_cof) > 1)
-      shiny_showNotification(rv ,'You can only select one co-factor!')
+      shiny_showNotification(rv, 'You can only select one co-factor!')
     else {
       shiny::removeModal()
       if (base::dir.exists(app_sys("app/Results/blup")))
@@ -1447,9 +1449,9 @@ app_server <- function(input, output, session) {
         BLUP(input, rv)
       }, error = function(e) {
         if (rv$Show_Errors)
-          shiny_showNotification(rv ,e$message)
+          shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1461,7 +1463,7 @@ app_server <- function(input, output, session) {
   shiny::observeEvent(input$indep_cor_btn, {
     if ((input$cor_opt == 'Intra correlation' && base::length(input$indep_cor) == 0) |
       (input$cor_opt == 'Intra correlation' && base::length(input$dep_cor) != 2)) {
-      shiny_showNotification(rv ,'Please selecet two dependent variables and at least one independent variable')
+      shiny_showNotification(rv, 'Please selecet two dependent variables and at least one independent variable')
     }else {
       if (base::dir.exists(app_sys("app/Results/Correlation")))
         base::unlink(app_sys("app/Results/Correlation"), recursive = TRUE)
@@ -1471,9 +1473,9 @@ app_server <- function(input, output, session) {
         CoReLaTiOnSS(input, rv)
       }, error = function(e) {
         if (rv$Show_Errors)
-          shiny_showNotification(rv ,e$message)
+          shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1492,9 +1494,9 @@ app_server <- function(input, output, session) {
         DensityPlot(input, rv)
       }, error = function(e) {
         if (rv$Show_Errors)
-          shiny_showNotification(rv ,e$message)
+          shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1517,14 +1519,14 @@ app_server <- function(input, output, session) {
           CheckBOXVIO(input, rv)
         }, error = function(e) {
           if (rv$Show_Errors)
-            shiny_showNotification(rv ,e$message)
+            shiny_showNotification(rv, e$message)
           else
-            shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+            shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
           # base::setwd("../../")
         })
         waiter$hide()
       }else
-        shiny_showNotification(rv ,'At least one independent variable need to be selected')
+        shiny_showNotification(rv, 'At least one independent variable need to be selected')
     }
     if ('densityplot' %in% input$plots_name) {
       if (!base::is.null(input$boxplot_vars))
@@ -1535,14 +1537,14 @@ app_server <- function(input, output, session) {
           DensityPlot(input, rv)
         }, error = function(e) {
           if (rv$Show_Errors)
-            shiny_showNotification(rv ,e$message)
+            shiny_showNotification(rv, e$message)
           else
-            shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+            shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
           # base::setwd("../../")
         })
         waiter$hide()
       }else
-        shiny_showNotification(rv ,'At least one independent variable need to be selected')
+        shiny_showNotification(rv, 'At least one independent variable need to be selected')
     }
     if ('violinplot' %in% input$plots_name) {
       if (!base::is.null(input$boxplot_vars)) {
@@ -1552,14 +1554,14 @@ app_server <- function(input, output, session) {
           CheckVIO(input, rv)
         }, error = function(e) {
           if (rv$Show_Errors)
-            shiny_showNotification(rv ,e$message)
+            shiny_showNotification(rv, e$message)
           else
-            shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+            shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
           # base::setwd("../../")
         })
         waiter$hide()
       }else
-        shiny_showNotification(rv ,'At least one independent variable need to be selected')
+        shiny_showNotification(rv, 'At least one independent variable need to be selected')
     }
     if ('scatterplot' %in% input$plots_name) {
       if (base::length(input$scatter_vars) == 2) {
@@ -1569,18 +1571,18 @@ app_server <- function(input, output, session) {
           CheckSatterplot(input, rv)
         }, error = function(e) {
           if (rv$Show_Errors)
-            shiny_showNotification(rv ,e$message)
+            shiny_showNotification(rv, e$message)
           else
-            shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+            shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
           # base::setwd("../../")
           waiter$hide()
         })
         waiter$hide()
       }else
-        shiny_showNotification(rv ,'Two dependent/response variables are required for creating Scatterplot')
+        shiny_showNotification(rv, 'Two dependent/response variables are required for creating Scatterplot')
     }
     if (base::is.null(input$plots_name)) {
-      shiny_showNotification(rv ,'Please select at least one option!')
+      shiny_showNotification(rv, 'Please select at least one option!')
     }
     show_slider("Box Plots")
   })
@@ -1594,9 +1596,9 @@ app_server <- function(input, output, session) {
       ImputeMissing(input, rv, session)
     }, error = function(e) {
       if (rv$Show_Errors)
-        shiny_showNotification(rv ,e$message)
+        shiny_showNotification(rv, e$message)
       else
-        shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+        shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
       # base::setwd("../../")
     })
     waiter$hide()
@@ -1614,9 +1616,9 @@ app_server <- function(input, output, session) {
       PoSiBlEoUtLieR(input, rv)
     }, error = function(e) {
       if (rv$Show_Errors)
-        shiny_showNotification(rv ,e$message)
+        shiny_showNotification(rv, e$message)
       else
-        shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+        shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
       # base::setwd("../../")
     })
     waiter$hide()
@@ -1658,9 +1660,9 @@ app_server <- function(input, output, session) {
       }
     }, error = function(e) {
       if (rv$Show_Errors)
-        shiny_showNotification(rv ,e$message)
+        shiny_showNotification(rv, e$message)
       else
-        shiny_showNotification(rv ,'Error in applying outlier tools')
+        shiny_showNotification(rv, 'Error in applying outlier tools')
     })
   })
 
@@ -1690,7 +1692,7 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$create_db, {
-    if(!is.null(rv$dataC)){
+    if (!is.null(rv$dataC)) {
       flag = T
       for (col in base::c(base::colnames(rv$dataC), input$project_name)) {
         if (check_name(col) == '') {
@@ -1705,7 +1707,7 @@ app_server <- function(input, output, session) {
         rv$selected.col = NULL
         rv$review_flag = TRUE
       }else {
-        shiny_showNotification(rv ,'Column/Project name can not include " \ | ? * : < > () and space')
+        shiny_showNotification(rv, 'Column/Project name can not include " \ | ? * : < > () and space')
       }
       base::rm(flag)
     }
@@ -1783,7 +1785,7 @@ app_server <- function(input, output, session) {
         rv,
         'At least one independent variable should be selected'
       )
-    }else if (base::length(input$main_db_dep_val) == 0 ) {
+    }else if (base::length(input$main_db_dep_val) == 0) {
       shiny_showNotification(
         rv,
         'At least one dependent/response variable should be selected'
@@ -1864,7 +1866,7 @@ app_server <- function(input, output, session) {
       }
       rv$outliers_row = rv$outliers = NULL
 
-      shiny_showNotification(rv ,' Outliers are refined!')
+      shiny_showNotification(rv, ' Outliers are refined!')
 
       if (base::dir.exists(app_sys("app/Results/Refine")))
         base::unlink(app_sys("app/Results/Refine"), recursive = TRUE)
@@ -1873,9 +1875,9 @@ app_server <- function(input, output, session) {
         Refine(input, rv)
       }, error = function(e) {
         if (rv$Show_Errors)
-          shiny_showNotification(rv ,e$message)
+          shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv ,'Incorrect arguments, please review the data!')
+          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -2022,7 +2024,7 @@ app_server <- function(input, output, session) {
             label = shiny::HTML(str_temp),
             value = rv$data[k, base::paste0(i)]
           )))
-        }else{
+        }else {
           str_temp = base::paste0('<h4>', i, ' (', input$indep_outlier_2, ')</h4>')
           args1 = base::append(args1, base::list(shiny::textInput(
             base::paste0("OTL_", i),
