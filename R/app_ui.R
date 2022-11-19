@@ -131,6 +131,8 @@ menu_setting <- shinydashboard::menuItem(
     'results_folder',
     'Select a folder'
   )
+  ,
+  shiny::textInput('results_folder_path', 'Selected a folder')
 )
 
 menu_db <- shinydashboard::menuItem(
