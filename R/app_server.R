@@ -61,73 +61,77 @@ app_server <- function(input, output, session) {
   })
 
   show_slider <- function(str, k = 1) {
-    rv$slider.str = str
-    rv$slider.k = k
+    tryCatch({
+      rv$slider.str = str
+      rv$slider.k = k
 
-    imgs <-
-      base::list.files(app_sys(base::paste0("app/Results/", str)),
-                       pattern = stringr::regex("*.(png|csv|txt)"))
-    imgs = put_csv_last(imgs)
+      imgs <-
+        base::list.files(app_sys(base::paste0("app/Results/", str)),
+                         pattern = stringr::regex("*.(png|csv|txt)"))
+      imgs = put_csv_last(imgs)
 
-    if (base::is.null(rv$slider.k))
-      k = 1
-    if (k <= base::length(imgs) & k > 0) {
-      file_address = app_sys('app/Results/', str, '/', imgs[k])
+      if (base::is.null(rv$slider.k))
+        k = 1
+      if (k <= base::length(imgs) & k > 0) {
+        file_address = app_sys('app/Results/', str, '/', imgs[k])
 
-      rv$png_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.png')
-      rv$pdf_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.pdf')
-      rv$csv_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.csv')
-      rv$txt_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.txt')
+        rv$png_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.png')
+        rv$pdf_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.pdf')
+        rv$csv_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.csv')
+        rv$txt_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.txt')
 
-      file_address = base::paste0('Results/', str, '/', imgs[k], '?', runif(1, 1, 2))
+        file_address = base::paste0('Results/', str, '/', imgs[k], '?', runif(1, 1, 2))
 
-      extention = base::substring(imgs[k], base::nchar(imgs[k]) - 2, base::nchar(imgs[k]))
-      shiny::showModal(shiny::modalDialog(
-        title = shiny::tags$b(base::substring(imgs[k], 1, base::nchar(imgs[k]) - 4)),
-        if (extention == 'png') {
-          shiny::HTML(
-            paste0(
-              '<img
-          src="',file_address,'" ,
+        extention = base::substring(imgs[k], base::nchar(imgs[k]) - 2, base::nchar(imgs[k]))
+        shiny::showModal(shiny::modalDialog(
+          title = shiny::tags$b(base::substring(imgs[k], 1, base::nchar(imgs[k]) - 4)),
+          if (extention == 'png') {
+            shiny::HTML(
+              paste0(
+                '<img
+            src="', file_address, '" ,
           style="width:100%;height:auto;object-fit:contain",
           alt = " This plot is not availabe based on your data or the used arguments!",
           >'
+              )
             )
-          )
-        }else if (extention == 'csv') {
-          rv$csv_value = utils::read.csv(
-            file = rv$csv_address, header = TRUE,
-            sep = ",", fileEncoding = "UTF-8-BOM")
+          }else if (extention == 'csv') {
+            rv$csv_value = utils::read.csv(
+              file = rv$csv_address, header = TRUE,
+              sep = ",", fileEncoding = "UTF-8-BOM")
 
-          DT::renderDataTable(
-            rv$csv_value,
-            options = base::list(
-              scrollX = TRUE,
-              scrollCollapse = TRUE, autoWidth = TRUE, dom = 'ltip')
-          )
-        }else if (extention == 'txt') {
-          sum = ''
-          for (i in readLines(rv$txt_address)) {
-            sum = paste0(sum, '<br/>', i)
-          }
-          helpText(HTML(sum))
-        },
-        easyClose = TRUE,
-        footer = shiny::tagList(
-          shiny::actionButton('slider_back', 'Previous'),
-          if (base::file.exists(rv$pdf_address))
-            shiny::downloadButton('download_pdf', 'Download as PDF'),
-          if (base::file.exists(rv$png_address))
-            shiny::downloadButton('download_png', 'Download full size image'),
-          if (base::file.exists(rv$csv_address))
-            shiny::downloadButton('download_csv', 'Download the table'),
-          if (base::file.exists(rv$csv_address))
-            shiny::actionButton('csvs_use', 'Set the table as main dataset'),
+            DT::renderDataTable(
+              rv$csv_value,
+              options = base::list(
+                scrollX = TRUE,
+                scrollCollapse = TRUE, autoWidth = TRUE, dom = 'ltip')
+            )
+          }else if (extention == 'txt') {
+            sum = ''
+            for (i in readLines(rv$txt_address)) {
+              sum = paste0(sum, '<br/>', i)
+            }
+            helpText(HTML(sum))
+          },
+          easyClose = TRUE,
+          footer = shiny::tagList(
+            shiny::actionButton('slider_back', 'Previous'),
+            if (base::file.exists(rv$pdf_address))
+              shiny::downloadButton('download_pdf', 'Download as PDF'),
+            if (base::file.exists(rv$png_address))
+              shiny::downloadButton('download_png', 'Download full size image'),
+            if (base::file.exists(rv$csv_address))
+              shiny::downloadButton('download_csv', 'Download the table'),
+            if (base::file.exists(rv$csv_address))
+              shiny::actionButton('csvs_use', 'Set the table as main dataset'),
 
-          shiny::actionButton('slider_next', base::paste0(k, '/', base::length(imgs), '  Next'))
-        )
-      ))
-    }
+            shiny::actionButton('slider_next', base::paste0(k, '/', base::length(imgs), '  Next'))
+          )
+        ))
+      }
+    }, error = function(e) {
+      shiny_showNotification(rv, e$message)
+    })
   }
 
   db.edit <- function(temp_r, temp_c, temp_v, col_type = 'number') {
@@ -227,41 +231,139 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$file$data, {
-    address = input$file$data
-    postfix = base::substring(
-      address,
-      base::nchar(address) - 3,
-      base::nchar(address)
-    )
-    rv$dataC <- NULL
-    if (postfix == "xlsx")
-      rv$dataC <- readxl::read_xlsx(address, sheet = 1)
-    else if (postfix == ".csv")
-      rv$dataC <-
+    tryCatch({
+      db_flag = T
+      address = input$file$data
+      postfix = base::substring(
+        address,
+        base::nchar(address) - 3,
+        base::nchar(address)
+      )
+      if (postfix == "xlsx") {
+        rv$dataC <- readxl::read_xlsx(address, sheet = 1)
+        output$dataC_sheet <- shiny::renderUI({
+          shiny::selectInput('sheet_number', 'Sheet Number', 1:100, selected = 1)
+        })
+      }
+      else if (postfix == ".csv"){
+        rv$dataC <-
         utils::read.csv(
           address,
           header = TRUE,
           sep = ",",
           fileEncoding = "UTF-8-BOM"
         )
-    else if (postfix == ".txt")
-      rv$dataC <-
-        utils::read.delim(address,
-                          header = TRUE,
-                          fileEncoding = "UTF-8-BOM")
-    else {
-      db_flag = FALSE
-      session$sendCustomMessage(type = 'testmessage',
-                                message = "Please select a valid dataset !")
-    }
-    output$columns_name <- shiny::renderUI({
-      shiny::selectInput('columns_name_list', 'Columns', base::colnames(rv$dataC))
+        output$dataC_sheet <- shiny::renderUI({
+          shiny::tagList(
+            shiny::selectInput(
+              inputId = 'dataC_delimiter',
+              label = 'Delimiter',
+              choices = list(
+                Tab = "\t", Comma = ",", Semicolon = ";", Space = " ")
+              , selected = ','),
+            shiny::checkboxInput(
+              inputId = 'dataC_header',
+              label = 'Header',
+              value = T
+            )
+          )
+        })
+      }
+      else if (postfix == ".txt") {
+        rv$dataC <-
+          utils::read.delim(
+            address,
+            header = TRUE,
+            fileEncoding = "UTF-8-BOM")
+        output$dataC_sheet <- shiny::renderUI({
+          shiny::tagList(
+            shiny::selectInput(
+              inputId = 'dataC_delimiter',
+              label = 'Delimiter',
+              choices = list(
+                Empty = '', Tab = "\t", Comma = ",", Semicolon = ";", Space = " "),
+              selected = '\t'),
+            shiny::checkboxInput(
+              inputId = 'dataC_header',
+              label = 'Header',
+              value = T
+            )
+          )
+        })
+      }
+      else {
+        db_flag = FALSE
+        session$sendCustomMessage(type = 'testmessage',
+                                  message = "Please select a valid dataset !")
+      }
+      if (db_flag) {
+        output$columns_name <- shiny::renderUI({
+          shiny::selectInput('columns_name_list', 'Columns', base::colnames(rv$dataC))
+        })
+        output$column_new_name <- shiny::renderUI({
+          shiny::textInput('new_col_name', 'New Name:', value = input$columns_name_list)
+        })
+        output$columns_name_btn <- shiny::renderUI({
+          shiny::actionButton('new_col_name_btn', 'Apply new name')
+        })
+      }
+    }, error = function(e) {
+      shiny_showNotification(rv, e$message)
     })
-    output$column_new_name <- shiny::renderUI({
-      shiny::textInput('new_col_name', 'New Name:', value = input$columns_name_list)
+  })
+
+  observeEvent(
+    ignoreInit = TRUE, c(
+    input$dataC_delimiter,
+    input$dataC_header), {
+    tryCatch({
+      address = input$file$data
+      postfix = base::substring(
+        address,
+        base::nchar(address) - 3,
+        base::nchar(address)
+      )
+      if (postfix == ".csv"){
+        rv$dataC <-
+          utils::read.csv(
+            address,
+            header = input$dataC_header,
+            sep = input$dataC_delimiter,
+            fileEncoding = "UTF-8-BOM"
+          )
+      }else if (postfix == ".txt") {
+        rv$dataC <-
+          utils::read.delim(
+            address,
+            header = input$dataC_header,
+            sep = input$dataC_delimiter,
+            fileEncoding = "UTF-8-BOM"
+          )
+      }else {
+        session$sendCustomMessage(type = 'testmessage',
+                                  message = "Please select a valid dataset !")
+      }
+    }, error = function(e) {
+      shiny_showNotification(rv, e$message)
     })
-    output$columns_name_btn <- shiny::renderUI({
-      shiny::actionButton('new_col_name_btn', 'Apply new name')
+  })
+
+  observeEvent(input$sheet_number, {
+    tryCatch({
+      address = input$file$data
+      postfix = base::substring(
+        address,
+        base::nchar(address) - 3,
+        base::nchar(address)
+      )
+      if (postfix == "xlsx"){
+        rv$dataC <- readxl::read_xlsx(address, sheet = as.numeric(input$sheet_number))
+      }else {
+        session$sendCustomMessage(type = 'testmessage',
+                                  message = "Please select a valid dataset !")
+      }
+    }, error = function(e) {
+      shiny_showNotification(rv, e$message)
     })
   })
 
@@ -310,6 +412,7 @@ app_server <- function(input, output, session) {
         shiny::fileInput('file', 'Upload Dataset File :'),
         shiny::textInput('project_name', "Project Name", value = "Untitled"),
         # shiny::textInput('Results_dir', "Insert a directory for outputs", placeholder = "C:/User/Desktop/Results"),
+        shiny::uiOutput('dataC_sheet'),
         shiny::uiOutput('columns_name'),
         shiny::uiOutput('column_new_name'),
         # shiny::uiOutput('column_type'),
@@ -1855,25 +1958,29 @@ app_server <- function(input, output, session) {
   })
 
   output$table1 <- DT::renderDT({
-    k = rv$selected.col
-    k = base::which(base::colnames(rv$data) == k)
-    DT::datatable(
-      rv$data,
-      editable = TRUE,
-      selection = base::list(
-        mode = "multiple",
-        selected = base::list(rows = rv$outliers_row, cols = base::as.numeric(k)),
-        target = 'row+column'
-      ),
-      filter = base::list(position = 'top', plain = TRUE),
-      options = base::list(
-        scrollX = TRUE,
-        search = base::list(regex = TRUE),
-        lengthChange = T,
-        dom = 'ltip',
-        searchCols = rv$filter.k
+    tryCatch({
+      k = rv$selected.col
+      k = base::which(base::colnames(rv$data) == k)
+      DT::datatable(
+        rv$data,
+        editable = TRUE,
+        selection = base::list(
+          mode = "multiple",
+          selected = base::list(rows = rv$outliers_row, cols = base::as.numeric(k)),
+          target = 'row+column'
+        ),
+        filter = base::list(position = 'top', plain = TRUE),
+        options = base::list(
+          scrollX = TRUE,
+          search = base::list(regex = TRUE),
+          lengthChange = T,
+          dom = 'ltip',
+          searchCols = rv$filter.k
+        )
       )
-    )
+    }, error = function(e) {
+      shiny_showNotification(rv, e$message)
+    })
   })
 
   shiny::observeEvent(input$OTL_apply_changes, {
