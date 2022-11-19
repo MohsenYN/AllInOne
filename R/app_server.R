@@ -42,7 +42,11 @@ app_server <- function(input, output, session) {
   })
 
   observeEvent(input$results_folder,{
-    rv$Path_For_Saving_Results = utils::choose.dir()
+    base::tryCatch({
+      rv$Path_For_Saving_Results = utils::choose.dir()
+    }, error = function(e){
+      shiny_showNotification(rv ,e$message)
+    })
   })
 
   show_slider <- function(str, k = 1) {
