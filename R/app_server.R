@@ -1600,7 +1600,6 @@ app_server <- function(input, output, session) {
     show_slider("Box Plots")
   })
 
-
   shiny::observeEvent(input$run_outlier, {
     shiny::removeModal()
     outliers = NULL
@@ -1649,7 +1648,6 @@ app_server <- function(input, output, session) {
               )
             }
         })
-
       } else {
         session$sendCustomMessage(type = 'testmessage',
                                   message = 'Congratulations! There is no outlier')
@@ -1711,11 +1709,9 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$data_summary, {
-    showModal(
-      modalDialog(
-          shiny::renderTable(base::summary(rv$data), rownames = T, colnames = F)
-      )
-    )
+    shiny::showModal(shiny::modalDialog(
+      shiny::renderTable(base::summary(rv$data), rownames = T, colnames = F)
+    ))
   })
 
   shiny::observeEvent(input$interaction_btn_apply, {
