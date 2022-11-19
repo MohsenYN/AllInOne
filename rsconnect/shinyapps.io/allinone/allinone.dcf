@@ -1,0 +1,11 @@
+name: allinone
+title:
+username:
+account: allinone
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7674631
+bundleId: 6530984
+url: https://allinone.shinyapps.io/allinone/
+when: 1668809363.72595
+lastSyncTime: 1668809363.72595

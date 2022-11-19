@@ -93,7 +93,7 @@ menu_setting <- shinydashboard::menuItem(
   shiny::checkboxInput(
     'Ign_Res_Wrd',
     label = shiny::tags$span(
-      'Ignore special characters',
+      'Ignore special character',
       shiny::tags$i(
        class = "glyphicon glyphicon-info-sign",
        style = "color: var(--Just-color);",
@@ -193,7 +193,7 @@ body <- shinydashboard::dashboardBody(
 
 Header <- shinydashboard::dashboardHeader(
 
-  title = shiny::a(href="https://github.com/Mohsen1080",
+  title = shiny::a(href="https://github.com/MohsenYN",
                    shiny::img(src="www/PictureRM2.png", class="title-image"))
 )
 
