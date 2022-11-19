@@ -1,4 +1,6 @@
+/inst/app/Results/
+/.Rhistory
+/.idea
 .Rproj.user
-.Rhistory
 .RData
 .Ruserdata
