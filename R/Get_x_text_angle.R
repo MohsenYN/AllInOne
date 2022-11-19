@@ -15,6 +15,8 @@ get_x_text_angle <- function(levels) {
 
 
 get_width <- function(rv, factor = 1) {
+  if(nrow(rv$data) < 200)
+    base::return(480)
   base::return(nrow(rv$data) * factor)
 }
 
