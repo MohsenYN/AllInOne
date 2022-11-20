@@ -180,7 +180,8 @@ sidebar <- shinydashboard::dashboardSidebar({
     menu_operators,
     shiny::uiOutput('content_3'), #Outliers content
     shiny::uiOutput('content_7'), #apply changes outliers
-    shiny::a(href="mailto:myoosefz@uoguelph.ca",shiny::img(src="www/Picture3.png", class="MYNHelp"))
+    shiny::div(class="needhelp-spacer"),
+    shiny::a(href="mailto:myoosefz@uoguelph.ca",shiny::img(src="www/Picture3.png", class="MYNHelp"), class="MYNHelpL")
   )
 })
 
@@ -193,8 +194,24 @@ body <- shinydashboard::dashboardBody(
 
 Header <- shinydashboard::dashboardHeader(
 
-  title = shiny::a(href="https://github.com/MohsenYN",
-                   shiny::img(src="www/PictureRM2.png", class="title-image"))
+  shiny::tags$li(shiny::a(href="https://github.com/Mohsen1080",
+                   shiny::img(src="www/PictureRM2.png", class="title-image")), class='dropdown title-logo'),
+  shinydashboard::dropdownMenu(type = "notifications",
+  # shinydashboard::notificationItem(
+  #   text = "5 new users today",
+  #   shiny::icon("users")
+  # ),
+  # shinydashboard::notificationItem(
+  #   text = "12 items delivered",
+  #   shiny::icon("truck"),
+  #   status = "success"
+  # ),
+  # shinydashboard::notificationItem(
+  #   text = "Server load at 86%",
+  #   icon = shiny::icon("exclamation-triangle"),
+  #   status = "warning"
+  # )
+  )
 )
 
 
