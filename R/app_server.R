@@ -1710,7 +1710,15 @@ app_server <- function(input, output, session) {
 
   shiny::observeEvent(input$data_summary, {
     shiny::showModal(shiny::modalDialog(
-      shiny::renderTable(base::summary(rv$data), rownames = T, colnames = F)
+      shiny::renderTable(base::summary(rv$data), rownames = T, colnames = F),
+      easyClose = T, title = 'Summary of your data'
+    ))
+  })
+
+  shiny::observeEvent(input$data_structure, {
+    shiny::showModal(shiny::modalDialog(
+      shiny::HTML((paste0(capture.output(str(rv$data)), '<br/><br/>'))),
+      easyClose = T, title = 'Structure of your data'
     ))
   })
 
@@ -1897,7 +1905,8 @@ app_server <- function(input, output, session) {
     if (!base::is.null(rv$data)) {
       shiny::tagList(shiny::downloadButton('download_db', 'Save as the dataset'),
                      shiny::actionButton('filter_outlier_reset', "Revert filters"),
-                     shiny::actionButton('data_summary', "Summary"))
+                     shiny::actionButton('data_summary', "Summary"),
+                     shiny::actionButton('data_structure', "Structure"))
     }
   })
 
