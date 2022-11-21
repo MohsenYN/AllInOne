@@ -114,10 +114,6 @@ Mixed_Analysis <- function(input, rv) {
 
     utils::write.csv(aa, paste0(input$project_name, '-- Anova table (fixed effects).csv'))
 
-    base::sink("Summary of Model.txt")
-    base::print(base::summary(MM.S))
-    base::sink()
-
     MM.Sresid <- stats::residuals(MM.S, type = "pearson")
     MM.Sactual <- stats::predict(MM.S)
     utils::write.csv(MM.Sactual, paste0(input$project_name, '-- Predicted Values.csv'))
@@ -186,7 +182,7 @@ Mixed_Analysis <- function(input, rv) {
 
       utils::write.csv(
         A2,
-        base::paste0(project_name, ' -- ', response,'BLUP value (', indep, ').csv'),
+        base::paste0(project_name, ' -- ', response,' BLUP value (', indep, ').csv'),
         row.names = FALSE)
     }
 
@@ -268,10 +264,6 @@ Mixed_Analysis <- function(input, rv) {
     aa <- as.data.frame(a)
 
     utils::write.csv(aa, paste0(input$project_name, '-- Anova table (fixed effects).csv'))
-
-    base::sink("Summary of Model.txt")
-    base::print(base::summary(MM.S))
-    base::sink()
 
     MM.Sresid <- stats::residuals(MM.S, type = "pearson")
     MM.Sactual <- stats::predict(MM.S)
