@@ -703,7 +703,7 @@ app_server <- function(input, output, session) {
         break
       }
     }
-    if (!rv$review_flag | base::file.exists('debug_mode/ignore_review_flag'))
+    if (!rv$review_flag)
     {
       if (input$active_opt_2 == 'missing_handler') {
         shiny::showModal(
@@ -945,7 +945,8 @@ app_server <- function(input, output, session) {
                                'Spatial Analysis' = 'spatial',
                                'Best Linear Unbiased Estimator' = 'blue',
                                'Best Linear Unbiased Prediction' = 'blup',
-                               'Heritability' = 'heritability'
+                               'Heritability' = 'heritability',
+                               'Mixed Analysis (Beta)' = 'mixed_analysis'
                              ), selected = 'spatial', multiple = F),
 
           if (!base::is.null(rv$spat_buffer)) {
@@ -1122,6 +1123,63 @@ app_server <- function(input, output, session) {
           shiny::uiOutput('help_her')
         ))
       }
+
+      else if (input$her_action == 'mixed_analysis') {
+
+        shiny::showModal(shiny::modalDialog(
+          shiny::selectInput('blue_resp',
+                             'Please select response variable',
+                             choices = dep_cols
+          ),
+
+          shiny::numericInput(
+            'mix_intercept',
+            label = tags$span(
+              'Intercept',
+              tags$i(
+               class = "glyphicon glyphicon-info-sign",
+               style = "color: var(--Just-color);",
+               title = 'The independant variable with a level number more than the maximum set will be ignored for creating plots'
+              )),
+            0,
+            -1,
+            1,
+            '100%'
+          ),
+
+          if (base::length(dep_cols) > 1)
+            shiny::selectInput('blue_cof',
+                               'Please select cofactor variable (if there is any)',
+                               choices = dep_cols,
+                               multiple = TRUE
+            ),
+
+          shiny::checkboxGroupInput('blue_fix',
+                                    'Please select fixed variable(s)',
+                                    choices = indep_cols),
+
+          shiny::selectInput('blue_fix_interact',
+                             'If you have interaction in fixed formula; please select interacted columns two by two',
+                             choices = indep_cols,
+                             multiple = T),
+
+          shiny::uiOutput('help_fix_blue'),
+
+          shiny::checkboxGroupInput('blue_rand',
+                                    'Please select random variable(s)',
+                                    choices = indep_cols),
+
+          shiny::selectInput('blue_rand_interact',
+                             'If you have interaction in random formula; please select interacted columns two by two',
+                             choices = indep_cols,
+                             multiple = T),
+
+          shiny::uiOutput('help_rand_blue'),
+
+          footer = shiny::tagList(shiny::actionButton('indep_mixed_btn', 'OK'),
+                                  shiny::modalButton('Dismiss'))
+        ))
+      }
     }else {
       session$sendCustomMessage(
         type = 'testmessage',
@@ -1194,6 +1252,30 @@ app_server <- function(input, output, session) {
       waiter$hide()
       show_slider('Blue')
     }
+  })
+
+  shiny::observeEvent(input$indep_mixed_btn, {
+
+
+      shiny::removeModal()
+      if (base::dir.exists(app_sys("app/Results/Mixed Analysis")))
+        base::unlink(app_sys("app/Results/Mixed Analysis"), recursive = TRUE)
+      waiter$show()
+      base::tryCatch({
+
+        Mixed_Analysis(input, rv)
+
+      }, error = function(e) {
+
+        if (rv$Show_Errors)
+          shiny_showNotification(rv, e$message)
+        else
+          shiny_showNotification(rv, 'Something is wrong! Would like to check everything again? ')
+        # base::setwd("../../")
+      })
+      waiter$hide()
+      show_slider('Mixed Analysis')
+
   })
 
   output$help_fix <- shiny::renderUI({
