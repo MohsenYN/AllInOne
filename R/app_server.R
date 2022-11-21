@@ -1051,25 +1051,25 @@ app_server <- function(input, output, session) {
           ),
           if (base::length(dep_cols) > 1)
             shiny::selectInput('blue_cof',
-                               'Please select cofactor variable (if there is any)',
+                               'Cofactor variable (if there is any)',
                                choices = dep_cols, multiple = TRUE
             ),
           shiny::checkboxGroupInput('blue_fix',
-                                    'Please select fixed variable(s)',
+                                    'Fixed variable(s)',
                                     choices = indep_cols),
 
           shiny::selectInput('blue_fix_interact',
-                             'If you have interaction in fixed formula; please select interacted columns two by two',
+                             'If you have interaction for fixed effects; please select interacted columns two by two',
                              choices = indep_cols,
                              multiple = T),
           shiny::uiOutput('help_fix_blue'),
 
           shiny::checkboxGroupInput('blue_rand',
-                                    'Please select random variable(s)',
+                                    'Random variable(s)',
                                     choices = indep_cols),
 
           shiny::selectInput('blue_rand_interact',
-                             'If you have interaction in random formula; please select interacted columns two by two',
+                             'If you have interaction for random effects; please select interacted columns two by two',
                              choices = indep_cols,
                              multiple = T),
           shiny::uiOutput('help_rand_blue'),
@@ -1139,7 +1139,7 @@ app_server <- function(input, output, session) {
               tags$i(
                class = "glyphicon glyphicon-info-sign",
                style = "color: var(--Just-color);",
-               title = 'The independant variable with a level number more than the maximum set will be ignored for creating plots'
+               title = 'Can be 1 (with intercept) or 0 (without intercept). For BLUE, intercept should be 0.'
               )),
             0,
             -1,
@@ -1149,28 +1149,28 @@ app_server <- function(input, output, session) {
 
           if (base::length(dep_cols) > 1)
             shiny::selectInput('blue_cof',
-                               'Please select cofactor variable (if there is any)',
+                               'Cofactor variable (if there is any)',
                                choices = dep_cols,
                                multiple = TRUE
             ),
 
           shiny::checkboxGroupInput('blue_fix',
-                                    'Please select fixed variable(s)',
+                                    'Fixed variable(s)',
                                     choices = indep_cols),
 
           shiny::selectInput('blue_fix_interact',
-                             'If you have interaction in fixed formula; please select interacted columns two by two',
+                             'If you have interaction for fixed effects, please select interacted columns two by two',
                              choices = indep_cols,
                              multiple = T),
 
           shiny::uiOutput('help_fix_blue'),
 
           shiny::checkboxGroupInput('blue_rand',
-                                    'Please select random variable(s)',
+                                    'Random variable(s)',
                                     choices = indep_cols),
 
           shiny::selectInput('blue_rand_interact',
-                             'If you have interaction in random formula; please select interacted columns two by two',
+                             'If you have interaction for random effects, please select interacted columns two by two',
                              choices = indep_cols,
                              multiple = T),
 
@@ -1201,7 +1201,7 @@ app_server <- function(input, output, session) {
       if (rv$Show_Errors)
         shiny_showNotification(rv, e$message)
       else
-        shiny_showNotification(rv, 'Something is wrong! Would like to check everything again? ')
+        shiny_showNotification(rv, 'Something is wrong! Would you like to check everything again? ')
       # base::setwd("../../")
     })
 
@@ -1222,7 +1222,7 @@ app_server <- function(input, output, session) {
 
   shiny::observeEvent(input$indep_blue_btn, {
     if (base::length(input$blue_cof) > 2)
-      shiny_showNotification(rv, 'You can only select one co-factor!')
+      shiny_showNotification(rv, 'You can only select one cofactor!')
     else if (
       input$rv_blue_rand == '' |
         input$rv_blue_fix == '' |
@@ -1374,7 +1374,7 @@ app_server <- function(input, output, session) {
       res = base::paste0(res, f)
     }
 
-    shiny::textInput('rv_blue_fix', value = res, label = 'BLUE fixed equation')
+    shiny::textInput('rv_blue_fix', value = res, label = 'Fixed equation')
   })
 
   output$help_rand_blue <- shiny::renderUI({
@@ -1412,7 +1412,7 @@ app_server <- function(input, output, session) {
       else
         res = base::paste0(res, ' + ', f)
     }
-    shiny::textInput('rv_blue_rand', value = res, label = 'BLUE random equation')
+    shiny::textInput('rv_blue_rand', value = res, label = 'Random equation')
   })
 
   output$help_fix_outlier <- shiny::renderUI({
