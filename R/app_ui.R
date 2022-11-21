@@ -37,8 +37,8 @@ interface <- shiny::fluidPage(
           -column-fill: auto;
       }
     "))
-  ) },
-  shiny::uiOutput('information')
+  ) }
+
 )
 
 menu_setting <- shinydashboard::menuItem(
@@ -186,10 +186,28 @@ sidebar <- shinydashboard::dashboardSidebar({
 })
 
 body <- shinydashboard::dashboardBody(
-  shiny::uiOutput("content_save_db"),
-  DT::DTOutput("table1"),
-  shiny::a(href="https://www.uoguelph.ca/oac/",shiny::img(src="www/OACL.png", class="MYNGuelph")),
-  interface
+  tabsetPanel(
+    type = "tabs",
+    tabPanel(
+      "Home",
+      shiny::uiOutput('information')
+    ),
+    tabPanel(
+      "Dataset",
+      shiny::uiOutput("content_save_db"),
+      DT::DTOutput("table1"),
+      shiny::a(href = "https://www.uoguelph.ca/oac/", shiny::img(src = "www/OACL.png", class = "MYNGuelph")),
+      interface
+    ),
+    tabPanel(
+      "Summary",
+      uiOutput("summary")
+    ),
+    tabPanel(
+      "Structure",
+      uiOutput("structure")
+    )
+  )
 )
 
 Header <- shinydashboard::dashboardHeader(

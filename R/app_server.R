@@ -182,9 +182,7 @@ app_server <- function(input, output, session) {
   }
 
   output$information <- shiny::renderUI({
-    if (base::is.null(rv$data)) {
-      information_ui
-    }
+    information_ui
   })
 
   output$o_opt_list <- shiny::renderUI({
@@ -200,17 +198,7 @@ app_server <- function(input, output, session) {
     )
   })
 
-  output$o_opt_list_btn <- shiny::renderUI({
-    shiny::actionButton('opt_list_btn', 'Run Operator')
-  })
-
-  output$o_opt_list_btn_2 <- shiny::renderUI({
-    if (!base::is.null(rv$data)) {
-      shiny::actionButton('opt_list_btn_2', 'Run Operator')
-    }
-  })
-
-  output$mice_input <- shiny::renderUI({
+output$mice_input <- shiny::renderUI({
     if (input$impute_method != 'rm') {
       shiny::tagList(
         shiny::helpText(mice_help[[input$impute_method]]),
@@ -407,150 +395,7 @@ app_server <- function(input, output, session) {
 
   shiny::observeEvent(input$opt_list_btn, {
     base::options(shiny.maxRequestSize = 50 * 1024^2)
-    if (input$active_opt == 'db') {
-      shiny::showModal(shiny::modalDialog(
-        shiny::fileInput('file', 'Upload Dataset File :'),
-        shiny::textInput('project_name', "Project Name", value = "Untitled"),
-        # shiny::textInput('Results_dir', "Insert a directory for outputs", placeholder = "C:/User/Desktop/Results"),
-        shiny::uiOutput('dataC_sheet'),
-        shiny::uiOutput('columns_name'),
-        shiny::uiOutput('column_new_name'),
-        # shiny::uiOutput('column_type'),
-        shiny::uiOutput('columns_name_btn'),
-        footer = shiny::tagList(shiny::actionButton('create_db', 'Apply Information'),
-                                shiny::modalButton('Dismiss')),
-        easyClose = FALSE
-      ))
-    }
-    else if (input$active_opt == 'ind_var') {
-      if (base::is.null(rv$data)) {
-        session$sendCustomMessage(type = 'testmessage',
-                                  message = "Please select the main detaset first !")
-      } else {
-        temp_indep = input$main_db_indep_val
-        if (rv$Show_Errors)if (base::is.null(temp_indep)) {
-          temp_indep = base::c('T',
-                               'Treatment',
-                               'Column',
-                               'Rows',
-                               'Genotype',
-                               'Province',
-                               'Site',
-                               'Year',
-                               'Line',
-                               'MultiYear',
-                               'Location',
-                               'Rep',
-                               'Row',
-                               'Col',
-                               'Entry',
-                               'Plot')
-        }
-        temp_dep = input$main_db_dep_val
-        if (rv$Show_Errors)if (base::is.null(temp_dep)) {
-          temp_dep = base::c('Yield',
-                             'Oil',
-                             'Maturity',
-                             'Seedweight',
-                             'Height',
-                             'Protein',
-                             'Disease')
-          # temp_dep = base::names(rv$data)
-        }
-        coln = base::colnames(rv$data)
-        cls = ''
-        if (base::length(coln) > 10)
-          cls = 'multicol'
-        shiny::showModal(
-          shiny::modalDialog(
-            shiny::tags$div(align = 'left',
-                            class = cls,
-                            shiny::checkboxGroupInput(
-                              inputId = 'main_db_indep_val',
-                              label = 'Please select independent variables',
-                              choices = coln,
-                              selected = temp_indep
-                            )),
-            shiny::tags$div(align = 'left',
-                            class = cls,
-                            shiny::checkboxGroupInput(
-                              inputId = 'main_db_dep_val',
-                              label = 'Select dependent/response variables',
-                              choices = coln,
-                              selected = temp_dep
-                            )),
-            easyClose = FALSE,
-            footer = shiny::actionButton('apply_db', 'OK')
-          )
-        )
-        rv$review_flag = FALSE
-        temp_indep = input$main_db_indep_val
-        temp_dep = input$main_db_dep_val
-        rv$active_opt_ = 'interaction'
-      }
-    }
-    else if (input$active_opt == 'interaction') {
-      if (base::is.null(rv$data)) {
 
-        session$sendCustomMessage(type = 'testmessage',
-                                  message = "Please select the main detaset first !")
-
-      } else if (rv$review_flag) {
-        session$sendCustomMessage(type = 'testmessage',
-                                  message = "Please select variables !")
-      }else {
-        defult_name = base::paste0('Interacted_Column_', base::sample(1:99, 1))
-        # Check if this name already exists
-        shiny::showModal(
-          shiny::modalDialog(
-            shiny::checkboxGroupInput(
-              inputId = 'main_db_interaction_col',
-              label = 'Select variables to interact',
-              choices = base::names(rv$data),
-            ),
-            shiny::textInput(
-              'interacted_name',
-              'New column name',
-              defult_name
-            ),
-            footer =
-              shiny::tagList(shiny::actionButton('interaction_btn_apply', 'interact'),
-                             shiny::modalButton('Dismiss')),
-            easyClose = FALSE
-          )
-        )
-        rv$active_opt_ = 'db'
-      }
-    }
-    else if (input$active_opt == 'subset') {
-      if (base::is.null(rv$data)) {
-
-        session$sendCustomMessage(type = 'testmessage',
-                                  message = "Please select the main detaset first !")
-
-      } else if (rv$review_flag) {
-        session$sendCustomMessage(type = 'testmessage',
-                                  message = "Please select variables !")
-      } else {
-        shiny::showModal(
-          shiny::modalDialog(
-            shiny::selectInput(
-              inputId = 'subset_indep',
-              label = 'Select an independent variable to subset',
-              choices = input$main_db_indep_val,
-            ),
-            shiny::uiOutput('subset_levels'),
-            easyClose = FALSE,
-            footer = {
-              shiny::tagList(
-                shiny::actionButton('subset_btn', 'Subset'),
-                shiny::modalButton('Dismiss'))
-            }
-          )
-        )
-        rv$active_opt_ = 'db'
-      }
-    }
   })
 
   shiny::observeEvent(input$subset_btn, {
@@ -1796,6 +1641,16 @@ app_server <- function(input, output, session) {
     ))
   })
 
+  output$summary <- renderUI({
+    if(!is.null(rv$data))
+      shiny::renderTable(base::summary(rv$data), rownames = T, colnames = F)
+  })
+
+  output$structure <- renderUI({
+    if(!is.null(rv$data))
+      shiny::HTML((paste0(capture.output(str(rv$data)), '<br/><br/>')))
+  })
+
   shiny::observeEvent(input$data_structure, {
     shiny::showModal(shiny::modalDialog(
       shiny::HTML((paste0(capture.output(str(rv$data)), '<br/><br/>'))),
@@ -1982,13 +1837,160 @@ app_server <- function(input, output, session) {
     }
   })
 
-  output$content_save_db <- shiny::renderUI({
-    if (!base::is.null(rv$data)) {
-      shiny::tagList(shiny::downloadButton('download_db', 'Save as the dataset'),
-                     shiny::actionButton('filter_outlier_reset', "Revert filters"),
-                     shiny::actionButton('data_summary', "Summary"),
-                     shiny::actionButton('data_structure', "Structure"))
+  observeEvent(input$active_opt_db, {
+    shiny::showModal(shiny::modalDialog(
+      shiny::fileInput('file', 'Upload Dataset File :'),
+      shiny::textInput('project_name', "Project Name", value = "Untitled"),
+      # shiny::textInput('Results_dir', "Insert a directory for outputs", placeholder = "C:/User/Desktop/Results"),
+      shiny::uiOutput('dataC_sheet'),
+      shiny::uiOutput('columns_name'),
+      shiny::uiOutput('column_new_name'),
+      # shiny::uiOutput('column_type'),
+      shiny::uiOutput('columns_name_btn'),
+      footer = shiny::tagList(shiny::actionButton('create_db', 'Apply Information'),
+                              shiny::modalButton('Dismiss')),
+      easyClose = FALSE
+    ))
+  })
+
+  observeEvent(input$active_opt_ind_var, {
+    if (base::is.null(rv$data)) {
+      session$sendCustomMessage(type = 'testmessage',
+                                message = "Please select the main detaset first !")
+    } else {
+      temp_indep = input$main_db_indep_val
+      if (rv$Show_Errors)if (base::is.null(temp_indep)) {
+        temp_indep = base::c(
+          'T',
+          'Treatment',
+          'Column',
+          'Rows',
+          'Genotype',
+          'Province',
+          'Site',
+          'Year',
+          'Line',
+          'MultiYear',
+          'Location',
+          'Rep',
+          'Row',
+          'Col',
+          'Entry',
+          'Plot')
+      }
+      temp_dep = input$main_db_dep_val
+      if (rv$Show_Errors)if (base::is.null(temp_dep)) {
+        temp_dep = base::c(
+          'Yield',
+          'Oil',
+          'Maturity',
+          'Seedweight',
+          'Height',
+          'Protein',
+          'Disease')
+      }
+      coln = base::colnames(rv$data)
+      cls = ''
+      if (base::length(coln) > 10)
+        cls = 'multicol'
+      shiny::showModal(
+        shiny::modalDialog(
+          shiny::tags$div(align = 'left',
+                          class = cls,
+                          shiny::checkboxGroupInput(
+                            inputId = 'main_db_indep_val',
+                            label = 'Please select independent variables',
+                            choices = coln,
+                            selected = temp_indep
+                          )),
+          shiny::tags$div(align = 'left',
+                          class = cls,
+                          shiny::checkboxGroupInput(
+                            inputId = 'main_db_dep_val',
+                            label = 'Select dependent/response variables',
+                            choices = coln,
+                            selected = temp_dep
+                          )),
+          easyClose = FALSE,
+          footer = shiny::actionButton('apply_db', 'OK')
+        )
+      )
+      rv$review_flag = FALSE
     }
+  })
+
+  observeEvent(input$active_opt_interaction, {
+    if (base::is.null(rv$data)) {
+
+      session$sendCustomMessage(type = 'testmessage',
+                                message = "Please select the main detaset first !")
+
+    } else if (rv$review_flag) {
+      session$sendCustomMessage(type = 'testmessage',
+                                message = "Please select variables !")
+    }else {
+      defult_name = base::paste0('Interacted_Column_', base::sample(1:99, 1))
+      # Check if this name already exists
+      shiny::showModal(
+        shiny::modalDialog(
+          shiny::checkboxGroupInput(
+            inputId = 'main_db_interaction_col',
+            label = 'Select variables to interact',
+            choices = base::names(rv$data),
+          ),
+          shiny::textInput(
+            'interacted_name',
+            'New column name',
+            defult_name
+          ),
+          footer =
+            shiny::tagList(shiny::actionButton('interaction_btn_apply', 'interact'),
+                           shiny::modalButton('Dismiss')),
+          easyClose = FALSE
+        )
+      )
+    }
+  })
+
+  observeEvent(input$active_opt_subset, {
+    if (base::is.null(rv$data)) {
+
+      session$sendCustomMessage(type = 'testmessage',
+                                message = "Please select the main detaset first !")
+
+    } else if (rv$review_flag) {
+      session$sendCustomMessage(type = 'testmessage',
+                                message = "Please select variables !")
+    } else {
+      shiny::showModal(
+        shiny::modalDialog(
+          shiny::selectInput(
+            inputId = 'subset_indep',
+            label = 'Select an independent variable to subset',
+            choices = input$main_db_indep_val,
+          ),
+          shiny::uiOutput('subset_levels'),
+          easyClose = FALSE,
+          footer = {
+            shiny::tagList(
+              shiny::actionButton('subset_btn', 'Subset'),
+              shiny::modalButton('Dismiss'))
+          }
+        )
+      )
+      rv$active_opt_ = 'db'
+    }
+  })
+
+  output$content_save_db <- shiny::renderUI({
+    shiny::tagList(
+      column(width = 4,shiny::actionButton('active_opt_db', 'Upload Dataset', width = '100%')),
+      column(width = 4,shiny::actionButton('active_opt_ind_var', 'Select Variables', width = '100%')),
+      column(width = 4,shiny::actionButton('active_opt_interaction', 'Create Interactions', width = '100%')),
+      column(width = 4,shiny::actionButton('active_opt_subset', 'Subset Dataset', width = '100%')),
+      column(width = 4,shiny::downloadButton('download_db', 'Save as the dataset', width = '100%')),
+      column(width = 4,shiny::actionButton('filter_outlier_reset', "Revert filters", width = '100%'))
+    )
   })
 
   output$download_db <- shiny::downloadHandler(
