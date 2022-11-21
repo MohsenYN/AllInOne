@@ -45,6 +45,10 @@ Mixed_Analysis <- function(input, rv) {
       Model <- base::eval(base::bquote(lme4::lmer(.(fix.F), weights = base::get(Cof), data = data)))
     }
 
+    base::sink("Summary of Model.txt")
+    base::print(base::summary(Model))
+    base::sink()
+
     fixed_variables = base::unique(base::c(input$blue_fix, input$blue_fix_interact))
 
     for (each_NameG in fixed_variables) {
@@ -163,6 +167,10 @@ Mixed_Analysis <- function(input, rv) {
       base::colnames(data_buf)[[base::which(base::colnames(data_buf) == Cof)]] <- 'Cof'
       B2 <- lme4::lmer(formula = base::paste0(response, ' ~ ', intercep, ' + ', formula_str), data = stats::na.omit(data_buf), weights = Cof)
     }
+    base::sink("Summary of Model.txt")
+    base::print(base::summary(B2))
+    base::sink()
+
     for (indep in random_var) {
       A2 <- base::list()
       A2[[response]] = stats::coef(B2)[[indep]]
@@ -251,6 +259,10 @@ Mixed_Analysis <- function(input, rv) {
       Model <- base::eval(base::bquote(stats::lm(.(fix.F), weights = base::get(Cof), data = data)))
     }
     MM.S = Model
+
+    base::sink("Summary of Model.txt")
+    base::print(base::summary(MM.S))
+    base::sink()
 
     a <- stats::anova(MM.S)
     aa <- as.data.frame(a)
