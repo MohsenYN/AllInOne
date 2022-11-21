@@ -159,9 +159,10 @@ Mixed_Analysis <- function(input, rv) {
 
     if (base::is.null(Cof))
       B2 <- lme4::lmer(formula = base::paste0(response, ' ~ ', intercep, ' + ', formula_str), data = stats::na.omit(data_buf))
-    else
-      B2 <- lme4::lmer(formula = base::paste0(response, ' ~ ', intercep, ' + ', formula_str), data = stats::na.omit(data_buf), weights = base::get(Cof))
-
+    else {
+      base::colnames(data_buf)[[base::which(base::colnames(data_buf) == Cof)]] <- 'Cof'
+      B2 <- lme4::lmer(formula = base::paste0(response, ' ~ ', intercep, ' + ', formula_str), data = stats::na.omit(data_buf), weights = Cof)
+    }
     for (indep in random_var) {
       A2 <- base::list()
       A2[[response]] = stats::coef(B2)[[indep]]
@@ -177,11 +178,11 @@ Mixed_Analysis <- function(input, rv) {
 
       utils::write.csv(
         A2,
-        base::paste0(project_name, " -- BLUP value for ", response, ".csv"),
+        base::paste0(project_name, ' -- ', response,'BLUP value (', indep, ').csv'),
         row.names = FALSE)
     }
 
-    dat_long <- rv$data %>% tidyr::gather(key = "DTriats", value = "Valuee", response)
+    dat_long <- rv$data %>% tidyr::gather(key = 'DTriats', value = 'Valuee', response)
 
     form <- stats::formula(base::paste0('Valuee ~ ', formula_str))
 
