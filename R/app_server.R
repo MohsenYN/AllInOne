@@ -1275,7 +1275,6 @@ app_server <- function(input, output, session) {
       })
       waiter$hide()
       show_slider('Mixed Analysis')
-
   })
 
   output$help_fix <- shiny::renderUI({
