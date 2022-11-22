@@ -780,6 +780,7 @@ output$mice_input <- shiny::renderUI({
           shiny::selectInput(
             'her_action', 'Action to do:',
             choices = base::c(
+              'Spatial Analysis' = 'spatial',
               'Mixed Analysis' = 'mixed_analysis',
               'Heritability' = 'heritability'
             ), selected = 'spatial', multiple = F),
@@ -1636,13 +1637,6 @@ output$mice_input <- shiny::renderUI({
     }, error = function(e) {
       shiny_showNotification(rv, e$message)
     })
-  })
-
-  shiny::observeEvent(input$data_summary, {
-    shiny::showModal(shiny::modalDialog(
-      shiny::renderTable(base::summary(rv$data), rownames = T, colnames = F),
-      easyClose = T, title = 'Summary of your data'
-    ))
   })
 
   output$summary <- renderUI({
