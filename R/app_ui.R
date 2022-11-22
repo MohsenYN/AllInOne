@@ -1,13 +1,17 @@
 #______________UI__________________
 interface <- shiny::fluidPage(
   shinydisconnect::disconnectMessage(
-    text = "Your session has timed out due to inactivity. Please try again.",
+    text = "Hmmm ... Seems your session has timed out. No worries you can always try again :)",
     refresh = "Reload",
     background = "#FFC72A",
     colour = "#000000",
     overlayColour = "grey",
-    overlayOpacity = 0.3,
-    refreshColour = "brown"
+    overlayOpacity = 0.5,
+    refreshColour = "brown",
+    size = 22,
+    width = "full",
+    top = "center",
+    css = "padding: 0 !important; border: 3px solid #000000;"
   ),
   waiter::use_waiter(),
   shinyjs::useShinyjs(),

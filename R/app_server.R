@@ -1715,7 +1715,7 @@ output$mice_input <- shiny::renderUI({
             choices = list(
               'Character' = 1,
               'Numeric' = 2,
-              'As Factor' = 3,
+              'Factor' = 3,
               'Undefined' = 4
             ),
             selected = get_col_type(input$str_column_name))
