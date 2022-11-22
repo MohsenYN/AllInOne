@@ -1641,8 +1641,18 @@ output$mice_input <- shiny::renderUI({
   })
 
   output$summary <- renderUI({
-    if(!is.null(rv$data))
-      shiny::renderTable(base::summary(rv$data), rownames = F, colnames = F)
+    if(!is.null(rv$data)){
+      len = base::length(base::colnames(rv$data))
+      if(len > 5){
+        half = floor(len / 2)
+        shiny::tagList(
+          column(width = 6, shiny::renderTable(base::summary(rv$data[, 1:half]), rownames = F, colnames = F)),
+          column(width = 6, shiny::renderTable(base::summary(rv$data[, (half + 1):len]), rownames = F, colnames = F))
+        )
+      }else
+        column(width = 12, shiny::renderTable(base::summary(rv$data), rownames = F, colnames = F))
+    }
+
   })
 
   get_col_type <- function (col){
