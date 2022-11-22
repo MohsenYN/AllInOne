@@ -1645,6 +1645,7 @@ output$mice_input <- shiny::renderUI({
       s = read.csv('summary.csv',
                    header = T
       )
+      unlink('summary.csv')
       colnames(s) = colnames(rv$data)
       DT::renderDataTable(
         s,
