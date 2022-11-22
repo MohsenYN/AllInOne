@@ -176,7 +176,7 @@ menu_operators <- shinydashboard::menuItem(
 sidebar <- shinydashboard::dashboardSidebar({
   shinydashboard::sidebarMenu(
     menu_setting,
-    menu_db,
+    # menu_db,
     menu_operators,
     shiny::uiOutput('content_3'), #Outliers content
     shiny::uiOutput('content_7'), #apply changes outliers
@@ -205,6 +205,9 @@ body <- shinydashboard::dashboardBody(
     ),
     tabPanel(
       "Structure",
+      uiOutput("o_structure_col_name"),
+      uiOutput("o_structure_col_type"),
+      uiOutput("o_structure_col_btn"),
       uiOutput("structure")
     )
   )

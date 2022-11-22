@@ -785,14 +785,12 @@ output$mice_input <- shiny::renderUI({
 
       else if (input$active_opt_2 == 'Heritability') {
         shiny::showModal(shiny::modalDialog(
-          shiny::selectInput('her_action', 'Action to do:',
-                             choices = base::c(
-                               'Spatial Analysis' = 'spatial',
-                               'Best Linear Unbiased Estimator' = 'blue',
-                               'Best Linear Unbiased Prediction' = 'blup',
-                               'Heritability' = 'heritability',
-                               'Mixed Analysis (Beta)' = 'mixed_analysis'
-                             ), selected = 'spatial', multiple = F),
+          shiny::selectInput(
+            'her_action', 'Action to do:',
+            choices = base::c(
+              'Mixed Analysis' = 'mixed_analysis',
+              'Heritability' = 'heritability'
+            ), selected = 'spatial', multiple = F),
 
           if (!base::is.null(rv$spat_buffer)) {
             shiny::checkboxInput('use_spat', 'Use recent spatial analysis as dataset')
@@ -1643,12 +1641,65 @@ output$mice_input <- shiny::renderUI({
 
   output$summary <- renderUI({
     if(!is.null(rv$data))
-      shiny::renderTable(base::summary(rv$data), rownames = T, colnames = F)
+      shiny::renderTable(base::summary(rv$data), rownames = F, colnames = F)
+  })
+
+  get_col_type <- function (col){
+    if(!is.null(col))
+      if(is.character(rv$data[[col]]))
+        return(1)
+    return(2)
+  }
+
+  observeEvent(input$structure_change_type,{
+    if (input$str_column_type == 1)
+      rv$data[[input$str_column_name]] = as.character(rv$data[[input$str_column_name]])
+    else if (input$str_column_type == 2)
+      rv$data[[input$str_column_name]] = as.numeric(rv$data[[input$str_column_name]])
   })
 
   output$structure <- renderUI({
-    if(!is.null(rv$data))
-      shiny::HTML((paste0(capture.output(str(rv$data)), '<br/><br/>')))
+    if (!is.null(rv$data)) {
+      shiny::tagList(
+        shiny::HTML(paste0('<br/>', c(' ',' ',' ',' ',capture.output(str(rv$data)))))
+      )
+    }
+  })
+
+  output$o_structure_col_name <- renderUI({
+    if (!is.null(rv$data))
+      shiny::column(
+          width = 5,
+          shiny::selectInput(
+            inputId = 'str_column_name',
+            label = 'Column name',
+            choices = base::colnames(rv$data)
+          )
+        )
+  })
+
+  output$o_structure_col_type <- renderUI({
+    if (!is.null(rv$data))
+      shiny::column(
+          width = 5,
+          shiny::selectInput(
+            inputId = 'str_column_type',
+            label = 'Column name',
+            choices = list(
+              'Character' = 1,
+              'Numeric' = 2
+            ),
+            selected = get_col_type(input$str_column_name))
+        )
+
+  })
+
+  output$o_structure_col_btn <- renderUI({
+    if (!is.null(rv$data))
+      shiny::column(
+          width = 2,
+          shiny::actionButton('structure_change_type','Apply')
+      )
   })
 
   shiny::observeEvent(input$data_structure, {
@@ -1984,12 +2035,12 @@ output$mice_input <- shiny::renderUI({
 
   output$content_save_db <- shiny::renderUI({
     shiny::tagList(
-      column(width = 4,shiny::actionButton('active_opt_db', 'Upload Dataset', width = '100%')),
-      column(width = 4,shiny::actionButton('active_opt_ind_var', 'Select Variables', width = '100%')),
-      column(width = 4,shiny::actionButton('active_opt_interaction', 'Create Interactions', width = '100%')),
-      column(width = 4,shiny::actionButton('active_opt_subset', 'Subset Dataset', width = '100%')),
-      column(width = 4,shiny::downloadButton('download_db', 'Save as the dataset', width = '100%')),
-      column(width = 4,shiny::actionButton('filter_outlier_reset', "Revert filters", width = '100%'))
+      column(width = 3,shiny::actionButton('active_opt_db', 'Upload Dataset')),
+      column(width = 3,shiny::actionButton('active_opt_ind_var', 'Select Variables')),
+      column(width = 3,shiny::actionButton('active_opt_interaction', 'Create Interactions')),
+      column(width = 3,shiny::actionButton('active_opt_subset', 'Subset Dataset')),
+      column(width = 3,shiny::downloadButton('download_db', 'Save As')),
+      column(width = 3,shiny::actionButton('filter_outlier_reset', "Revert filters"))
     )
   })
 
