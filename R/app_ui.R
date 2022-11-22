@@ -1,10 +1,10 @@
 #______________UI__________________
 interface <- shiny::fluidPage(
   shinydisconnect::disconnectMessage(
-    text = "Your session timed out.",
+    text = "Your session has timed out due to inactivity. Please try again.",
     refresh = "Reload",
-    background = "#00b050",
-    colour = "white",
+    background = "#FFC72A",
+    colour = "#000000",
     overlayColour = "grey",
     overlayOpacity = 0.3,
     refreshColour = "brown"
@@ -215,7 +215,7 @@ body <- shinydashboard::dashboardBody(
 
 Header <- shinydashboard::dashboardHeader(
 
-  shiny::tags$li(shiny::a(href="https://github.com/Mohsen1080",
+  shiny::tags$li(shiny::a(href="https://github.com/MohsenYN",
                    shiny::img(src="www/PictureRM2.png", class="title-image")), class='dropdown title-logo'),
   shinydashboard::dropdownMenu(type = "notifications"
   #                               ,

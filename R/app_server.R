@@ -203,16 +203,16 @@ output$mice_input <- shiny::renderUI({
       shiny::tagList(
         shiny::helpText(mice_help[[input$impute_method]]),
         shiny::textInput('mice_input_m',
-                         'Please specify the number of imputation',
+                         'Specify the number of imputation',
                          value = 5),
         shiny::textInput('mice_input_maxit',
-                         'Please specify the number of iteration',
+                         'Specify the number of iteration',
                          value = 5, placeholder = 'A scalar giving the number of iterations'),
         shiny::textInput('mice_input_seed',
-                         'Please specify the seed number',
+                         'Specify the seed number',
                          value = 500),
         shiny::selectInput('mice_input_collinear',
-                           'Please specify if the collinearity effect should be removed',
+                           'Specify if the collinearity effect should be removed',
                            choices = base::c('Remove' = T, 'Don\'t remove' = F), selected = 'Remove')
       )
     }
@@ -506,7 +506,7 @@ output$mice_input <- shiny::renderUI({
     if ('scatterplot' %in% input$plots_name) {
       shiny::checkboxGroupInput(
         'scatter_vars',
-        'Please select two dependant/response variables for scatterplot',
+        'Select two dependant/response variables for scatterplot',
         choices = input$main_db_dep_val,
         selected = input$scatter_vars
       )
@@ -530,7 +530,7 @@ output$mice_input <- shiny::renderUI({
 
       shiny::checkboxGroupInput(
         'boxplot_vars',
-        'Please select variables for plot(s)',
+        'Select variables for plot(s)',
         choices = indep_cols,
         selected = input$boxplot_vars
       )
@@ -560,7 +560,7 @@ output$mice_input <- shiny::renderUI({
           shiny::modalDialog(
             shiny::radioButtons(
               inputId = 'missing_handler_opt',
-              label = 'Please select whether you want to see the missing pattern or impute them',
+              label = 'Would you like to',
               choices = base::c('See Missing Pattern' = 'missing',
                                 'Impute Missing Value' = 'impute')),
             uiOutput('mice_input2'),
@@ -576,7 +576,7 @@ output$mice_input <- shiny::renderUI({
             shiny::tagList(
             shiny::selectInput(
               'impute_method',
-              'Please select the method for imputation',
+              'Select the imputation method',
               base::c(
                 'Remove Missing Point' = 'rm',
                 # 'Random Forest' = 'rand',
@@ -592,23 +592,7 @@ output$mice_input <- shiny::renderUI({
                 'Linear regression using bootstrap' = 'norm.boot',
                 'Linear regression, predicted values' = 'norm.predict',
                 'Lasso linear regression' = 'lasso.norm',
-                'Lasso select and linear regression' = 'lasso.select.norm',
-                'Imputation of quadratic terms' = 'quadratic',
-                'Random indicator for nonignorable data' = 'ri',
-                'Logistic regression' = 'logreg',
-                'Logistic regression with bootstrap' = 'logreg.boot',
-                'Lasso logistic regression' = 'lasso.logreg',
-                'Lasso select and logistic regression' = 'lasso.select.logreg',
-                'Proportional odds model' = 'polr',
-                'Polytomous logistic regression' = 'polyreg',
-                'Linear discriminant analysis' = 'lda',
-                'Level-1 normal heteroscedastic' = '2l.norm',
-                'Level-1 normal homoscedastic, lmer' = '2l.lmer',
-                'Level-1 normal homoscedastic, pan' = '2l.pan',
-                'Level-1 logistic, glmer' = '2l.bin',
-                'Level-2 class mean' = '2lonly.mean',
-                'Level-2 class normal' = '2lonly.norm',
-                'Level-2 class predictive mean matching' = '2lonly.pmm'
+                'Lasso select and linear regression' = 'lasso.select.norm'
               ),
               selected = 'rm'
             ),
@@ -624,18 +608,18 @@ output$mice_input <- shiny::renderUI({
             shiny::tagList(
               shiny::radioButtons(
                 inputId = 'indep_outlier_2',
-                label = 'Please select the independent Variable',
+                label = 'Select the independent variable',
                 choices = input$main_db_indep_val),
 
               shiny::textInput(
                 'minp',
-                "Set the minimum quantile for detecting outlier:",
+                "Minimum quantile:",
                 value = 0.25
               ),
 
               shiny::textInput(
                 'maxp',
-                "Set the maximum quantile for detecting outlier:",
+                "Maximum quantile:",
                 value = 0.75
               ))
         })
@@ -644,11 +628,11 @@ output$mice_input <- shiny::renderUI({
           if (input$outlier_method == 'B')
             shiny::tagList(
               shiny::selectInput('outlier_resp',
-                                 'Please select response variable',
+                                 'Dependant/response variable',
                                  choices = input$main_db_dep_val
               ),
               shiny::checkboxGroupInput('outlier_rand',
-                                        'Please select random variable(s)',
+                                        'Select the independent variable(s)',
                                         choices = input$main_db_indep_val)
             )
         })
@@ -656,8 +640,8 @@ output$mice_input <- shiny::renderUI({
         shiny::showModal(shiny::modalDialog(
           shiny::radioButtons(
             inputId = 'outlier_method',
-            label = 'Please select the method for outlier',
-            choices = base::c('One dependent base' = 'A', "Cook\'s Distance" = 'B')),
+            label = 'Outlier method',
+            choices = base::c('Quantile' = 'A', "Cook\'s Distance" = 'B')),
           shiny::uiOutput('cooksdistance_ui'),
           shiny::uiOutput('normal_outlier_ui'),
           footer = shiny::tagList(
@@ -697,7 +681,7 @@ output$mice_input <- shiny::renderUI({
             title = 'Data Visualization',
             shiny::checkboxGroupInput(
               'plots_name',
-              'Please select the plot(s)',
+              'Select the plot(s) type',
               choices = base::c(
                 'Boxplot' = 'boxplot',
                 'Densityplot' = 'densityplot',
@@ -740,12 +724,12 @@ output$mice_input <- shiny::renderUI({
           if (input$cor_opt == 'Inter correlation') {
             shiny::radioButtons(
               inputId = 'indep_cor',
-              label = 'Please select one independent variable',
+              label = 'Select one independent variable',
               choices = indep_cols)
           }else if (input$cor_opt == 'Intra correlation') {
             shiny::checkboxGroupInput(
               inputId = 'indep_cor',
-              label = 'Please select independent variable(s)',
+              label = 'Select independent variable(s)',
               choices = indep_cols)
           }
         })
@@ -753,13 +737,13 @@ output$mice_input <- shiny::renderUI({
           if (input$cor_opt == 'Inter correlation') {
             shiny::radioButtons(
               inputId = 'dep_cor',
-              label = 'Please select one dependent/response variable',
+              label = 'Select one dependent/response variable',
               choices = dep_cols)
           }
           else if (input$cor_opt == 'Intra correlation') {
             shiny::checkboxGroupInput(
               inputId = 'dep_cor',
-              label = 'Please select two dependent/response variables',
+              label = 'Select two dependent/response variables',
               choices = dep_cols)
           }
         })
@@ -767,7 +751,7 @@ output$mice_input <- shiny::renderUI({
         shiny::showModal(shiny::modalDialog(
           shiny::radioButtons(
             inputId = 'cor_opt',
-            label = 'Please select an option',
+            label = 'Correlation methods',
             choices = base::c('Non-independent-based correlation',
                               'Inter correlation',
                               'Intra correlation')),
@@ -848,40 +832,40 @@ output$mice_input <- shiny::renderUI({
       if (input$her_action == 'spatial') {
         shiny::showModal(shiny::modalDialog(
           shiny::selectInput('spat_resp',
-                             'Please select dependent/response variable',
+                             'Dependent/response variable',
                              choices = dep_cols
           ),
           shiny::selectInput(
             inputId = 'spat_gen',
-            label = 'Please select the genotype variable',
+            label = 'Genotype variable',
             choices = indep_cols),
           shiny::selectInput(
             inputId = 'spat_row',
-            label = 'Please select the row variable',
+            label = 'Row variable',
             choices = indep_cols,
             selected = 'Row'),
 
           shiny::selectInput(
             inputId = 'spat_col',
-            label = 'Please select the column variable',
+            label = 'Column variable',
             choices = indep_cols,
             selected = 'Col'),
           shiny::checkboxGroupInput('spat_fix',
-                                    'Please select fixed variable(s)',
+                                    'Fixed effects',
                                     choices = indep_cols),
 
           shiny::selectInput('spat_fix_interact',
-                             'If you have interaction in fixed formula; please select interacted columns two by two',
+                             'If you have interaction for fixed effects; please select interacted columns two by two',
                              choices = indep_cols,
                              multiple = T),
           shiny::uiOutput('help_fix'),
 
           shiny::checkboxGroupInput('spat_rand',
-                                    'Please select random variable(s)',
+                                    'Random effects',
                                     choices = indep_cols),
 
           shiny::selectInput('spat_rand_interact',
-                             'If you have interaction in random formula; please select interacted columns two by two',
+                             'If you have interaction for random effects; please select interacted columns two by two',
                              choices = indep_cols,
                              multiple = T),
           shiny::uiOutput('help_rand'),
@@ -894,7 +878,7 @@ output$mice_input <- shiny::renderUI({
       else if (input$her_action == 'blue') {
         shiny::showModal(shiny::modalDialog(
           shiny::selectInput('blue_resp',
-                             'Please select response variable',
+                             'Dependent/response variable',
                              choices = dep_cols
           ),
           if (base::length(dep_cols) > 1)
@@ -929,14 +913,14 @@ output$mice_input <- shiny::renderUI({
       else if (input$her_action == 'heritability') {
         shiny::showModal(shiny::modalDialog(
           shiny::checkboxGroupInput('her_rand',
-                                    'Please select independent variable(s)',
+                                    'Independent variable(s)',
                                     choices = indep_cols),
           shiny::selectInput('her_rand_interact',
-                             'Please select interaction variable(s)',
+                             'Interaction variable(s)',
                              choices = indep_cols, multiple = TRUE),
           shiny::radioButtons(
             inputId = 'indep_her',
-            label = 'Please select the genotype column',
+            label = 'Genotype column',
             choices = indep_cols),
           footer = shiny::tagList(shiny::actionButton('indep_her_btn', 'OK'),
                                   shiny::modalButton('Dismiss')),
@@ -976,7 +960,7 @@ output$mice_input <- shiny::renderUI({
 
         shiny::showModal(shiny::modalDialog(
           shiny::selectInput('blue_resp',
-                             'Please select response variable',
+                             'Dependent/response variable',
                              choices = dep_cols
           ),
 
@@ -987,7 +971,9 @@ output$mice_input <- shiny::renderUI({
               tags$i(
                class = "glyphicon glyphicon-info-sign",
                style = "color: var(--Just-color);",
-               title = 'Can be 1 (with intercept) or 0 (without intercept). For BLUE, intercept should be 0.'
+               title = 'Can be 1 (with intercept) or 0 (without intercept).
+               For estimating BLUE, intercept should be 0.
+               For estimating BLUP, intercept should be 1'
               )),
             0,
             -1,
@@ -1094,7 +1080,7 @@ output$mice_input <- shiny::renderUI({
         if (rv$Show_Errors)
           shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv, 'Something is wrong! Would like to check everything again? ')
+          shiny_showNotification(rv, 'Something is wrong! Would you like to check the dataset? ')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1118,7 +1104,7 @@ output$mice_input <- shiny::renderUI({
         if (rv$Show_Errors)
           shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv, 'Something is wrong! Would like to check everything again? ')
+          shiny_showNotification(rv, 'Something is wrong! Would you like to check the dataset? ')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1570,7 +1556,7 @@ output$mice_input <- shiny::renderUI({
                 ),
                 shiny::selectInput(
                   inputId = 'indep_outlier',
-                  label = 'Please select the independent variable',
+                  label = 'Select the independent variable',
                   choices = input$main_db_indep_val
                 ),
                 shiny::actionButton('filter_outlier', "Filter The Dataset")
@@ -1783,7 +1769,7 @@ output$mice_input <- shiny::renderUI({
       shiny::showModal(shiny::modalDialog(
         shiny::checkboxGroupInput(
           inputId = 'main_db_indep_val',
-          label = 'Selected Independent Variables',
+          label = 'Selected Independent/Factor Variables',
           choices = base::names(dplyr::select(rv$data, dplyr::all_of(base::c(input$main_db_indep_val, interacted_name)))),
           selected = new_main_db_indep_val
         ), easyClose = FALSE,
@@ -1900,7 +1886,7 @@ output$mice_input <- shiny::renderUI({
         if (rv$Show_Errors)
           shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
+          shiny_showNotification(rv, 'Incorrect arguments, please review the dataset!')
         # base::setwd("../../")
       })
       waiter$hide()
@@ -1978,7 +1964,7 @@ output$mice_input <- shiny::renderUI({
                           class = cls,
                           shiny::checkboxGroupInput(
                             inputId = 'main_db_indep_val',
-                            label = 'Please select independent variables',
+                            label = 'Select independent/factor variables',
                             choices = coln,
                             selected = temp_indep
                           )),
@@ -2260,7 +2246,7 @@ output$mice_input <- shiny::renderUI({
       shiny::modalDialog(
         shiny::checkboxGroupInput(
           inputId = 'main_db_indep_val',
-          label = 'Please select independent variables',
+          label = 'Select independent/factor variables',
           choices = base::names(rv$data),
           selected = temp_indep
         ),
