@@ -16,7 +16,7 @@ interface <- shiny::fluidPage(
   waiter::use_waiter(),
   shinyjs::useShinyjs(),
   shiny::tags$head(
-    shiny::tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css?v15")
+    shiny::tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css?v16")
   ),
   { shiny::tags$head(
     shiny::tags$script(shiny::HTML('Shiny.addCustomMessageHandler("testmessage",

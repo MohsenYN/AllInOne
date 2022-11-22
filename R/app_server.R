@@ -1640,27 +1640,26 @@ output$mice_input <- shiny::renderUI({
   })
 
   output$summary <- renderUI({
-    if(!is.null(rv$data)){
-      len = base::length(base::colnames(rv$data))
-      if(len > 5 & len <= 10){
-        half = floor(len / 2)
-        shiny::tagList(
-          column(width = 6, shiny::renderTable(t(base::summary(rv$data[, 1:half])), rownames = F, colnames = F)),
-          column(width = 6, shiny::renderTable(t(base::summary(rv$data[, (half + 1):len])), rownames = F, colnames = F))
+    if (!is.null(rv$data)) {
+      s = base::summary(rv$data)
+      write.csv(s, 'summary.csv', row.names = F)
+      s = read.csv('summary.csv',
+                   header = T
+      )
+      unlink('summary.csv')
+      colnames(s) = colnames(rv$data)
+      DT::renderDataTable(
+        s,
+        rownames = F,
+        options = base::list(
+          scrollX = TRUE,
+          scrollCollapse = TRUE,
+          autoWidth = TRUE,
+          selection = 'none',
+          dom = 'lti'
         )
-      }else if( len > 10){
-        half = floor(len / 2)
-        q = floor(half / 2)
-        shiny::tagList(
-          column(width = 3, shiny::renderTable(base::summary(rv$data[, 1:(q)]), rownames = F, colnames = F)),
-          column(width = 3, shiny::renderTable(base::summary(rv$data[, (q + 1):half]), rownames = F, colnames = F)),
-          column(width = 3, shiny::renderTable(base::summary(rv$data[, (half+1):(half+q)]), rownames = F, colnames = F)),
-          column(width = 3, shiny::renderTable(base::summary(rv$data[, (half+q+1):len]), rownames = F, colnames = F))
-        )
-      }else
-        column(width = 12, shiny::renderTable(base::summary(rv$data), rownames = F, colnames = F))
+      )
     }
-
   })
 
   get_col_type <- function(col) {
