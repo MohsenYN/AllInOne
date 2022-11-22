@@ -2189,19 +2189,21 @@ output$mice_input <- shiny::renderUI({
       args1 = ''
       for (i in COLN) {
         if (i %in% o_cln) {
-          str_temp = base::paste0('<h4>', i, ' (', input$indep_outlier_2, ')</h4>')
+          str_temp = base::paste0('<b><h4>', i, ' (', input$indep_outlier_2, ')</h4></b>')
           args1 = base::append(args1, base::list(shiny::textInput(
             base::paste0("OTL_", i),
             label = shiny::HTML(str_temp),
             value = rv$data[k, base::paste0(i)]
           )))
         }else {
-          str_temp = base::paste0('<h4>', i, ' (', input$indep_outlier_2, ')</h4>')
-          args1 = base::append(args1, base::list(shiny::textInput(
-            base::paste0("OTL_", i),
-            label = shiny::HTML(str_temp),
-            value = rv$data[k, base::paste0(i)]
-          )))
+          if(!is.null(input[[base::paste0("OTL_", i)]])){
+            str_temp = base::paste0('<h4>', i, ' (', input$indep_outlier_2, ')</h4>')
+            args1 = base::append(args1, base::list(shiny::textInput(
+              base::paste0("OTL_", i),
+              label = shiny::HTML(str_temp),
+              value = rv$data[k, base::paste0(i)]
+            )))
+          }
         }
       }
       args1 = base::append(args1, base::list(shiny::actionButton("OTL_apply_changes", "Apply Change(s) / Ignore")))
@@ -2229,7 +2231,7 @@ output$mice_input <- shiny::renderUI({
 
   shiny::observeEvent(input$outl_select_input, {
     k = input$outl_select_input
-    COLN = base::colnames(rv$data)
+    COLN = input$main_db_dep_val
     o_cln <- NULL
     len = base::length(rv$outliers)
     for (x in base::seq(2, len, 3)) {
