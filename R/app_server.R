@@ -243,19 +243,20 @@ output$mice_input <- shiny::renderUI({
             fileEncoding = "UTF-8-BOM"
           )
         output$dataC_sheet <- shiny::renderUI({
-          shiny::tagList(
-            shiny::selectInput(
-              inputId = 'dataC_delimiter',
-              label = 'Delimiter',
-              choices = list(
-                Tab = "\t", Comma = ",", Semicolon = ";", Space = " ")
-              , selected = ','),
-            shiny::checkboxInput(
-              inputId = 'dataC_header',
-              label = 'Header',
-              value = T
-            )
-          )
+          if (!input$use_sampledb) {
+            shiny::tagList(
+              shiny::selectInput(
+                inputId = 'dataC_delimiter',
+                label = 'Delimiter',
+                choices = list(
+                  Tab = "\t", Comma = ",", Semicolon = ";", Space = " ")
+                , selected = ','),
+              shiny::checkboxInput(
+                inputId = 'dataC_header',
+                label = 'Header',
+                value = T
+              )
+            ) }
         })
       }
       else if (postfix == ".txt") {
@@ -265,7 +266,8 @@ output$mice_input <- shiny::renderUI({
             header = TRUE,
             fileEncoding = "UTF-8-BOM")
         output$dataC_sheet <- shiny::renderUI({
-          shiny::tagList(
+          if (!input$use_sampledb) {
+            shiny::tagList(
             shiny::selectInput(
               inputId = 'dataC_delimiter',
               label = 'Delimiter',
@@ -278,6 +280,7 @@ output$mice_input <- shiny::renderUI({
               value = T
             )
           )
+          }
         })
       }
       else {
@@ -1659,11 +1662,20 @@ output$mice_input <- shiny::renderUI({
   output$summary <- renderUI({
     if(!is.null(rv$data)){
       len = base::length(base::colnames(rv$data))
-      if(len > 5){
+      if(len > 5 & len <= 10){
         half = floor(len / 2)
         shiny::tagList(
-          column(width = 6, shiny::renderTable(base::summary(rv$data[, 1:half]), rownames = F, colnames = F)),
-          column(width = 6, shiny::renderTable(base::summary(rv$data[, (half + 1):len]), rownames = F, colnames = F))
+          column(width = 6, shiny::renderTable(t(base::summary(rv$data[, 1:half])), rownames = F, colnames = F)),
+          column(width = 6, shiny::renderTable(t(base::summary(rv$data[, (half + 1):len])), rownames = F, colnames = F))
+        )
+      }else if( len > 10){
+        half = floor(len / 2)
+        q = floor(half / 2)
+        shiny::tagList(
+          column(width = 3, shiny::renderTable(base::summary(rv$data[, 1:(q)]), rownames = F, colnames = F)),
+          column(width = 3, shiny::renderTable(base::summary(rv$data[, (q + 1):half]), rownames = F, colnames = F)),
+          column(width = 3, shiny::renderTable(base::summary(rv$data[, (half+1):(half+q)]), rownames = F, colnames = F)),
+          column(width = 3, shiny::renderTable(base::summary(rv$data[, (half+q+1):len]), rownames = F, colnames = F))
         )
       }else
         column(width = 12, shiny::renderTable(base::summary(rv$data), rownames = F, colnames = F))
@@ -1671,11 +1683,17 @@ output$mice_input <- shiny::renderUI({
 
   })
 
-  get_col_type <- function (col){
-    if(!is.null(col))
-      if(is.character(rv$data[[col]]))
+  get_col_type <- function(col) {
+    if (!is.null(col)) {
+      if (is.character(rv$data[[col]]))
         return(1)
-    return(2)
+      else if (is.factor(rv$data[[col]]))
+        return(3)
+      else if (is.numeric(rv$data[[col]]))
+        return(2)
+      else
+        return(4)
+    }
   }
 
   observeEvent(input$structure_change_type,{
@@ -1683,6 +1701,8 @@ output$mice_input <- shiny::renderUI({
       rv$data[[input$str_column_name]] = as.character(rv$data[[input$str_column_name]])
     else if (input$str_column_type == 2)
       rv$data[[input$str_column_name]] = as.numeric(rv$data[[input$str_column_name]])
+    else if (input$str_column_type == 3)
+      rv$data[[input$str_column_name]] = as.factor(rv$data[[input$str_column_name]])
   })
 
   output$structure <- renderUI({
@@ -1714,7 +1734,9 @@ output$mice_input <- shiny::renderUI({
             label = 'Column name',
             choices = list(
               'Character' = 1,
-              'Numeric' = 2
+              'Numeric' = 2,
+              'As Factor' = 3,
+              'Undefined' = 4
             ),
             selected = get_col_type(input$str_column_name))
         )
