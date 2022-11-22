@@ -59,8 +59,7 @@ Imports:
     testthat ,
     readxl ,
     waiter,
-    glmnet,
-    rio
+    glmnet
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/MohsenYN/AllInOne
