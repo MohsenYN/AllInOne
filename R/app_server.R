@@ -230,7 +230,8 @@ output$mice_input <- shiny::renderUI({
       if (postfix == "xlsx") {
         rv$dataC <- readxl::read_xlsx(address, sheet = 1)
         output$dataC_sheet <- shiny::renderUI({
-          shiny::selectInput('sheet_name', 'Sheet', choices = readxl::excel_sheets(address), selected = 1)
+          if(!input$use_sampledb)
+            shiny::selectInput('sheet_name', 'Sheet', choices = readxl::excel_sheets(address), selected = 1)
         })
       }
       else if (postfix == ".csv") {
@@ -286,13 +287,16 @@ output$mice_input <- shiny::renderUI({
       }
       if (db_flag) {
         output$columns_name <- shiny::renderUI({
-          shiny::selectInput('columns_name_list', 'Columns', base::colnames(rv$dataC))
+          if(!input$use_sampledb)
+            shiny::selectInput('columns_name_list', 'Columns', base::colnames(rv$dataC))
         })
         output$column_new_name <- shiny::renderUI({
-          shiny::textInput('new_col_name', 'New Name:', value = input$columns_name_list)
+          if(!input$use_sampledb)
+            shiny::textInput('new_col_name', 'New Name:', value = input$columns_name_list)
         })
         output$columns_name_btn <- shiny::renderUI({
-          shiny::actionButton('new_col_name_btn', 'Apply new name')
+          if(!input$use_sampledb)
+            shiny::actionButton('new_col_name_btn', 'Apply new name')
         })
       }
     }, error = function(e) {
@@ -1611,26 +1615,38 @@ output$mice_input <- shiny::renderUI({
   })
 
   shiny::observeEvent(input$create_db, {
-    if (!is.null(rv$dataC)) {
-      flag = T
-      for (col in base::c(base::colnames(rv$dataC), input$project_name)) {
-        if (check_name(col) == '') {
-          flag = F
-          break
-        }
-      }
-      if (flag) {
+    tryCatch({
+      if (input$use_sampledb) {
         shiny::removeModal()
-        rv$data <- base::as.data.frame(rv$dataC)
+        dat <- readxl::read_xlsx(app_sys('app/SampleDB/SampleDB.xlsx'), sheet = 1)
+        rv$data <- base::as.data.frame(dat)
         rv$outliers_row = NULL
         rv$selected.col = NULL
         rv$review_flag = TRUE
-
-      }else {
-        shiny_showNotification(rv, 'Column/Project name can not include " \ | ? * : < > () and space')
       }
-      base::rm(flag)
-    }
+      else if (!is.null(rv$dataC)) {
+        flag = T
+        for (col in base::c(base::colnames(rv$dataC), input$project_name)) {
+          if (check_name(col) == '') {
+            flag = F
+            break
+          }
+        }
+        if (flag) {
+          shiny::removeModal()
+          rv$data <- base::as.data.frame(rv$dataC)
+          rv$outliers_row = NULL
+          rv$selected.col = NULL
+          rv$review_flag = TRUE
+
+        }else {
+          shiny_showNotification(rv, 'Column/Project name can not include " \ | ? * : < > () and space')
+        }
+        base::rm(flag)
+      }
+    }, error = function(e) {
+      shiny_showNotification(rv, e$message)
+    })
   })
 
   shiny::observeEvent(input$data_summary, {
@@ -1902,6 +1918,7 @@ output$mice_input <- shiny::renderUI({
   observeEvent(input$active_opt_db, {
     shiny::showModal(shiny::modalDialog(
       shiny::fileInput('file', 'Upload Dataset File :'),
+      shiny::checkboxInput('use_sampledb', "Use Sample Dataset", value = F),
       shiny::textInput('project_name', "Project Name", value = "Untitled"),
       # shiny::textInput('Results_dir', "Insert a directory for outputs", placeholder = "C:/User/Desktop/Results"),
       shiny::uiOutput('dataC_sheet'),
