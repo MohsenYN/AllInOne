@@ -1926,7 +1926,7 @@ output$mice_input <- shiny::renderUI({
   observeEvent(input$active_opt_db, {
     shiny::showModal(shiny::modalDialog(
       shiny::fileInput('file', 'Upload Dataset File :'),
-      shiny::checkboxInput('use_sampledb', "Use Sample Dataset", value = F),
+      shiny::checkboxInput('use_sampledb', "Sample Dataset", value = F),
       shiny::textInput('project_name', "Project Name", value = "Untitled"),
       # shiny::textInput('Results_dir', "Insert a directory for outputs", placeholder = "C:/User/Desktop/Results"),
       shiny::uiOutput('dataC_sheet'),
