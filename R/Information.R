@@ -3,7 +3,8 @@
 #' @noRd
 #'
 
-information_ui <- shiny::column(
+information_ui <- shiny::fluidRow(
+  shiny::column(
   12,
   shiny::tags$body(
     shiny::h2(shiny::strong('Welcome to the AllInOne')),
@@ -155,4 +156,5 @@ information_ui <- shiny::column(
   shiny::hr(),
   shiny::h3(shiny::strong('ENJOY!')),
   shiny::hr()
+)
 )
