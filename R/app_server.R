@@ -6,6 +6,7 @@
 #'
 #' @noRd
 app_server <- function(input, output, session) {
+
   rv <- shiny::reactiveValues(
     data = NULL, dataC = NULL, dataT = NULL, VarPYSL = NULL, flags = 1,
     SelectedTraits = NULL, Vec_LASTV = NULL, dependent_variables = NULL,
@@ -1607,7 +1608,7 @@ output$mice_input <- shiny::renderUI({
     tryCatch({
       if (input$use_sampledb) {
         shiny::removeModal()
-        dat <- readxl::read_xlsx(app_sys('app/SampleDB/SampleDB.xlsx'), sheet = 1)
+        dat <- rio::import("https://github.com/MohsenYN/AllInOne/blob/main/inst/app/SampleDB/SampleDB.xlsx?raw=true")
         rv$data <- base::as.data.frame(dat)
         rv$outliers_row = NULL
         rv$selected.col = NULL
@@ -2064,7 +2065,7 @@ output$mice_input <- shiny::renderUI({
 
   output$content_save_db <- shiny::renderUI({
     shiny::tagList(
-      column(width = 3,shiny::actionButton('active_opt_db', 'Upload Dataset', icon = shiny::icon("upload"))),
+      column(width = 3,shiny::actionButton('active_opt_db', 'Upload Dataset')),
       column(width = 3,shiny::actionButton('active_opt_ind_var', 'Select Variables')),
       column(width = 3,shiny::actionButton('active_opt_interaction', 'Create Interactions')),
       column(width = 3,shiny::actionButton('active_opt_subset', 'Subset Dataset')),
