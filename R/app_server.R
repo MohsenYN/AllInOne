@@ -230,7 +230,7 @@ output$mice_input <- shiny::renderUI({
       if (postfix == "xlsx") {
         rv$dataC <- readxl::read_xlsx(address, sheet = 1)
         output$dataC_sheet <- shiny::renderUI({
-          shiny::selectInput('sheet_number', 'Sheet Number', 1:100, selected = 1)
+          shiny::selectInput('sheet_name', 'Sheet', choices = readxl::excel_sheets(address), selected = 1)
         })
       }
       else if (postfix == ".csv") {
@@ -336,7 +336,7 @@ output$mice_input <- shiny::renderUI({
     })
   })
 
-  observeEvent(input$sheet_number, {
+  observeEvent(input$sheet_name, {
     tryCatch({
       address = input$file$data
       postfix = base::substring(
@@ -345,7 +345,8 @@ output$mice_input <- shiny::renderUI({
         base::nchar(address)
       )
       if (postfix == "xlsx") {
-        rv$dataC <- readxl::read_xlsx(address, sheet = as.numeric(input$sheet_number))
+        buf = readxl::excel_sheets(address)
+        rv$dataC <- readxl::read_xlsx(address, sheet = which(buf == input$sheet_name))
       }else {
         session$sendCustomMessage(type = 'testmessage',
                                   message = "Please select a valid dataset !")
