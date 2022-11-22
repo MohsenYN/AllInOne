@@ -6,7 +6,6 @@
 #'
 #' @noRd
 app_server <- function(input, output, session) {
-
   rv <- shiny::reactiveValues(
     data = NULL, dataC = NULL, dataT = NULL, VarPYSL = NULL, flags = 1,
     SelectedTraits = NULL, Vec_LASTV = NULL, dependent_variables = NULL,
@@ -2065,7 +2064,7 @@ output$mice_input <- shiny::renderUI({
 
   output$content_save_db <- shiny::renderUI({
     shiny::tagList(
-      column(width = 3,shiny::actionButton('active_opt_db', 'Upload Dataset')),
+      column(width = 3,shiny::actionButton('active_opt_db', 'Upload Dataset', icon = shiny::icon("upload"))),
       column(width = 3,shiny::actionButton('active_opt_ind_var', 'Select Variables')),
       column(width = 3,shiny::actionButton('active_opt_interaction', 'Create Interactions')),
       column(width = 3,shiny::actionButton('active_opt_subset', 'Subset Dataset')),

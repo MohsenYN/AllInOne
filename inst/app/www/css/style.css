@@ -167,3 +167,8 @@ ul.sidebar-menu {
 .needhelp-spacer {
     flex: 1;
 }
+
+#content_save_db .btn-default {
+    width: 100%;
+    margin: 5px;
+}
