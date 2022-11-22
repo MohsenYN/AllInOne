@@ -275,6 +275,10 @@ golem_add_external_resources <- function() {
       "Results",
       app_sys("app/Results")
     )
+  add_resource_path(
+      "SampleDB",
+      app_sys("app/SampleDB")
+    )
 
   tags$head(
     favicon(),
