@@ -401,11 +401,6 @@ output$mice_input <- shiny::renderUI({
     }
   })
 
-  shiny::observeEvent(input$opt_list_btn, {
-    base::options(shiny.maxRequestSize = 50 * 1024^2)
-
-  })
-
   shiny::observeEvent(input$subset_btn, {
     if (!is.null(input$subset_levels) & !is.null(input$subset_indep)) {
       shiny::removeModal()
@@ -1608,7 +1603,8 @@ output$mice_input <- shiny::renderUI({
     tryCatch({
       if (input$use_sampledb) {
         shiny::removeModal()
-        dat <- rio::import("https://github.com/MohsenYN/Available-Datasets/blob/main/SampleDB.xlsx?raw=true")
+        # dat <- rio::import("https://github.com/MohsenYN/AllInOne/blob/main/inst/app/SampleDB/SampleDB.xlsx?raw=true")
+        dat <- readxl::read_xlsx(app_sys('app/SampleDB/SampleDB.xlsx'), sheet = 1)
         rv$data <- base::as.data.frame(dat)
         rv$outliers_row = NULL
         rv$selected.col = NULL
@@ -1917,6 +1913,7 @@ output$mice_input <- shiny::renderUI({
   })
 
   observeEvent(input$active_opt_db, {
+    base::options(shiny.maxRequestSize = 50 * 1024^2)
     shiny::showModal(shiny::modalDialog(
       shiny::fileInput('file', 'Upload Dataset File :'),
       shiny::checkboxInput('use_sampledb', "Sample Dataset", value = F),
