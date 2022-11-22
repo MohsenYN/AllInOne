@@ -1608,7 +1608,7 @@ output$mice_input <- shiny::renderUI({
     tryCatch({
       if (input$use_sampledb) {
         shiny::removeModal()
-        dat <- rio::import("https://github.com/MohsenYN/AllInOne/blob/main/inst/app/SampleDB/SampleDB.xlsx?raw=true")
+        dat <- rio::import("https://github.com/MohsenYN/Available-Datasets/blob/main/SampleDB.xlsx?raw=true")
         rv$data <- base::as.data.frame(dat)
         rv$outliers_row = NULL
         rv$selected.col = NULL
