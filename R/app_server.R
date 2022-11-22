@@ -951,7 +951,7 @@ output$mice_input <- shiny::renderUI({
                                     'Please select random variable(s)',
                                     choices = indep_cols),
           shiny::selectInput('her_rand_interact',
-                             'If you have interaction in random formula; please select interacted columns two by two',
+                             'If you have interaction for random effects; please select interacted columns two by two',
                              choices = indep_cols, multiple = TRUE),
 
           footer = shiny::tagList(shiny::actionButton('indep_blup_btn', 'OK'),
@@ -1146,7 +1146,7 @@ output$mice_input <- shiny::renderUI({
       res = base::paste0(res, f)
     }
 
-    shiny::textInput('rv_spat_fix', value = res, label = 'Fixed formula')
+    shiny::textInput('rv_spat_fix', value = res, label = 'Fixed equation')
   })
 
   output$help_rand <- shiny::renderUI({
@@ -1178,7 +1178,7 @@ output$mice_input <- shiny::renderUI({
       }
       res = base::paste0(res, f)
     }
-    shiny::textInput('rv_spat_rand', value = res, label = 'Random formula')
+    shiny::textInput('rv_spat_rand', value = res, label = 'Random equation')
   })
 
   output$help_fix_blue <- shiny::renderUI({
