@@ -8,7 +8,7 @@ information_ui <- shiny::fluidRow(
   12,
   shiny::tags$body(
     shiny::h2(shiny::strong('Welcome to the AllInOne')),
-    shiny::h3(shiny::strong('An Open-Source Breeder-Friendly Analytical Package for Pre-processing Phenotypic Data')),
+    shiny::h3(shiny::strong('An Open-Source Friendly Analytical Package for Pre-processing Phenotypic Data')),
     shiny::h4(shiny::strong('Version 1.0.5')),
     shiny::hr(),
     shiny::tags$blockquote(
@@ -20,7 +20,7 @@ information_ui <- shiny::fluidRow(
     #br(),
     shiny::tags$blockquote(
       shiny::tags$div(shiny::tags$ul(
-        shiny::tags$li("Interactive Environment for Pre-Processing Breeding Datasets."),
+        shiny::tags$li("Interactive Environment for Pre-Processing Phenotypic Datasets."),
         shiny::tags$li("Detecting Missing Pattern Based on Independant Variables."),
         shiny::tags$li("Imputing Missing Data Using the Power of MICE Package."),
         shiny::tags$li("Phenotypic Data Visualization: Interactive Histograms, Density Plots, Box Plots, and Scatter Plots."),
@@ -41,7 +41,7 @@ information_ui <- shiny::fluidRow(
     shiny::tags$blockquote(
 
       shiny::tags$ol(
-        shiny::tags$li("AllInOne is an open-Source, R-Shiny user interface package designed in the Plant Agriculture department at the University of Guelph to provide a broad range of pre-processing analysis features for phenotypic breeding datasets. This app uses different R packages, such as mice, VIM, lme4, bestNormalize, etc., to enable plant breeders to use all the mentioned packages simultaneously in an interactive environment. Furthermore, it allows plant breeders to edit, organize, subset, and sort datasets in a live mode."),
+        shiny::tags$li("AllInOne is an open-Source, R-Shiny user interface package designed in the Plant Agriculture department at the University of Guelph to provide a broad range of pre-processing analysis features for phenotypic datasets. This app uses different R packages, such as mice, VIM, lme4, bestNormalize, etc., to enable plant scientists to use all the mentioned packages simultaneously in an interactive environment. Furthermore, it allows plant scientists to edit, organize, subset, and sort datasets in a live mode."),
         shiny::br(),
         shiny::tags$li("A wide range of datasets can be easily uploaded in this app. This app now works well with the three most common file formats such as .txt (comma separated), .csv (comma separated), and .xlsx, so there is no need to change the dataset format before using it."),
         shiny::br(),
