@@ -1803,6 +1803,7 @@ output$mice_input <- shiny::renderUI({
     if (!is.null(rv$data))
       shiny::column(
           width = 2,
+          class = "structure_change_type_col",
           shiny::actionButton('structure_change_type','Apply')
       )
   })

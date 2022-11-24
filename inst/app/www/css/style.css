@@ -172,3 +172,8 @@ ul.sidebar-menu {
     width: 100%;
     margin: 5px;
 }
+.structure_change_type_col {
+    height: 79px;
+    display: flex;
+    align-items: center;
+}
