@@ -104,7 +104,7 @@ app_server <- function(input, output, session) {
               rv$csv_value,
               options = base::list(
                 scrollX = TRUE,
-                scrollCollapse = TRUE, autoWidth = TRUE, dom = 'ltip')
+                scrollCollapse = TRUE, dom = 'ltip')
             )
           }else if (extention == 'txt') {
             sum = ''
@@ -804,7 +804,6 @@ output$mice_input <- shiny::renderUI({
           options = base::list(
             scrollX = TRUE,
             scrollCollapse = TRUE,
-            autoWidth = TRUE,
             dom = 'ltip'
           )
         )
@@ -1650,7 +1649,6 @@ output$mice_input <- shiny::renderUI({
         options = base::list(
           scrollX = TRUE,
           scrollCollapse = TRUE,
-          autoWidth = TRUE,
           selection = 'none',
           dom = 'lti'
         )
