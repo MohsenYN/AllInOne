@@ -1787,7 +1787,7 @@ output$mice_input <- shiny::renderUI({
           width = 5,
           shiny::selectInput(
             inputId = 'str_column_type',
-            label = 'Column name',
+            label = 'Set structure',
             choices = list(
               'Character' = 1,
               'Numeric' = 2,
