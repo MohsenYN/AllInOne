@@ -8,7 +8,7 @@
 #' @noRd
 CheckVIO <- function(input, rv) {
 
-  set_wd('Box Plots')
+  set_wd('Data Visualization')
 
   VarPYSL <- dplyr::select(rv$independent_variables, dplyr::all_of(input$boxplot_vars))
 
@@ -41,5 +41,5 @@ CheckVIO <- function(input, rv) {
       }
     }
   }
-  set_wd('Box Plots', rv, input$save_results)
+  set_wd('Data Visualization', rv, input$save_results)
 }

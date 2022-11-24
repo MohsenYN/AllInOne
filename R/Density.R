@@ -8,7 +8,7 @@
 #' @noRd
 DensityPlot <- function(input, rv) {
 
-  set_wd('Box Plots')
+  set_wd('Data Visualization')
 
   dat = rv$data
   VarPYSLK <- dplyr::select(rv$independent_variables, dplyr::all_of(input$boxplot_vars))
@@ -116,5 +116,5 @@ DensityPlot <- function(input, rv) {
     }
   }
 
-  set_wd('Box Plots', rv, input$save_results)
+  set_wd('Data Visualization', rv, input$save_results)
 }

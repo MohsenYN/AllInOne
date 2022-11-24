@@ -16,7 +16,7 @@ ExSPATS <- function(input, rv) {
     shiny_showNotification(rv ,'Installing SpATS and/or viridis package(s) failed!')
     return(F)
   }
-  set_wd('spatial analysis')
+  set_wd('Spatial Analysis')
 
   response = input$spat_resp
   NameG = input$spat_gen
@@ -176,5 +176,5 @@ ExSPATS <- function(input, rv) {
     height = 15,
     units = "cm"
   )
-  set_wd('spatial analysis', rv, input$save_results)
+  set_wd('Spatial Analysis', rv, input$save_results)
 }

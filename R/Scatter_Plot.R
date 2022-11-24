@@ -7,7 +7,7 @@
 #' @noRd
 CheckSatterplot <- function(input, rv) {
 
-  set_wd('Box Plots')
+  set_wd('Data Visualization')
 
   Scatter <- rv$data %>% dplyr::select(input$scatter_vars)
 
@@ -17,5 +17,5 @@ CheckSatterplot <- function(input, rv) {
   filesave('png', input$project_name, " -- Scatter plot ", p, rv)
   filesave('pdf', input$project_name, " -- Scatter plot ", p, rv)
 
-  set_wd('Box Plots', rv, input$save_results)
+  set_wd('Data Visualization', rv, input$save_results)
 }
