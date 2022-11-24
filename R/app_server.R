@@ -60,7 +60,88 @@ app_server <- function(input, output, session) {
     rv$Path_For_Saving_Results = input$results_folder_path
   })
 
-  show_slider <- function(str, k = 1) {
+  # observeEvent(input$debug, {
+  #   print('Debug...')
+  # })
+
+  output$o_res_blue_k <- renderUI({
+    if (!is.null(input$res_blue_str)) {
+      str = input$res_blue_str
+      if (base::dir.exists(app_sys(paste0("app/Results/"), str))) {
+        imgs <-
+          base::list.files(app_sys(base::paste0("app/Results/", str)),
+                           pattern = stringr::regex("*.(png|csv|txt)"))
+        if (length(imgs) > 0) {
+          imgs = put_csv_last(imgs)
+          column(
+            width = 6,
+            shiny::selectInput(
+              'res_blue_k',
+              'Outputs',
+              imgs))
+        }
+      }else
+        shiny::h4(paste0('No output history in ', str, ' Menu'))
+    }
+  })
+
+  output$o_results <- renderUI({
+    tryCatch({
+    if (!is.null(input$res_blue_str) & !is.null(input$res_blue_k)) {
+      str = input$res_blue_str
+      imgs <-
+        base::list.files(app_sys(base::paste0("app/Results/", str)),
+                         pattern = stringr::regex("*.(png|csv|txt)"))
+      if (length(imgs) > 0) {
+
+        imgs = put_csv_last(imgs)
+
+        k = which(imgs == input$res_blue_k)
+
+        if (length(k) != 0) {
+          file_address = app_sys('app/Results/', str, '/', imgs[k])
+
+          rv$png_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.png')
+          rv$pdf_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.pdf')
+          rv$csv_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.csv')
+          rv$txt_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.txt')
+
+          file_address = base::paste0('Results/', str, '/', imgs[k], '?', runif(1, 1, 2))
+
+          extention = base::substring(imgs[k], base::nchar(imgs[k]) - 2, base::nchar(imgs[k]))
+
+          if (extention == 'png') {
+            shiny::img(src = file_address, style = 'width : 100%')
+          }
+          else if (extention == 'csv') {
+            rv$csv_value = utils::read.csv(
+              file = rv$csv_address, header = TRUE,
+              sep = ",", fileEncoding = "UTF-8-BOM")
+
+            DT::renderDataTable(
+              rv$csv_value,
+              options = base::list(
+                scrollX = TRUE,
+                columnDefs = list(list(className = 'dt-center', targets = '_all')),
+                scrollCollapse = TRUE, dom = 'ltip')
+            )
+          }
+          else if (extention == 'txt') {
+            sum = ''
+            for (i in readLines(rv$txt_address)) {
+              sum = paste0(sum, '<br/>', i)
+            }
+            helpText(HTML(sum))
+          }
+        }
+      }
+    }
+    }, error = function (e){
+      shiny_showNotification(rv, e$message)
+    })
+  })
+
+show_slider <- function(str, k = 1) {
     tryCatch({
       rv$slider.str = str
       rv$slider.k = k
@@ -502,11 +583,12 @@ output$mice_input <- shiny::renderUI({
 
   output$scatter_vars_ui <- shiny::renderUI({
     if ('scatterplot' %in% input$plots_name) {
-      shiny::checkboxGroupInput(
+      shiny::selectInput(
         'scatter_vars',
         'Select two dependant/response variables for scatterplot',
         choices = input$main_db_dep_val,
-        selected = input$scatter_vars
+        selected = input$scatter_vars,
+        multiple = T
       )
     }
   })
@@ -526,11 +608,12 @@ output$mice_input <- shiny::renderUI({
         }
       }
 
-      shiny::checkboxGroupInput(
+      shiny::selectInput(
         'boxplot_vars',
         'Select variables for plot(s)',
         choices = indep_cols,
-        selected = input$boxplot_vars
+        selected = input$boxplot_vars,
+        multiple = T
       )
     }
   })
@@ -1022,8 +1105,8 @@ output$mice_input <- shiny::renderUI({
 
   shiny::observeEvent(input$indep_spat_btn, {
     shiny::removeModal()
-    if (base::dir.exists(app_sys("app/Results/spatial analysis")))
-      base::unlink(app_sys("app/Results/spatial analysis"), recursive = TRUE)
+    if (base::dir.exists(app_sys("app/Results/Spatial Analysis")))
+      base::unlink(app_sys("app/Results/Spatial Analysis"), recursive = TRUE)
     waiter$show()
 
     base::tryCatch({
@@ -1038,12 +1121,12 @@ output$mice_input <- shiny::renderUI({
     })
 
     waiter$hide()
-    show_slider('spatial analysis')
+    show_slider('Spatial Analysis')
   })
 
   shiny::observeEvent(input$spat_show, {
     shiny::removeModal()
-    show_slider('spatial analysis')
+    show_slider('Spatial Analysis')
   })
 
   shiny::observeEvent(input$use_spat_buffer, {
@@ -1435,8 +1518,8 @@ output$mice_input <- shiny::renderUI({
   })
 
   shiny::observeEvent(input$boxplot_modal_btn, {
-    if (base::dir.exists(app_sys("app/Results/Box Plots")))
-      base::unlink(app_sys("app/Results/Box Plots"), recursive = TRUE)
+    if (base::dir.exists(app_sys("app/Results/Data Visualization")))
+      base::unlink(app_sys("app/Results/Data Visualization"), recursive = TRUE)
     if ('boxplot' %in% input$plots_name) {
       if (!base::is.null(input$boxplot_vars)) {
         shiny::removeModal()
@@ -1510,7 +1593,7 @@ output$mice_input <- shiny::renderUI({
     if (base::is.null(input$plots_name)) {
       shiny_showNotification(rv, 'Please select at least one option!')
     }
-    show_slider("Box Plots")
+    show_slider("Data Visualization")
   })
 
   shiny::observeEvent(input$run_outlier, {
@@ -2058,13 +2141,21 @@ output$mice_input <- shiny::renderUI({
   })
 
   output$content_save_db <- shiny::renderUI({
+    flag = F
+    for (i in 1:base::length(rv$filter.k)) {
+      if(rv$filter.k[[i]]$search != '')
+        flag = T
+    }
     shiny::tagList(
       column(width = 3,shiny::actionButton('active_opt_db', 'Upload Dataset')),
       column(width = 3,shiny::actionButton('active_opt_ind_var', 'Select Variables')),
       column(width = 3,shiny::actionButton('active_opt_interaction', 'Create Interactions')),
       column(width = 3,shiny::actionButton('active_opt_subset', 'Subset Dataset')),
       column(width = 3,shiny::downloadButton('download_db', 'Save As')),
-      column(width = 3,shiny::actionButton('filter_outlier_reset', "Revert filters"))
+      if(flag)
+        column(width = 3,shiny::actionButton('filter_outlier_reset', "Revert filters!!!",
+                                             style = 'color : black; background-color : var(--secondary-color)'))
+      # ,column(width = 3,shiny::actionButton('debug', "debug"))
     )
   })
 
