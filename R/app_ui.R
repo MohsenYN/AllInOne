@@ -190,29 +190,39 @@ sidebar <- shinydashboard::dashboardSidebar({
 })
 
 body <- shinydashboard::dashboardBody(
-  tabsetPanel(
+  shiny::tabsetPanel(
     type = "tabs",
-    tabPanel(
-      "Home",
+    shiny::tabPanel(
+      title = "Home",
       shiny::uiOutput('information')
     ),
-    tabPanel(
-      "Dataset",
+    shiny::tabPanel(
+      title = "Dataset",
       shiny::uiOutput("content_save_db"),
       DT::DTOutput("table1"),
       shiny::a(href = "https://www.uoguelph.ca/oac/", shiny::img(src = "www/OACL.png", class = "MYNGuelph")),
       interface
     ),
-    tabPanel(
-      "Summary",
-      uiOutput("summary")
+    shiny::tabPanel(
+      title = "Summary",
+      shiny::uiOutput("summary")
     ),
-    tabPanel(
-      "Structure",
-      uiOutput("o_structure_col_name"),
-      uiOutput("o_structure_col_type"),
-      uiOutput("o_structure_col_btn"),
-      uiOutput("structure")
+    shiny::tabPanel(
+      title = "Structure",
+      shiny::uiOutput("o_structure_col_name"),
+      shiny::uiOutput("o_structure_col_type"),
+      shiny::uiOutput("o_structure_col_btn"),
+      shiny::uiOutput("structure")
+    ),
+    shiny::tabPanel(
+      title = "Results",
+      column(width = 4, shiny::selectInput(
+        'res_blue_str', 'str',
+        c('Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
+          'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
+      )),
+      column(width = 8, shiny::uiOutput('o_res_blue_k')),
+      shiny::uiOutput('o_results')
     )
   )
 )
