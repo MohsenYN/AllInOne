@@ -642,7 +642,7 @@ output$mice_input <- shiny::renderUI({
             shiny::radioButtons(
               inputId = 'missing_handler_opt',
               label = 'Would you like to',
-              choices = base::c('See Missing Pattern' = 'missing',
+              choices = base::c('Check Missing Pattern' = 'missing',
                                 'Impute Missing Value' = 'impute')),
             uiOutput('mice_input2'),
             easyClose = FALSE,
