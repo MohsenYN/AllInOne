@@ -27,6 +27,8 @@ Required: [shinydisconnect](https://github.com/daattali/shinydisconnect) R packa
 <br/>
 Required: [shinyjs](https://deanattali.com/shinyjs/) R package version 2.1.0 or later
 <br/>
+Required: [SpATS](https://cran.r-project.org/web/packages/SpATS/index.html) R package version 1.0-16 or later
+<br/>
 Required: [remotes](https://cran.r-project.org/web/packages/remotes/index.html) R package
 <br/>
 

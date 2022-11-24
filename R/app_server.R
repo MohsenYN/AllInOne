@@ -694,13 +694,13 @@ output$mice_input <- shiny::renderUI({
 
               shiny::textInput(
                 'minp',
-                "Minimum quantile:",
+                "Lower (Q1) quartile percentile",
                 value = 0.25
               ),
 
               shiny::textInput(
                 'maxp',
-                "Maximum quantile:",
+                "Upper quartile (Q3) percentile",
                 value = 0.75
               ))
         })
@@ -1632,7 +1632,7 @@ output$mice_input <- shiny::renderUI({
 
                 shiny::selectInput(
                   'outl_select_input',
-                  label = shiny::h5("Select An Outlier"),
+                  label = shiny::h5("Select Outlier"),
                   choices = base::unique(base::sort(rv$outliers_row))
                 ),
                 shiny::selectInput(

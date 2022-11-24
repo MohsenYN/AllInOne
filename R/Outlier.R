@@ -68,8 +68,7 @@ PoSiBlEoUtLieR <- function(input, rv) {
               ) +
               ggplot2::theme_classic() +
               ggplot2::labs(x = i,
-                            title = "Detecting outlier in each ",
-                            j,
+                            title = base::paste0("Detecting outlier in each ",j),
                             subtitle = i) +
               # ggplot2::guides(fill = ggplot2::guide_legend(j)) + ggplot2::scale_x_discrete(name = j) +
               ggplot2::scale_y_continuous(name = i) +
