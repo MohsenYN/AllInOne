@@ -27,7 +27,7 @@ ExBLUE <- function(input, rv) {
   }
 
   if (base::is.null(Cof)) {
-    Model <- base::eval(base::bquote(lme4::lmer(.(fix.F), data = data)))
+    Model <- base::eval(base::bquote(lme4::lmer(.(fix.F), data = data,REML=F)))
   } else {
     Model <- base::eval(base::bquote(lme4::lmer(.(fix.F), weights = base::get(Cof), data = data)))
   }
@@ -73,7 +73,7 @@ ExBLUE <- function(input, rv) {
   )
 
   if (base::is.null(Cof)) {
-    MM.S <- base::eval(base::bquote(lmerTest::lmer(.(fix.F), data = data)))
+    MM.S <- base::eval(base::bquote(lmerTest::lmer(.(fix.F), data = data,REML=F)))
   } else {
     MM.S <- base::eval(base::bquote(lmerTest::lmer(.(fix.F), weights = base::get(Cof), data = data)))
   }
