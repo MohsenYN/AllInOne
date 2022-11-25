@@ -217,7 +217,7 @@ body <- shinydashboard::dashboardBody(
     shiny::tabPanel(
       title = "Results",
       column(width = 4, shiny::selectInput(
-        'res_blue_str', 'str',
+        'res_blue_str', 'Results folder',
         c('Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
           'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
       )),

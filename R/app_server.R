@@ -77,7 +77,7 @@ app_server <- function(input, output, session) {
             width = 6,
             shiny::selectInput(
               'res_blue_k',
-              'Outputs',
+              'Results file',
               imgs))
         }
       }else
