@@ -83,12 +83,12 @@ app_server <- function(input, output, session) {
                            pattern = stringr::regex("*.(png|csv|txt)"))
         if (length(imgs) > 0) {
           imgs = put_csv_last(imgs)
-          column(
-            width = 6,
-            shiny::selectInput(
-              'res_blue_k',
-              'Results file',
-              imgs))
+          shiny::selectInput(
+            'res_blue_k',
+            'Results file',
+            imgs,
+            width = '100%'
+          )
         }
       }else
         if(str != 'None')
