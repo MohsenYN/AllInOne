@@ -200,7 +200,6 @@ body <- shinydashboard::dashboardBody(
       title = "Dataset",
       shiny::uiOutput("content_save_db"),
       DT::DTOutput("table1"),
-      shiny::a(href = "https://www.uoguelph.ca/oac/", shiny::img(src = "www/OACL.png", class = "MYNGuelph")),
       interface
     ),
     shiny::tabPanel(
@@ -223,7 +222,9 @@ body <- shinydashboard::dashboardBody(
       )),
       column(width = 8, shiny::uiOutput('o_res_blue_k')),
       shiny::uiOutput('o_results')
-    )
+    ),
+    shiny::a(href = "https://www.uoguelph.ca/oac/", shiny::img(src = "www/OACL.png", class = "MYNGuelph"))
+
   )
 )
 
