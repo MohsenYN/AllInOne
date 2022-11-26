@@ -232,23 +232,7 @@ Header <- shinydashboard::dashboardHeader(
 
   shiny::tags$li(shiny::a(href="https://github.com/MohsenYN",
                    shiny::img(src="www/PictureRM2.png", class="title-image")), class='dropdown title-logo'),
-  shinydashboard::dropdownMenu(type = "notifications"
-  #                               ,
-  # shinydashboard::notificationItem(
-  #   text = "5 new users today",
-  #   shiny::icon("users")
-  # ),
-  # shinydashboard::notificationItem(
-  #   text = "12 items delivered",
-  #   shiny::icon("truck"),
-  #   status = "success"
-  # ),
-  # shinydashboard::notificationItem(
-  #   text = "Server load at 86%",
-  #   icon = shiny::icon("exclamation-triangle"),
-  #   status = "warning"
-  # )
-  )
+  shinydashboard::dropdownMenuOutput('header_notification')
 )
 
 

@@ -96,6 +96,16 @@ app_server <- function(input, output, session) {
     }
   })
 
+  output$header_notification <- shinydashboard::renderMenu({
+    shinydashboard::dropdownMenu(
+      type = "messages",
+      shinydashboard::messageItem(
+        from = 'Admin',
+        message = "Welcome to the AllInOne Shinyapp!"
+      )
+    )
+  })
+
   output$o_results <- renderUI({
     tryCatch({
       if (!is.null(input$res_blue_str) & !is.null(input$res_blue_k)) {
