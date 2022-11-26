@@ -5,6 +5,7 @@
 #' @noRd
 
 set_wd <- function (str, rv = NULL, save = F){
+  shiny::updateSelectInput(inputId = 'res_blue_str', selected = 'None')
   if (is.null(rv)) {
     base::setwd(app_sys("app/Results"))
     if (!base::dir.exists(str))

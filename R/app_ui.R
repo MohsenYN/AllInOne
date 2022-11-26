@@ -217,7 +217,7 @@ body <- shinydashboard::dashboardBody(
       title = "Results",
       column(width = 4, shiny::selectInput(
         'res_blue_str', 'Results folder',
-        c('Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
+        c('None','Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
           'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
       )),
       column(width = 8, shiny::uiOutput('o_res_blue_k')),

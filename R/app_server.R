@@ -14,8 +14,10 @@ app_server <- function(input, output, session) {
     indep_col = NULL, outliers = NULL, outliers_row = NULL,
     active_opt_ = 'db', slider.k = 1, filter.k = base::rep(base::list(base::list(search = "")), 500),
     selected.col = NULL, cor_temp = NULL, slider.str = '', filter_flag = 0,
-    pdf_address = NULL, png_address = NULL, csv_address = NULL, txt_address = NULL, review_flag = TRUE,
-    csv_value = NULL, blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
+    pdf_address = NULL, png_address = NULL, csv_address = NULL, txt_address = NULL,
+    pdf_address2 = NULL, png_address2 = NULL, csv_address2 = NULL, txt_address2 = NULL,
+    csv_value = NULL, csv_value2 = NULL, review_flag = TRUE, refresh_flag = NULL,
+    blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
     Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F, User_Config_notif_delay = 8, User_Config_notif_size = 4
     , Path_For_Saving_Results = '', Show_Errors = T,
   )
@@ -72,10 +74,6 @@ app_server <- function(input, output, session) {
     rv$Path_For_Saving_Results = input$results_folder_path
   })
 
-  # observeEvent(input$debug, {
-  #   print('Debug...')
-  # })
-
   output$o_res_blue_k <- renderUI({
     if (!is.null(input$res_blue_str)) {
       str = input$res_blue_str
@@ -93,62 +91,63 @@ app_server <- function(input, output, session) {
               imgs))
         }
       }else
-        shiny::h4(paste0('No output history in ', str, ' Menu'))
+        if(str != 'None')
+          shiny::h4(paste0('No output history in ', str, ' Menu'))
     }
   })
 
   output$o_results <- renderUI({
     tryCatch({
-    if (!is.null(input$res_blue_str) & !is.null(input$res_blue_k)) {
-      str = input$res_blue_str
-      imgs <-
-        base::list.files(app_sys(base::paste0("app/Results/", str)),
-                         pattern = stringr::regex("*.(png|csv|txt)"))
-      if (length(imgs) > 0) {
+      if (!is.null(input$res_blue_str) & !is.null(input$res_blue_k)) {
+        str = input$res_blue_str
+        imgs <-
+          base::list.files(app_sys(base::paste0("app/Results/", str)),
+                           pattern = stringr::regex("*.(png|csv|txt)"))
+        if (length(imgs) > 0) {
 
-        imgs = put_csv_last(imgs)
+          imgs = put_csv_last(imgs)
 
-        k = which(imgs == input$res_blue_k)
+          k = which(imgs == input$res_blue_k)
 
-        if (length(k) != 0) {
-          file_address = app_sys('app/Results/', str, '/', imgs[k])
+          if (length(k) != 0) {
+            file_address = app_sys('app/Results/', str, '/', imgs[k])
 
-          rv$png_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.png')
-          rv$pdf_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.pdf')
-          rv$csv_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.csv')
-          rv$txt_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.txt')
+            rv$png_address2 = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.png')
+            rv$pdf_address2 = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.pdf')
+            rv$csv_address2 = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.csv')
+            rv$txt_address2 = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.txt')
 
-          file_address = base::paste0('Results/', str, '/', imgs[k], '?', runif(1, 1, 2))
+            file_address = base::paste0('Results/', str, '/', imgs[k], '?', runif(1, 1, 2))
 
-          extention = base::substring(imgs[k], base::nchar(imgs[k]) - 2, base::nchar(imgs[k]))
+            extention = base::substring(imgs[k], base::nchar(imgs[k]) - 2, base::nchar(imgs[k]))
 
-          if (extention == 'png') {
-            shiny::img(src = file_address, style = 'width : 100%')
-          }
-          else if (extention == 'csv') {
-            rv$csv_value = utils::read.csv(
-              file = rv$csv_address, header = TRUE,
-              sep = ",", fileEncoding = "UTF-8-BOM")
-
-            DT::renderDataTable(
-              rv$csv_value,
-              options = base::list(
-                scrollX = TRUE,
-                columnDefs = list(list(className = 'dt-center', targets = '_all')),
-                scrollCollapse = TRUE, dom = 'ltip')
-            )
-          }
-          else if (extention == 'txt') {
-            sum = ''
-            for (i in readLines(rv$txt_address)) {
-              sum = paste0(sum, '<br/>', i)
+            if (extention == 'png') {
+              shiny::img(src = file_address, style = 'width : 100%')
             }
-            helpText(HTML(sum))
+            else if (extention == 'csv') {
+              rv$csv_value2 = utils::read.csv(
+                file = rv$csv_address2, header = TRUE,
+                sep = ",", fileEncoding = "UTF-8-BOM")
+
+              DT::renderDataTable(
+                rv$csv_value2,
+                options = base::list(
+                  scrollX = TRUE,
+                  columnDefs = list(list(className = 'dt-center', targets = '_all')),
+                  scrollCollapse = TRUE, dom = 'ltip')
+              )
+            }
+            else if (extention == 'txt') {
+              sum = ''
+              for (i in readLines(rv$txt_address2)) {
+                sum = paste0(sum, '<br/>', i)
+              }
+              helpText(HTML(sum))
+            }
           }
         }
       }
-    }
-    }, error = function (e){
+    }, error = function(e) {
       shiny_showNotification(rv, e$message)
     })
   })
