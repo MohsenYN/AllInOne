@@ -20,6 +20,18 @@ app_server <- function(input, output, session) {
     , Path_For_Saving_Results = '', Show_Errors = T,
   )
 
+  allinone_initialize <- function(rv) {
+    rv$outliers_row = NULL
+    rv$selected.col = NULL
+    rv$review_flag = TRUE
+    if(dir.exists(app_sys('app/Results')))
+      unlink(app_sys('app/Results'), recursive = T)
+    dir.create(paste0(app_sys('app'),'/Results'))
+  }
+  if(dir.exists(app_sys('app/Results')))
+      unlink(app_sys('app/Results'), recursive = T)
+  dir.create(paste0(app_sys('app'),'/Results'))
+
   forbidden_characters <- base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"',
                                   ' ', '!', ';', ',', '|', '!', '@', '#', '$',
                                   '%', '^', '&', '*', '(', ')', '+', '-')
@@ -1688,9 +1700,7 @@ output$mice_input <- shiny::renderUI({
         # dat <- rio::import("https://github.com/MohsenYN/AllInOne/blob/main/inst/app/SampleDB/SampleDB.xlsx?raw=true")
         dat <- readxl::read_xlsx(app_sys('app/SampleDB/SampleDB.xlsx'), sheet = 1)
         rv$data <- base::as.data.frame(dat)
-        rv$outliers_row = NULL
-        rv$selected.col = NULL
-        rv$review_flag = TRUE
+        allinone_initialize(rv)
       }
       else if (!is.null(rv$dataC)) {
         flag = T
@@ -1703,9 +1713,7 @@ output$mice_input <- shiny::renderUI({
         if (flag) {
           shiny::removeModal()
           rv$data <- base::as.data.frame(rv$dataC)
-          rv$outliers_row = NULL
-          rv$selected.col = NULL
-          rv$review_flag = TRUE
+          allinone_initialize(rv)
 
         }else {
           shiny_showNotification(rv, 'Column/Project name can not include " \ | ? * : < > () and space')
