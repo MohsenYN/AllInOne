@@ -96,7 +96,7 @@ app_server <- function(input, output, session) {
     }
   })
 
-  output$header_notification <- shinydashboard::renderMenu({
+  output$header_notification_deactive <- shinydashboard::renderMenu({
     shinydashboard::dropdownMenu(
       type = "messages",
       shinydashboard::messageItem(
