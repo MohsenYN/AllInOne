@@ -671,7 +671,7 @@ output$mice_input <- shiny::renderUI({
                 'Bayesian linear regression' = 'norm',
                 'Linear regression ignoring model error' = 'norm.nob',
                 'Linear regression using bootstrap' = 'norm.boot',
-                'Linear regression, predicted values' = 'norm.predict',
+                'Linear regression predicted values' = 'norm.predict',
                 'Lasso linear regression' = 'lasso.norm',
                 'Lasso select and linear regression' = 'lasso.select.norm'
               ),

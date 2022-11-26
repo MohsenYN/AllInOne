@@ -45,8 +45,8 @@ ImputeMissing <- function(input, rv, session) {
     p <- function()
       base::print(base::plot(PMM_MD))
 
-    filesave('png', input$project_name, " -- Mean of the imputed varibales based on the number of multiple imputations  ", p, rv)
-    filesave('pdf', input$project_name, " -- Mean of the imputed varibales based on the number of multiple imputations  ", p, rv)
+    filesave('png', input$project_name, " -- Mean of the imputed variables based on the number of multiple imputations  ", p, rv)
+    filesave('pdf', input$project_name, " -- Mean of the imputed variables based on the number of multiple imputations  ", p, rv)
 
     p <- function()
       base::print(mice::densityplot(PMM_MD))
