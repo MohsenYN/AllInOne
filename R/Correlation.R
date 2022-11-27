@@ -289,7 +289,7 @@ CoReLaTiOnSS <- function(input, rv) {
       corrplot::corrplot(M, type = "upper", order = "hclust")
 
       base::invisible(grDevices::dev.off())
-      grDevices::pdf(file = base::paste0(input$project_name, "-- Correlation (hclust).pdf"))
+      grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (hclust).pdf"))
       P <- corrplot::corrplot(M, type = "upper", order = "hclust")
       base::invisible(base::print(P))
       base::invisible(grDevices::dev.off())
