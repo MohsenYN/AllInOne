@@ -29,7 +29,9 @@ app_server <- function(input, output, session) {
     if(dir.exists(app_sys('app/Results')))
       unlink(app_sys('app/Results'), recursive = T)
     dir.create(paste0(app_sys('app'),'/Results'))
+    cat("\014")
   }
+
   if(dir.exists(app_sys('app/Results')))
       unlink(app_sys('app/Results'), recursive = T)
   dir.create(paste0(app_sys('app'),'/Results'))
