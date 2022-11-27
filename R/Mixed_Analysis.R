@@ -116,7 +116,7 @@ Mixed_Analysis <- function(input, rv) {
 
     MM.Sresid <- stats::residuals(MM.S, type = "pearson")
     MM.Sactual <- stats::predict(MM.S)
-    utils::write.csv(MM.Sactual, paste0(input$project_name, '-- Predicted Values.csv'))
+    utils::write.csv(MM.Sactual, paste0(input$project_name, '-- Predicted Values.csv'), row.names = F)
     # create plot
 
     p <- function() {
