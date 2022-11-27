@@ -12,7 +12,7 @@ CheckSatterplot <- function(input, rv) {
   Scatter <- rv$data %>% dplyr::select(input$scatter_vars)
 
   p <- function()
-    base::print(VIM::marginplot(Scatter))
+    VIM::marginplot(Scatter)
 
   filesave('png', input$project_name, " -- Scatter plot ", p, rv)
   filesave('pdf', input$project_name, " -- Scatter plot ", p, rv)
