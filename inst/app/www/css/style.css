@@ -177,3 +177,15 @@ ul.sidebar-menu {
     display: flex;
     align-items: center;
 }
+
+div#o_results > img {
+    width: 85% !important;
+    max-width: 900px !important;
+}
+div#o_results {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-height: 70vh;
+    align-items: center;
+}
