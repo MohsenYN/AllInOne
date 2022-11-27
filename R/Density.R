@@ -89,7 +89,7 @@ DensityPlot <- function(input, rv) {
     else {
       A[[i]] <- ggplot2::ggplot(SelectedTraits, ggplot2::aes_string(x = i)) +
         ggplot2::geom_histogram(
-          ggplot2::aes(y = after_stat(density)),
+          ggplot2::aes(y = ggplot2::after_stat(density)),
           colour = "black",
           fill = "Red",
           alpha = .2
