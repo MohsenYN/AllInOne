@@ -151,7 +151,7 @@ PoSiBlEoUtLieR <- function(input, rv) {
           ggplot2::theme_classic()
 
         grDevices::png(base::paste0(input$project_name, ' -- cooks distance plot grouped by ', gp, '.png'),
-                       width = get_width(rv, 3))
+                       width = get_width(rv, 2))
         base::invisible(base::print(p))
         grDevices::dev.off()
 
@@ -166,7 +166,7 @@ PoSiBlEoUtLieR <- function(input, rv) {
 
     ##############################
     grDevices::png(base::paste0(input$project_name, ' --  DFFIT plot.png'),
-                   width = get_width(rv, 3))
+                   width = get_width(rv, 2))
     base::invisible(base::print(olsrr::ols_plot_dffits(model)))
     grDevices::dev.off()
 
@@ -194,7 +194,7 @@ PoSiBlEoUtLieR <- function(input, rv) {
                                                                 base::round(k$ts, 3))) +
       ggplot2::theme_classic()
     grDevices::png(base::paste0(input$project_name, ' -- cooks distance bar.png'),
-                   width = get_width(rv, 3))
+                   width = get_width(rv, 2))
     base::invisible(base::print(p))
     grDevices::dev.off()
 
@@ -215,7 +215,7 @@ PoSiBlEoUtLieR <- function(input, rv) {
                         fontface = "italic", colour = "darkred",
                         label = base::paste("Threshold:", base::round(k$ts, 3))) +
       ggplot2::theme_classic()
-    grDevices::png(base::paste0(input$project_name, ' -- cooks distance chart.png'), width = get_width(rv, 3))
+    grDevices::png(base::paste0(input$project_name, ' -- cooks distance chart.png'), width = get_width(rv, 2))
     base::invisible(base::print(p))
     grDevices::dev.off()
 
@@ -223,7 +223,7 @@ PoSiBlEoUtLieR <- function(input, rv) {
     base::invisible(base::print(p))
     grDevices::dev.off()
     ##############################
-    grDevices::png(base::paste0(input$project_name, ' -- cooks distance Hadi plot.png'), width = get_width(rv, 3))
+    grDevices::png(base::paste0(input$project_name, ' -- cooks distance Hadi plot.png'), width = get_width(rv, 2))
     base::invisible(base::print(olsrr::ols_plot_hadi(model)))
     grDevices::dev.off()
 
