@@ -1697,63 +1697,71 @@ output$mice_input <- shiny::renderUI({
   })
 
   shiny::observeEvent(input$run_outlier, {
-    shiny::removeModal()
-    outliers = NULL
-    outliers_row = NULL
-    if (base::dir.exists(app_sys("app/Results/Outlier")))
-      base::unlink(app_sys("app/Results/Outlier"), recursive = TRUE)
-    waiter$show()
-    base::tryCatch({
-      PoSiBlEoUtLieR(input, rv)
-    }, error = function(e) {
-      if (rv$Show_Errors)
-        shiny_showNotification(rv, e$message)
-      else
-        shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
-      # base::setwd("../../")
-    })
-    waiter$hide()
-
-    base::tryCatch({
-      if (base::length(rv$outliers_row) > 0) {
-        session$sendCustomMessage(
-          type = 'testmessage',
-          message = base::paste0(base::length(rv$outliers_row),
-                                 ' Outlier(s) are founded!'))
-
-        outl_rows = base::unique(base::sort(rv$outliers_row))
-        output$content_3 <- shiny::renderUI({
-          if (input$active_opt_2 == 'outlier')
-            if (base::length(base::unique(base::sort(rv$outliers_row)))) {
-              shiny::tagList(
-                shiny::actionButton('show_pic_outlier', "See Plots"),
-
-                shiny::actionButton('ref_outlier', "Auto Refine Outliers"),
-
-                shiny::selectInput(
-                  'outl_select_input',
-                  label = shiny::h5("Select Outlier"),
-                  choices = base::unique(base::sort(rv$outliers_row))
-                ),
-                shiny::selectInput(
-                  inputId = 'indep_outlier',
-                  label = 'Select the independent variable',
-                  choices = input$main_db_indep_val
-                ),
-                shiny::actionButton('filter_outlier', "Filter The Dataset")
-              )
-            }
-        })
-      } else {
-        session$sendCustomMessage(type = 'testmessage',
-                                  message = 'Congratulations! There is no outlier')
+    flag = T
+    if (input$outlier_method == 'B') {
+      if (is.null(input$outlier_rand)) {
+        flag = F
       }
-    }, error = function(e) {
-      if (rv$Show_Errors)
-        shiny_showNotification(rv, e$message)
-      else
-        shiny_showNotification(rv, 'Error in applying outlier tools')
-    })
+    }
+    if (flag) {
+      shiny::removeModal()
+      outliers = NULL
+      outliers_row = NULL
+      if (base::dir.exists(app_sys("app/Results/Outlier")))
+        base::unlink(app_sys("app/Results/Outlier"), recursive = TRUE)
+      waiter$show()
+      base::tryCatch({
+        PoSiBlEoUtLieR(input, rv)
+      }, error = function(e) {
+        if (rv$Show_Errors)
+          shiny_showNotification(rv, e$message)
+        else
+          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
+        # base::setwd("../../")
+      })
+      waiter$hide()
+
+      base::tryCatch({
+        if (base::length(rv$outliers_row) > 0) {
+          session$sendCustomMessage(
+            type = 'testmessage',
+            message = base::paste0(base::length(rv$outliers_row),
+                                   ' Outlier(s) are founded!'))
+
+          outl_rows = base::unique(base::sort(rv$outliers_row))
+          output$content_3 <- shiny::renderUI({
+            if (input$active_opt_2 == 'outlier')
+              if (base::length(base::unique(base::sort(rv$outliers_row)))) {
+                shiny::tagList(
+                  shiny::actionButton('show_pic_outlier', "See Plots"),
+
+                  shiny::actionButton('ref_outlier', "Auto Refine Outliers"),
+
+                  shiny::selectInput(
+                    'outl_select_input',
+                    label = shiny::h5("Select Outlier"),
+                    choices = base::unique(base::sort(rv$outliers_row))
+                  ),
+                  shiny::selectInput(
+                    inputId = 'indep_outlier',
+                    label = 'Select the independent variable',
+                    choices = input$main_db_indep_val
+                  ),
+                  shiny::actionButton('filter_outlier', "Filter The Dataset")
+                )
+              }
+          })
+        } else {
+          session$sendCustomMessage(type = 'testmessage',
+                                    message = 'Congratulations! There is no outlier')
+        }
+      }, error = function(e) {
+        if (rv$Show_Errors)
+          shiny_showNotification(rv, e$message)
+        else
+          shiny_showNotification(rv, 'Error in applying outlier tools')
+      })
+    }
   })
 
   shiny::observeEvent(input$show_pic_outlier, {
