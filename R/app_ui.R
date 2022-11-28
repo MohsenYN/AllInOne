@@ -196,7 +196,7 @@ sidebar <- shinydashboard::dashboardSidebar({
     shiny::uiOutput('content_3'), #Outliers content
     shiny::uiOutput('content_7'), #apply changes outliers
     shiny::div(class = "needhelp-spacer"),
-    shiny::a(href = "mailto:myoosefz@uoguelph.ca", shiny::img(src = "www/Picture3.png", class = "MYNHelp"), class = "MYNHelpL")
+    shiny::a(href = "https://github.com/MohsenYN/AllInOne/wiki", shiny::img(src = "www/Picture3.png", class = "MYNHelp"), class = "MYNHelpL")
   )
 })
 
@@ -271,7 +271,7 @@ body <- shinydashboard::dashboardBody(
 
 Header <- shinydashboard::dashboardHeader(
 
-  shiny::tags$li(shiny::a(href = "https://github.com/MohsenYN",
+  shiny::tags$li(shiny::a(href = "https://github.com/MohsenYN/AllInOne",
                           shiny::img(src = "www/PictureRM2.png", class = "title-image")), class = 'dropdown title-logo'),
   shinydashboard::dropdownMenuOutput('header_notification')
 )

@@ -180,7 +180,7 @@ ul.sidebar-menu {
 
 #o_results img {
     width: 85% !important;
-    max-width: 800px !important;
+    max-width: 600px !important;
 }
 div#o_results {
     display: flex;
