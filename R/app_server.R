@@ -47,34 +47,7 @@ app_server <- function(input, output, session) {
     rv$User_Config_notif_size = input$notif_size
     rv$Maximum_Level_For_Group_By = input$Max_levels_GB
     rv$Ignore_Reserved_Letters = input$Ign_Res_Wrd
-    # rv$Replace_Reserved_Letters = input$Rep_Res_Wrd
   })
-
-  # shiny::observeEvent(input$save_results, {
-  #   if (!input$save_results) {
-  #     shinyjs::disable('results_folder')
-  #     shinyjs::disable('results_folder_path')
-  #   }
-  #
-  #   else {
-  #     shinyjs::enable('results_folder')
-  #     shinyjs::enable('results_folder_path')
-  #   }
-  #
-  # })
-
-  # observeEvent(input$results_folder, {
-  #   base::tryCatch({
-  #     shiny::updateTextInput(inputId = 'results_folder_path', value = utils::choose.dir())
-  #   }, error = function(e) {
-  #     shiny_showNotification(rv, e$message)
-  #     shiny_showNotification(rv, 'As some thing went wrong in selecting the path, please copy it in the folowing inputbox')
-  #   })
-  # })
-
-  # observeEvent(input$results_folder_path, {
-  #   rv$Path_For_Saving_Results = input$results_folder_path
-  # })
 
   output$o_res_blue_k <- renderUI({
     if (!is.null(input$res_blue_str)) {
