@@ -191,12 +191,11 @@ ul.sidebar-menu {
 
 #o_results img {
     width: 85% !important;
-    height: calc(100vh - 300px) !important;
     object-fit: contain;
     display: block;
 }
 
-div#o_results {
+#o_results {
     display: flex;
     justify-content: center;
     width: 100%;
