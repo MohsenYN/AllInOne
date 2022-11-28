@@ -15,7 +15,6 @@ app_server <- function(input, output, session) {
     active_opt_ = 'db', slider.k = 1, filter.k = base::rep(base::list(base::list(search = "")), 500),
     selected.col = NULL, cor_temp = NULL, slider.str = '', filter_flag = 0,
     pdf_address = NULL, png_address = NULL, csv_address = NULL, txt_address = NULL,
-    pdf_address2 = NULL, png_address2 = NULL, csv_address2 = NULL, txt_address2 = NULL,
     csv_value = NULL, csv_value2 = NULL, review_flag = TRUE, refresh_flag = NULL,
     blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
     Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F, User_Config_notif_delay = 8, User_Config_notif_size = 4
@@ -23,6 +22,7 @@ app_server <- function(input, output, session) {
   )
 
   allinone_initialize <- function(rv) {
+    shiny::updateSelectInput(inputId = 'res_blue_str', selected = 'None')
     rv$outliers_row = NULL
     rv$selected.col = NULL
     rv$review_flag = TRUE
@@ -108,6 +108,30 @@ app_server <- function(input, output, session) {
     )
   })
 
+  output$o_results_btns <- renderUI({
+    if ((input$res_blue_str != 'None') & (!is.null(rv$png_address)))
+      shiny::column(
+        width = 12,
+        shiny::tagList(
+          if (base::file.exists(rv$pdf_address))
+            shiny::downloadButton('download_pdf_res', 'Download as PDF'),
+          if (base::file.exists(rv$png_address))
+            shiny::downloadButton('download_png_res', 'Download full size image'),
+          if (base::file.exists(rv$csv_address))
+            shiny::downloadButton('download_csv_res', 'Download the table'),
+          # if (base::file.exists(rv$csv_address))
+          #   shiny::actionButton('csvs_use', 'Set the table as main dataset'),
+        )
+      )
+  })
+
+  observeEvent(input$res_blue_str,{
+    rv$pdf_address = NULL
+    rv$png_address = NULL
+    rv$csv_address = NULL
+    rv$csv_value = NULL
+  })
+
   output$o_results <- renderUI({
     tryCatch({
       if (!is.null(input$res_blue_str) & !is.null(input$res_blue_k)) {
@@ -124,10 +148,10 @@ app_server <- function(input, output, session) {
           if (length(k) != 0) {
             file_address = app_sys('app/Results/', str, '/', imgs[k])
 
-            rv$png_address2 = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.png')
-            rv$pdf_address2 = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.pdf')
-            rv$csv_address2 = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.csv')
-            rv$txt_address2 = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.txt')
+            rv$png_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.png')
+            rv$pdf_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.pdf')
+            rv$csv_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.csv')
+            rv$txt_address = base::paste0(base::substring(file_address, 1, base::nchar(file_address) - 4), '.txt')
 
             file_address = base::paste0('Results/', str, '/', imgs[k], '?', runif(1, 1, 2))
 
@@ -137,12 +161,12 @@ app_server <- function(input, output, session) {
               shiny::img(src = file_address, style = 'width : 100%')
             }
             else if (extention == 'csv') {
-              rv$csv_value2 = utils::read.csv(
-                file = rv$csv_address2, header = TRUE,
+              rv$csv_value = utils::read.csv(
+                file = rv$csv_address, header = TRUE,
                 sep = ",", fileEncoding = "UTF-8-BOM")
 
               DT::renderDataTable(
-                rv$csv_value2,
+                rv$csv_value,
                 options = base::list(
                   scrollX = TRUE,
                   columnDefs = list(list(className = 'dt-center', targets = '_all')),
@@ -151,7 +175,7 @@ app_server <- function(input, output, session) {
             }
             else if (extention == 'txt') {
               sum = ''
-              for (i in readLines(rv$txt_address2)) {
+              for (i in readLines(rv$txt_address)) {
                 sum = paste0(sum, '<br/>', i)
               }
               helpText(HTML(sum))
@@ -2200,6 +2224,17 @@ output$mice_input <- shiny::renderUI({
     }
   )
 
+  output$download_pdf_res <- shiny::downloadHandler(
+
+    filename = function() {
+      base::basename(rv$pdf_address)
+    },
+    contentType = "pdf",
+    content = function(path) {
+      base::file.copy(rv$pdf_address, path, overwrite = TRUE)
+    }
+  )
+
   output$download_png <- shiny::downloadHandler(
 
     filename = function() {
@@ -2211,7 +2246,29 @@ output$mice_input <- shiny::renderUI({
     }
   )
 
+  output$download_png_res <- shiny::downloadHandler(
+
+    filename = function() {
+      base::basename(rv$png_address)
+    },
+    contentType = "png",
+    content = function(path) {
+      base::file.copy(rv$png_address, path, overwrite = TRUE)
+    }
+  )
+
   output$download_csv <- shiny::downloadHandler(
+
+    filename = function() {
+      base::basename(rv$csv_address)
+    },
+    contentType = "csv",
+    content = function(path) {
+      base::file.copy(rv$csv_address, path, overwrite = TRUE)
+    }
+  )
+
+  output$download_csv_res <- shiny::downloadHandler(
 
     filename = function() {
       base::basename(rv$csv_address)
@@ -2356,7 +2413,9 @@ output$mice_input <- shiny::renderUI({
 
   shiny::observeEvent(input$csvs_use, {
 
-    #Delete residualValue from data
+    allinone_initialize(rv)
+    # Delete residualValue from data
+    # Note that the first column of a dataset should not be ResidualValue
     if (base::colnames(rv$csv_value)[1] == 'ResidualValue')
       rv$csv_value[[1]] = NULL
 

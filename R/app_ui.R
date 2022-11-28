@@ -215,12 +215,13 @@ body <- shinydashboard::dashboardBody(
     ),
     shiny::tabPanel(
       title = "Results",
-      column(width = 4, shiny::selectInput(
+      shiny::column(width = 4, shiny::selectInput(
         'res_blue_str', 'Results folder',
         c('None','Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
           'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
       )),
-      column(width = 8, shiny::uiOutput('o_res_blue_k')),
+      shiny::column(width = 8, shiny::uiOutput('o_res_blue_k')),
+      shiny::uiOutput('o_results_btns'),
       shiny::uiOutput('o_results')
     ),
     shiny::a(href = "https://www.uoguelph.ca/oac/", shiny::img(src = "www/OACL.png", class = "MYNGuelph"))
