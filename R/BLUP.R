@@ -61,21 +61,21 @@ BLUP <- function(input, rv) {
       ggplot2::ggplot(ggplot2::aes(x = DTriats, y = Prop.Var.Comp, fill = grp)) +
       ggplot2::geom_col(colour = "black", alpha = 0.8) +
       ggplot2::scale_fill_brewer(palette = "Dark2") +
-      ggplot2::labs(x = "Dependant Variables", y = "Proportion of Variation") +
+      ggplot2::labs(x = "Dependant/Response Variable", y = "Proportion of Variation") +
       ggplot2::theme_classic() +
       ggplot2::guides(fill = ggplot2::guide_legend(title = "Source of Variation"))
     base::invisible(base::print(var))
   }
 
-  filesave('png', input$project_name, ' -- Variance Porportion', p1, rv)
-  filesave('pdf', input$project_name, ' -- Variance Porportion', p1, rv)
+  filesave('png', input$project_name, ' -- Variance Proportion', p1, rv)
+  filesave('pdf', input$project_name, ' -- Variance Proportion', p1, rv)
 
   utils::write.csv(rv$blup_temp,
             base::paste0(input$project_name, " -- BLUP value for ", input$blup_resp, ".csv"),
             row.names = FALSE)
   rv$blup_buffer = base::as.data.frame(res$vc.ge)
   utils::write.csv(rv$blup_buffer,
-            base::paste0(input$project_name, " -- Variance poportaion for ", input$blup_resp, ".csv"),
+            base::paste0(input$project_name, " -- Variance Proportion for ", input$blup_resp, ".csv"),
             row.names = FALSE)
 
   set_wd('Blup', rv, input$save_results)
