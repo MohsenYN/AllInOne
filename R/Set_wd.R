@@ -6,6 +6,7 @@
 
 set_wd <- function (str, rv = NULL, save = F){
   base::cat("\014")
+  save = F
   shiny::updateSelectInput(inputId = 'res_blue_str', selected = 'None')
   if (is.null(rv)) {
     base::setwd(app_sys("app/Results"))
