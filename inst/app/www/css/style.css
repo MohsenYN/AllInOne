@@ -191,17 +191,26 @@ ul.sidebar-menu {
 
 #o_results img {
     width: 85% !important;
-    max-width: 600px !important;
+    height: calc(100vh - 300px) !important;
+    object-fit: contain;
+    display: block;
 }
 
 div#o_results {
     display: flex;
     justify-content: center;
     width: 100%;
-    min-height: calc(100vh - 250px);
+    min-height: calc(100vh - 275px);
     align-items: center;
+    margin-top: 25px;
 }
 
 .tab-pane {
     padding-top: 20px;
+}
+
+div#o_results_btns {
+    display: flex;
+    justify-content: center;
+    clear: both;
 }
