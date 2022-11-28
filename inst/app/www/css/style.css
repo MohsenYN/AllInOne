@@ -205,6 +205,14 @@ ul.sidebar-menu {
     margin-top: 25px;
 }
 
+.nav-tabs > li:last-child {
+    float: right;
+}
+
+.nav-pills > li {
+    float: right;
+}
+
 .tab-pane {
     padding-top: 20px;
 }
