@@ -68,7 +68,7 @@ menu_setting <- shiny::tagList(
     shiny::selectInput(
       inputId = 'notif_size',
       label = tags$span(
-        'Size of the notifications',
+        'Notification size',
         tags$i(
           class = "glyphicon glyphicon-info-sign",
           style = "color: var(--Just-color);",
@@ -76,7 +76,7 @@ menu_setting <- shiny::tagList(
         )),
       choices = base::list(
         'Big' = '4',
-        'Normal Interactions' = '5',
+        'Medium' = '5',
         'Small' = '6'
       ),
       selected = '5',

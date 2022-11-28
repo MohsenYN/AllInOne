@@ -26,12 +26,12 @@ NormaLiZaTIoN <- function(input, rv) {
     if (base::is.character(SelectedTraits[, i]) == TRUE) {
       base::print(base::paste0(i, " is not continuous trait"))
     } else {
-      grDevices::png(file = base::paste0(i, "-normality plot (before normalization).png"))
+      grDevices::png(file = base::paste0(i, " -- Normality plot (before normalization).png"))
       MASS::truehist(SelectedTraits[, base::match(i, COLN)],
                      nbins = base::as.numeric(input$nbin),
                      xlab = i)
       base::invisible(grDevices::dev.off())
-      grDevices::pdf(file = base::paste0(i, "-normality plot (before normalization).pdf"))
+      grDevices::pdf(file = base::paste0(i, " -- Normality plot (before normalization).pdf"))
       MASS::truehist(SelectedTraits[, base::match(i, COLN)],
                      nbins = base::as.numeric(input$nbin),
                      xlab = i)
@@ -51,71 +51,28 @@ NormaLiZaTIoN <- function(input, rv) {
       xx <-
         base::seq(base::min(SelectedTraits[, base::match(i, COLN)]), base::max(SelectedTraits[, base::match(i, COLN)]))
 
-      grDevices::png(file = base::paste0(i, "-normality approaches.png"))
-      base::plot(
-        xx,
-        stats::predict(arcsinh_obj, newdata = xx),
-        type = "l",
-        col = 1,
-        ylim = base::c(-4, 4),
-        xlab = 'x',
-        ylab = "g(x)"
-      )
-      graphics::lines(xx, stats::predict(boxcox_obj, newdata = xx), col = 2)
-      graphics::lines(xx, stats::predict(yeojohnson_obj, newdata = xx), col = 3)
-      graphics::lines(xx, stats::predict(orderNorm_obj, newdata = xx), col = 4)
-
-      graphics::legend(
-        "bottomright",
-        legend = base::c("arcsinh", "Box Cox", "Yeo-Johnson", "OrderNorm"),
-        col = 1:4,
-        lty = 1,
-        bty = 'n'
-      )
-      base::invisible(grDevices::dev.off())
-      grDevices::pdf(file = base::paste0(i, "-normality approaches.pdf"))
-      base::plot(
-        xx,
-        stats::predict(arcsinh_obj, newdata = xx),
-        type = "l",
-        col = 1,
-        ylim = base::c(-4, 4),
-        xlab = 'x',
-        ylab = "g(x)"
-      )
-      graphics::lines(xx, stats::predict(boxcox_obj, newdata = xx), col = 2)
-      graphics::lines(xx, stats::predict(yeojohnson_obj, newdata = xx), col = 3)
-      graphics::lines(xx, stats::predict(orderNorm_obj, newdata = xx), col = 4)
-      graphics::legend(
-        "bottomright",
-        legend = base::c("arcsinh", "Box Cox", "Yeo-Johnson", "OrderNorm"),
-        col = 1:4,
-        lty = 1,
-        bty = 'n'
-      )
-      base::invisible(grDevices::dev.off())
-      grDevices::png(file = base::paste0(i, "-normality plot (after normalization).png"))
+      grDevices::png(file = base::paste0(i, " -- Normality plot (after normalization).png"))
       graphics::par(mfrow = base::c(2, 2))
       MASS::truehist(arcsinh_obj$x.t, main = "Arcsinh transformation", nbins = base::as.numeric(input$nbin))
       MASS::truehist(boxcox_obj$x.t, main = "Box Cox transformation", nbins = base::as.numeric(input$nbin))
       MASS::truehist(yeojohnson_obj$x.t, main = "Yeo-Johnson transformation", nbins = base::as.numeric(input$nbin))
-      MASS::truehist(orderNorm_obj$x.t, main = "orderNorm transformation", nbins = base::as.numeric(input$nbin))
+      MASS::truehist(orderNorm_obj$x.t, main = "OrderNorm transformation", nbins = base::as.numeric(input$nbin))
       base::invisible(grDevices::dev.off())
-      grDevices::pdf(file = base::paste0(i, "-normality plot (after normalization).pdf"))
+      grDevices::pdf(file = base::paste0(i, " -- Normality plot (after normalization).pdf"))
       graphics::par(mfrow = base::c(2, 2))
       MASS::truehist(arcsinh_obj$x.t, main = "Arcsinh transformation", nbins = base::as.numeric(input$nbin))
       MASS::truehist(boxcox_obj$x.t, main = "Box Cox transformation", nbins = base::as.numeric(input$nbin))
       MASS::truehist(yeojohnson_obj$x.t, main = "Yeo-Johnson transformation", nbins = base::as.numeric(input$nbin))
-      MASS::truehist(orderNorm_obj$x.t, main = "orderNorm transformation", nbins = base::as.numeric(input$nbin))
+      MASS::truehist(orderNorm_obj$x.t, main = "OrderNorm transformation", nbins = base::as.numeric(input$nbin))
       base::invisible(grDevices::dev.off())
 
 
-      grDevices::png(file = base::paste0(i, "-normality plot (best normalization approach).png"))
+      grDevices::png(file = base::paste0(i, " -- Normality plot (best normalization transformation).png"))
       graphics::par(mfrow = base::c(1, 2))
       MASS::truehist(
         BNobject$x.t,
         main = base::paste(
-          "Best Transformation:",
+          "Best transformation:",
           base::class(BNobject$chosen_transform)[1]
         ),
         nbins = base::as.numeric(input$nbin)
@@ -125,17 +82,17 @@ NormaLiZaTIoN <- function(input, rv) {
         stats::predict(BNobject, newdata = xx),
         type = "l",
         col = 1,
-        main = "Best Normalizing transformation",
+        main = "Best normalization transformation",
         ylab = "g(x)",
         xlab = "x"
       )
       base::invisible(grDevices::dev.off())
-      grDevices::pdf(file = base::paste0(i, "-normality plot (best normalization approach).pdf"))
+      grDevices::pdf(file = base::paste0(i, " -- Normality plot (best normalization transformation).pdf"))
       graphics::par(mfrow = base::c(1, 2))
       MASS::truehist(
         BNobject$x.t,
         main = base::paste(
-          "Best Transformation:",
+          "Best transformation:",
           base::class(BNobject$chosen_transform)[1]
         ),
         nbins = base::as.numeric(input$nbin)
@@ -145,13 +102,13 @@ NormaLiZaTIoN <- function(input, rv) {
         stats::predict(BNobject, newdata = xx),
         type = "l",
         col = 1,
-        main = "Best Normalizing transformation",
+        main = "Best normalization transformation",
         ylab = "g(x)",
         xlab = "x"
       )
       base::invisible(grDevices::dev.off())
       grDevices::png(
-        file = base::paste0(i, "-normality approaches (box plot).png"),
+        file = base::paste0(i, " -- Normality approaches (box plot).png"),
         width = 1000,
         height = 480
       )
@@ -162,7 +119,7 @@ NormaLiZaTIoN <- function(input, rv) {
            at = base::log10(base::c(.1, .5, 1, 2, 5, 10)),
            labels = base::c(.1, .5, 1, 2, 5, 10))
       base::invisible(grDevices::dev.off())
-      grDevices::pdf(file = base::paste0(i, "-normality approaches (box plot).pdf"))
+      grDevices::pdf(file = base::paste0(i, " -- Normality approaches (box plot).pdf"))
       graphics::boxplot(base::log10(BNobject$oos_preds),
               yaxt = 'n',
               xlab = "Normalization test")
@@ -170,22 +127,22 @@ NormaLiZaTIoN <- function(input, rv) {
            at = base::log10(base::c(.1, .5, 1, 2, 5, 10)),
            labels = base::c(.1, .5, 1, 2, 5, 10))
       base::invisible(grDevices::dev.off())
-      grDevices::png(file = base::paste0(i, "-normality quantiles (before).png"))
+      grDevices::png(file = base::paste0(i, " -- Normality quartiles (before).png"))
       car::qqPlot(SelectedTraits[, base::match(i, COLN)])
       base::invisible(grDevices::dev.off())
-      grDevices::pdf(file = base::paste0(i, "-normality quantiles (before).pdf"))
+      grDevices::pdf(file = base::paste0(i, " -- Normality quartiles (before).pdf"))
       car::qqPlot(SelectedTraits[, base::match(i, COLN)])
       base::invisible(grDevices::dev.off())
-      grDevices::png(file = base::paste0(i, "-normality quantiles (after).png"))
+      grDevices::png(file = base::paste0(i, " -- Normality quartiles (after).png"))
       car::qqPlot(BNobject$x.t)
       base::invisible(grDevices::dev.off())
-      grDevices::pdf(file = base::paste0(i, "-normality quantiles (after).pdf"))
+      grDevices::pdf(file = base::paste0(i, " -- Normality quartiles (after).pdf"))
       car::qqPlot(BNobject$x.t)
       base::invisible(grDevices::dev.off())
       A <- ggpubr::ggqqplot(SelectedTraits[, base::match(i, COLN)])
       ggplot2::ggsave(
         A,
-        file = base::paste0(i, "-B-normality quantiles (before).png"),
+        file = base::paste0(i, " -- Normality quartiles (before).png"),
         width = 32,
         height = 15,
         units = "cm"
@@ -193,27 +150,27 @@ NormaLiZaTIoN <- function(input, rv) {
       A <- ggpubr::ggqqplot(BNobject$x.t)
       ggplot2::ggsave(
         A,
-        file = base::paste0(i, "-B-normality quantiles (after).png"),
+        file = base::paste0(i, " -- Normality quartiles (after).png"),
         width = 32,
         height = 15,
         units = "cm"
       )
       A <- ggpubr::ggdensity(SelectedTraits[, base::match(i, COLN)],
-                     main = "Density plot (Original data)",
+                     main = "Density plot (Original)",
                      xlab = i)
       ggplot2::ggsave(
         A,
-        file = base::paste0(i, "-Density plot (Original data).png"),
+        file = base::paste0(i, " -- Density plot (Original).png"),
         width = 32,
         height = 15,
         units = "cm"
       )
       A <- ggpubr::ggdensity(BNobject$x.t,
-                     main = "Density plot (Normalized data)",
+                     main = "Density plot (Normalized)",
                      xlab = i)
       ggplot2::ggsave(
         A,
-        file = base::paste0(i, "-Density plot (Normalized data).png"),
+        file = base::paste0(i, " -- Density plot (Normalized).png"),
         width = 32,
         height = 15,
         units = "cm"
@@ -222,7 +179,7 @@ NormaLiZaTIoN <- function(input, rv) {
       A <- ggpubr::ggqqplot(SelectedTraits[, base::match(i, COLN)])
       ggplot2::ggsave(
         A,
-        file = base::paste0(i, "-B-normality quantiles (before).pdf"),
+        file = base::paste0(i, " -- Normality quartiles (before).pdf"),
         width = 32,
         height = 15,
         units = "cm"
@@ -230,27 +187,27 @@ NormaLiZaTIoN <- function(input, rv) {
       A <- ggpubr::ggqqplot(BNobject$x.t)
       ggplot2::ggsave(
         A,
-        file = base::paste0(i, "-B-normality quantiles (after).pdf"),
+        file = base::paste0(i, " -- Normality quartiles (after).pdf"),
         width = 32,
         height = 15,
         units = "cm"
       )
       A <- ggpubr::ggdensity(SelectedTraits[, base::match(i, COLN)],
-                     main = "Density plot (Original data)",
+                     main = "Density plot (Original)",
                      xlab = i)
       ggplot2::ggsave(
         A,
-        file = base::paste0(i, "-Density plot (Original data).pdf"),
+        file = base::paste0(i, " -- Density plot (Original).pdf"),
         width = 32,
         height = 15,
         units = "cm"
       )
       A <- ggpubr::ggdensity(BNobject$x.t,
-                     main = "Density plot (Normalized data)",
+                     main = "Density plot (Normalized)",
                      xlab = i)
       ggplot2::ggsave(
         A,
-        file = base::paste0(i, "-Density plot (Normalized data).pdf"),
+        file = base::paste0(i, " -- Density plot (Normalized).pdf"),
         width = 32,
         height = 15,
         units = "cm"
@@ -259,7 +216,7 @@ NormaLiZaTIoN <- function(input, rv) {
       FinalDataset <- base::cbind(VarPYSL, SelectedTraits)
       utils::write.csv(
         FinalDataset,
-        file = base::paste0(input$project_name, " - Normalized Dataset.csv"),
+        file = base::paste0(input$project_name, " -- Normalized dataset.csv"),
         row.names = FALSE
       )
     }
