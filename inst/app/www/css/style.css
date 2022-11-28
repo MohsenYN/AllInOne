@@ -191,6 +191,7 @@ ul.sidebar-menu {
 
 #o_results img {
     width: 85% !important;
+    max-width: 750px;
     object-fit: contain;
     display: block;
 }
