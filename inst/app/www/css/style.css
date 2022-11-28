@@ -191,7 +191,7 @@ ul.sidebar-menu {
 
 #o_results img {
     width: 85% !important;
-    max-width: 750px;
+    max-width: 600px;
     object-fit: contain;
     display: block;
 }
@@ -210,7 +210,7 @@ ul.sidebar-menu {
 }
 
 .nav-pills > li {
-    float: right;
+    float: left;
 }
 
 .tab-pane {
