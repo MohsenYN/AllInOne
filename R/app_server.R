@@ -1091,10 +1091,10 @@ app_server <- function(input, output, session) {
       else if (input$her_action == 'heritability') {
         shiny::showModal(shiny::modalDialog(
           shiny::checkboxGroupInput('her_rand',
-                                    'Independent variable(s)',
+                                    'Independent/factor variable',
                                     choices = indep_cols),
           shiny::selectInput('her_rand_interact',
-                             'Interaction variable(s)',
+                             'If you have interaction effects; please select interacted columns two by two.',
                              choices = indep_cols, multiple = TRUE),
           shiny::radioButtons(
             inputId = 'indep_her',
@@ -1518,7 +1518,7 @@ app_server <- function(input, output, session) {
           f = base::paste0(f, ' + ', s)
       }
     }
-    shiny::textInput('rv_her', value = f, label = 'Formula')
+    shiny::textInput('rv_her', value = f, label = 'Equation')
   })
 
   shiny::observeEvent(input$indep_her_btn, {

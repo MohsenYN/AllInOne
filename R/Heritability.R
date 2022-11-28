@@ -63,13 +63,13 @@ Heritability <- function(input, rv) {
     var <- ggplot2::ggplot(data = bs_her, ggplot2::aes(x = DTriats, y = h, group = 5, fill = DTriats)) +
       ggplot2::geom_bar(stat = "identity", position = "dodge", width = 0.5) +
       ggplot2::theme_classic() +
-      ggplot2::labs(y = "Heritability", x = "Dependant Variable") +
+      ggplot2::labs(y = "Heritability", x = "Dependant/Response Variable") +
       ggplot2::guides(fill = ggplot2::guide_legend(title = "Trait"))
     base::invisible(base::print(var))
   }
 
-  filesave('png', input$project_name, ' -  Heritability', p, rv)
-  filesave('pdf', input$project_name, ' -  Heritability', p, rv)
+  filesave('png', input$project_name, ' --  Heritability', p, rv)
+  filesave('pdf', input$project_name, ' --  Heritability', p, rv)
 
   set_wd('Heritability', rv, input$save_results)
 }

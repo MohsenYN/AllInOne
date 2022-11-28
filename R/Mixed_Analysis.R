@@ -72,7 +72,7 @@ Mixed_Analysis <- function(input, rv) {
       ggplot2::geom_histogram(color = "black", fill = "white") +
       ggplot2::theme_classic() +
       ggplot2::labs(title = "Raw Value") +
-      ggplot2::xlab("Response Varibale")
+      ggplot2::xlab("Response Variable")
 
     ggplot2::ggsave(
       p,
@@ -107,12 +107,12 @@ Mixed_Analysis <- function(input, rv) {
       new_rownames = c(new_rownames, buf)
     }
     rownames(bb) = new_rownames
-    utils::write.csv(bb, paste0(input$project_name, '-- Anova (random effects) Table.csv'))
+    utils::write.csv(bb, paste0(input$project_name, '-- Anova (random effect) Table.csv'))
 
     a <- stats::anova(MM.S)
     aa <- as.data.frame(a)
 
-    utils::write.csv(aa, paste0(input$project_name, '-- Anova table (fixed effects).csv'))
+    utils::write.csv(aa, paste0(input$project_name, '-- Anova table (fixed effect).csv'))
 
     MM.Sresid <- stats::residuals(MM.S, type = "pearson")
     MM.Sactual <- stats::predict(MM.S)
@@ -212,7 +212,7 @@ Mixed_Analysis <- function(input, rv) {
         ggplot2::ggplot(ggplot2::aes(x = DTriats, y = Prop.Var.Comp, fill = grp)) +
         ggplot2::geom_col(colour = "black", alpha = 0.8) +
         ggplot2::scale_fill_brewer(palette = "Dark2") +
-        ggplot2::labs(x = "Dependant Variables", y = "Proportion of Variation") +
+        ggplot2::labs(x = "Dependant/Response Variable", y = "Proportion of Variation") +
         ggplot2::theme_classic() +
         ggplot2::guides(fill = ggplot2::guide_legend(title = "Source of Variation"))
       base::invisible(base::print(var))
@@ -263,7 +263,7 @@ Mixed_Analysis <- function(input, rv) {
     a <- stats::anova(MM.S)
     aa <- as.data.frame(a)
 
-    utils::write.csv(aa, paste0(input$project_name, '-- Anova table (fixed effects).csv'))
+    utils::write.csv(aa, paste0(input$project_name, '-- Anova table (fixed effect).csv'))
 
     MM.Sresid <- stats::residuals(MM.S, type = "pearson")
     MM.Sactual <- stats::predict(MM.S)
