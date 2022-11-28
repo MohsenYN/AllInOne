@@ -246,6 +246,21 @@ body <- shinydashboard::dashboardBody(
         shiny::tabPanel(
           title = "Plots",
           menu_plots
+        ),
+        shiny::tabPanel(
+          title = "Import/Export",
+          shiny::column(
+            width = 12,
+            shiny::fileInput(
+              'setting_file',
+              'Upload Setting File :'
+            )
+          ),
+          shiny::column(
+            width = 12,
+            shiny::downloadButton(
+              'save_setting', 'Export Setting')),
+          # shiny::actionButton('save_setting', 'Export Setting')
         )
       )
     ),

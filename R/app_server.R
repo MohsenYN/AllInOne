@@ -435,6 +435,59 @@ output$mice_input <- shiny::renderUI({
     })
   })
 
+  shiny::observeEvent(input$setting_file$data, {
+    # tryCatch({
+      address = input$setting_file$data
+      postfix = base::substring(
+        address,
+        base::nchar(address) - 3,
+        base::nchar(address)
+      )
+      if (postfix == ".csv") {
+        setting_dat <- as.data.frame(
+          utils::read.csv(
+            address,
+            fileEncoding = "UTF-8-BOM"
+          )
+        )
+        notif_delay = as.numeric(setting_dat[['General']][1])
+        notif_size = as.numeric(setting_dat[['General']][2])
+        Ign_Res_Wrd = as.logical(setting_dat[['General']][3])
+
+        shiny::updateNumericInput(inputId = 'notif_delay',value = notif_delay)
+        shiny::updateSelectInput(inputId = 'notif_size',selected = notif_size)
+        shiny::updateCheckboxInput(inputId = 'Ign_Res_Wrd',value = Ign_Res_Wrd)
+        ######################################################################################
+        Max_levels_GB = as.numeric(setting_dat[['Plots']][1])
+
+        shiny::updateNumericInput(inputId = 'Max_levels_GB',value = Max_levels_GB)
+      }
+      else {
+        shiny_showNotification(rv, 'Failed to import setting file')
+      }
+    # }, error = function(e) {
+    #   shiny_showNotification(rv, e$message)
+    # })
+  })
+
+  observeEvent(input$save_setting, {
+    notif_delay = input$notif_delay
+    notif_size = input$notif_size
+    Ign_Res_Wrd = input$Ign_Res_Wrd
+
+    ######################################################################################
+    Max_levels_GB = input$Max_levels_GB
+
+    l = list()
+
+    l[['General']][1] = notif_delay
+    l[['General']][2] = notif_size
+    l[['General']][3] = Ign_Res_Wrd
+    l[['Plots']][1] = Max_levels_GB
+
+    write.csv(l,'setting_me.csv',row.names = F)
+  })
+
   observeEvent(
     ignoreInit = TRUE, c(
       input$dataC_delimiter,
@@ -2210,6 +2263,32 @@ output$mice_input <- shiny::renderUI({
     contentType = "text/csv",
     content = function(path) {
       utils::write.csv(rv$data, path, row.names = F)
+    }
+  )
+
+  output$save_setting <- shiny::downloadHandler(
+    filename = function() {
+      'My_setting.csv'
+    },
+    contentType = "text/csv",
+    content = function(path) {
+
+      notif_delay = input$notif_delay
+      notif_size = input$notif_size
+      Ign_Res_Wrd = input$Ign_Res_Wrd
+
+      #####################################
+
+      Max_levels_GB = input$Max_levels_GB
+
+      l = list()
+
+      l[['General']][1] = notif_delay
+      l[['General']][2] = notif_size
+      l[['General']][3] = Ign_Res_Wrd
+      l[['Plots']][1] = Max_levels_GB
+
+      utils::write.csv(l, path, row.names = F)
     }
   )
 
