@@ -26,15 +26,15 @@ app_server <- function(input, output, session) {
     rv$outliers_row = NULL
     rv$selected.col = NULL
     rv$review_flag = TRUE
-    if(dir.exists(app_sys('app/Results')))
+    if (dir.exists(app_sys('app/Results')))
       unlink(app_sys('app/Results'), recursive = T)
-    dir.create(paste0(app_sys('app'),'/Results'))
+    dir.create(paste0(app_sys('app'), '/Results'))
     cat("\014")
   }
 
-  if(dir.exists(app_sys('app/Results')))
-      unlink(app_sys('app/Results'), recursive = T)
-  dir.create(paste0(app_sys('app'),'/Results'))
+  if (dir.exists(app_sys('app/Results')))
+    unlink(app_sys('app/Results'), recursive = T)
+  dir.create(paste0(app_sys('app'), '/Results'))
 
   forbidden_characters <- base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"',
                                   ' ', '!', ';', ',', '|', '!', '@', '#', '$',
@@ -93,7 +93,7 @@ app_server <- function(input, output, session) {
           )
         }
       }else
-        if(str != 'None')
+        if (str != 'None')
           shiny::h4(paste0('No output history in ', str, ' Menu'))
     }
   })
@@ -110,22 +110,19 @@ app_server <- function(input, output, session) {
 
   output$o_results_btns <- renderUI({
     if ((input$res_blue_str != 'None') & (!is.null(rv$png_address)))
-      shiny::column(
-        width = 12,
-        shiny::tagList(
-          if (base::file.exists(rv$pdf_address))
-            shiny::downloadButton('download_pdf_res', 'Download as PDF'),
-          if (base::file.exists(rv$png_address))
-            shiny::downloadButton('download_png_res', 'Download full size image'),
-          if (base::file.exists(rv$csv_address))
-            shiny::downloadButton('download_csv_res', 'Download the table'),
-          # if (base::file.exists(rv$csv_address))
-          #   shiny::actionButton('csvs_use', 'Set the table as main dataset'),
-        )
+      shiny::tagList(
+        if (base::file.exists(rv$pdf_address))
+          shiny::downloadButton('download_pdf_res', 'Download as PDF'),
+        if (base::file.exists(rv$png_address))
+          shiny::downloadButton('download_png_res', 'Download full size image'),
+        if (base::file.exists(rv$csv_address))
+          shiny::downloadButton('download_csv_res', 'Download the table'),
+        # if (base::file.exists(rv$csv_address))
+        #   shiny::actionButton('csvs_use', 'Set the table as main dataset'),
       )
   })
 
-  observeEvent(input$res_blue_str,{
+  observeEvent(input$res_blue_str, {
     rv$pdf_address = NULL
     rv$png_address = NULL
     rv$csv_address = NULL
@@ -188,7 +185,7 @@ app_server <- function(input, output, session) {
     })
   })
 
-show_slider <- function(str, k = 1) {
+  show_slider <- function(str, k = 1) {
     tryCatch({
       rv$slider.str = str
       rv$slider.k = k
@@ -326,7 +323,7 @@ show_slider <- function(str, k = 1) {
     )
   })
 
-output$mice_input <- shiny::renderUI({
+  output$mice_input <- shiny::renderUI({
     if (input$impute_method != 'rm') {
       shiny::tagList(
         shiny::helpText(mice_help[[input$impute_method]]),
@@ -358,7 +355,7 @@ output$mice_input <- shiny::renderUI({
       if (postfix == "xlsx") {
         rv$dataC <- readxl::read_xlsx(address, sheet = 1)
         output$dataC_sheet <- shiny::renderUI({
-          if(!input$use_sampledb)
+          if (!input$use_sampledb)
             shiny::selectInput('sheet_name', 'Sheet', choices = readxl::excel_sheets(address), selected = 1)
         })
       }
@@ -396,18 +393,18 @@ output$mice_input <- shiny::renderUI({
         output$dataC_sheet <- shiny::renderUI({
           if (!input$use_sampledb) {
             shiny::tagList(
-            shiny::selectInput(
-              inputId = 'dataC_delimiter',
-              label = 'Delimiter',
-              choices = list(
-                Empty = '', Tab = "\t", Comma = ",", Semicolon = ";", Space = " "),
-              selected = '\t'),
-            shiny::checkboxInput(
-              inputId = 'dataC_header',
-              label = 'Header',
-              value = T
+              shiny::selectInput(
+                inputId = 'dataC_delimiter',
+                label = 'Delimiter',
+                choices = list(
+                  Empty = '', Tab = "\t", Comma = ",", Semicolon = ";", Space = " "),
+                selected = '\t'),
+              shiny::checkboxInput(
+                inputId = 'dataC_header',
+                label = 'Header',
+                value = T
+              )
             )
-          )
           }
         })
       }
@@ -418,15 +415,15 @@ output$mice_input <- shiny::renderUI({
       }
       if (db_flag) {
         output$columns_name <- shiny::renderUI({
-          if(!input$use_sampledb)
+          if (!input$use_sampledb)
             shiny::selectInput('columns_name_list', 'Columns', base::colnames(rv$dataC))
         })
         output$column_new_name <- shiny::renderUI({
-          if(!input$use_sampledb)
+          if (!input$use_sampledb)
             shiny::textInput('new_col_name', 'New Name:', value = input$columns_name_list)
         })
         output$columns_name_btn <- shiny::renderUI({
-          if(!input$use_sampledb)
+          if (!input$use_sampledb)
             shiny::actionButton('new_col_name_btn', 'Apply new name')
         })
       }
@@ -437,34 +434,34 @@ output$mice_input <- shiny::renderUI({
 
   shiny::observeEvent(input$setting_file$data, {
     # tryCatch({
-      address = input$setting_file$data
-      postfix = base::substring(
-        address,
-        base::nchar(address) - 3,
-        base::nchar(address)
-      )
-      if (postfix == ".csv") {
-        setting_dat <- as.data.frame(
-          utils::read.csv(
-            address,
-            fileEncoding = "UTF-8-BOM"
-          )
+    address = input$setting_file$data
+    postfix = base::substring(
+      address,
+      base::nchar(address) - 3,
+      base::nchar(address)
+    )
+    if (postfix == ".csv") {
+      setting_dat <- as.data.frame(
+        utils::read.csv(
+          address,
+          fileEncoding = "UTF-8-BOM"
         )
-        notif_delay = as.numeric(setting_dat[['General']][1])
-        notif_size = as.numeric(setting_dat[['General']][2])
-        Ign_Res_Wrd = as.logical(setting_dat[['General']][3])
+      )
+      notif_delay = as.numeric(setting_dat[['General']][1])
+      notif_size = as.numeric(setting_dat[['General']][2])
+      Ign_Res_Wrd = as.logical(setting_dat[['General']][3])
 
-        shiny::updateNumericInput(inputId = 'notif_delay',value = notif_delay)
-        shiny::updateSelectInput(inputId = 'notif_size',selected = notif_size)
-        shiny::updateCheckboxInput(inputId = 'Ign_Res_Wrd',value = Ign_Res_Wrd)
-        ######################################################################################
-        Max_levels_GB = as.numeric(setting_dat[['Plots']][1])
+      shiny::updateNumericInput(inputId = 'notif_delay', value = notif_delay)
+      shiny::updateSelectInput(inputId = 'notif_size', selected = notif_size)
+      shiny::updateCheckboxInput(inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd)
+      ######################################################################################
+      Max_levels_GB = as.numeric(setting_dat[['Plots']][1])
 
-        shiny::updateNumericInput(inputId = 'Max_levels_GB',value = Max_levels_GB)
-      }
-      else {
-        shiny_showNotification(rv, 'Failed to import setting file')
-      }
+      shiny::updateNumericInput(inputId = 'Max_levels_GB', value = Max_levels_GB)
+    }
+    else {
+      shiny_showNotification(rv, 'Failed to import setting file')
+    }
     # }, error = function(e) {
     #   shiny_showNotification(rv, e$message)
     # })
@@ -485,7 +482,7 @@ output$mice_input <- shiny::renderUI({
     l[['General']][3] = Ign_Res_Wrd
     l[['Plots']][1] = Max_levels_GB
 
-    write.csv(l,'My_Setting.csv',row.names = F)
+    write.csv(l, 'My_Setting.csv', row.names = F)
   })
 
   observeEvent(
@@ -753,32 +750,32 @@ output$mice_input <- shiny::renderUI({
           )
         )
         output$mice_input2 <- renderUI({
-          if(input$missing_handler_opt == 'impute'){
+          if (input$missing_handler_opt == 'impute') {
             shiny::tagList(
-            shiny::selectInput(
-              'impute_method',
-              'Select the imputation method',
-              base::c(
-                'Remove Missing Point' = 'rm',
-                # 'Random Forest' = 'rand',
-                # 'MI' = 'mi',
-                'Predictive mean matching' = 'pmm',
-                'Weighted predictive mean matching' = 'midastouch',
-                'Random sample from observed values' = 'sample',
-                'Classification and regression trees' = 'cart',
-                'Random forest imputations' = 'rf',
-                'Unconditional mean imputation' = 'mean',
-                'Bayesian linear regression' = 'norm',
-                'Linear regression ignoring model error' = 'norm.nob',
-                'Linear regression using bootstrap' = 'norm.boot',
-                'Linear regression predicted values' = 'norm.predict',
-                'Lasso linear regression' = 'lasso.norm',
-                'Lasso select and linear regression' = 'lasso.select.norm'
+              shiny::selectInput(
+                'impute_method',
+                'Select the imputation method',
+                base::c(
+                  'Remove Missing Point' = 'rm',
+                  # 'Random Forest' = 'rand',
+                  # 'MI' = 'mi',
+                  'Predictive mean matching' = 'pmm',
+                  'Weighted predictive mean matching' = 'midastouch',
+                  'Random sample from observed values' = 'sample',
+                  'Classification and regression trees' = 'cart',
+                  'Random forest imputations' = 'rf',
+                  'Unconditional mean imputation' = 'mean',
+                  'Bayesian linear regression' = 'norm',
+                  'Linear regression ignoring model error' = 'norm.nob',
+                  'Linear regression using bootstrap' = 'norm.boot',
+                  'Linear regression predicted values' = 'norm.predict',
+                  'Lasso linear regression' = 'lasso.norm',
+                  'Lasso select and linear regression' = 'lasso.select.norm'
+                ),
+                selected = 'rm'
               ),
-              selected = 'rm'
-            ),
-            shiny::uiOutput('mice_input')
-          )
+              shiny::uiOutput('mice_input')
+            )
           }
         })
       }
@@ -1150,9 +1147,9 @@ output$mice_input <- shiny::renderUI({
             label = tags$span(
               'Intercept',
               tags$i(
-               class = "glyphicon glyphicon-info-sign",
-               style = "color: var(--Just-color);",
-               title = 'Can be 1 (with intercept) or 0 (without intercept).
+                class = "glyphicon glyphicon-info-sign",
+                style = "color: var(--Just-color);",
+                title = 'Can be 1 (with intercept) or 0 (without intercept).
                For estimating BLUE, intercept should be 0.
                For estimating BLUP, intercept should be 1'
               )),
@@ -1272,24 +1269,24 @@ output$mice_input <- shiny::renderUI({
   shiny::observeEvent(input$indep_mixed_btn, {
 
 
-      shiny::removeModal()
-      if (base::dir.exists(app_sys("app/Results/Mixed Analysis")))
-        base::unlink(app_sys("app/Results/Mixed Analysis"), recursive = TRUE)
-      waiter$show()
-      base::tryCatch({
+    shiny::removeModal()
+    if (base::dir.exists(app_sys("app/Results/Mixed Analysis")))
+      base::unlink(app_sys("app/Results/Mixed Analysis"), recursive = TRUE)
+    waiter$show()
+    base::tryCatch({
 
-        Mixed_Analysis(input, rv)
+      Mixed_Analysis(input, rv)
 
-      }, error = function(e) {
+    }, error = function(e) {
 
-        if (rv$Show_Errors)
-          shiny_showNotification(rv, e$message)
-        else
-          shiny_showNotification(rv, 'Something is wrong! Would you like to check the dataset? ')
-        # base::setwd("../../")
-      })
-      waiter$hide()
-      show_slider('Mixed Analysis')
+      if (rv$Show_Errors)
+        shiny_showNotification(rv, e$message)
+      else
+        shiny_showNotification(rv, 'Something is wrong! Would you like to check the dataset? ')
+      # base::setwd("../../")
+    })
+    waiter$hide()
+    show_slider('Mixed Analysis')
   })
 
   output$help_fix <- shiny::renderUI({
@@ -1697,63 +1694,64 @@ output$mice_input <- shiny::renderUI({
   })
 
   shiny::observeEvent(input$run_outlier, {
-    shiny::removeModal()
-    outliers = NULL
-    outliers_row = NULL
-    if (base::dir.exists(app_sys("app/Results/Outlier")))
-      base::unlink(app_sys("app/Results/Outlier"), recursive = TRUE)
-    waiter$show()
-    base::tryCatch({
-      PoSiBlEoUtLieR(input, rv)
-    }, error = function(e) {
-      if (rv$Show_Errors)
-        shiny_showNotification(rv, e$message)
-      else
-        shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
-      # base::setwd("../../")
-    })
-    waiter$hide()
-
-    base::tryCatch({
-      if (base::length(rv$outliers_row) > 0) {
-        session$sendCustomMessage(
-          type = 'testmessage',
-          message = base::paste0(base::length(rv$outliers_row),
-                                 ' Outlier(s) are founded!'))
-
-        outl_rows = base::unique(base::sort(rv$outliers_row))
-        output$content_3 <- shiny::renderUI({
-          if (input$active_opt_2 == 'outlier')
-            if (base::length(base::unique(base::sort(rv$outliers_row)))) {
-              shiny::tagList(
-                shiny::actionButton('show_pic_outlier', "See Plots"),
-
-                shiny::actionButton('ref_outlier', "Auto Refine Outliers"),
-
-                shiny::selectInput(
-                  'outl_select_input',
-                  label = shiny::h5("Select Outlier"),
-                  choices = base::unique(base::sort(rv$outliers_row))
-                ),
-                shiny::selectInput(
-                  inputId = 'indep_outlier',
-                  label = 'Select the independent variable',
-                  choices = input$main_db_indep_val
-                ),
-                shiny::actionButton('filter_outlier', "Filter The Dataset")
-              )
-            }
-        })
-      } else {
-        session$sendCustomMessage(type = 'testmessage',
-                                  message = 'Congratulations! There is no outlier')
+    flag = T
+    if (input$outlier_method == 'B') {
+      if (is.null(input$outlier_rand)) {
+        flag = F
       }
-    }, error = function(e) {
-      if (rv$Show_Errors)
-        shiny_showNotification(rv, e$message)
-      else
-        shiny_showNotification(rv, 'Error in applying outlier tools')
-    })
+    }
+    if (flag) {
+      shiny::removeModal()
+      outliers = NULL
+      outliers_row = NULL
+      if (base::dir.exists(app_sys("app/Results/Outlier")))
+        base::unlink(app_sys("app/Results/Outlier"), recursive = TRUE)
+      waiter$show()
+      base::tryCatch({
+        PoSiBlEoUtLieR(input, rv)
+        if (base::length(rv$outliers_row) > 0) {
+          session$sendCustomMessage(
+            type = 'testmessage',
+            message = base::paste0(base::length(rv$outliers_row),
+                                   ' Outlier(s) are founded!'))
+
+          outl_rows = base::unique(base::sort(rv$outliers_row))
+          output$content_3 <- shiny::renderUI({
+            if (input$active_opt_2 == 'outlier')
+              if (base::length(base::unique(base::sort(rv$outliers_row)))) {
+                shiny::tagList(
+                  shiny::actionButton('show_pic_outlier', "See Plots"),
+
+                  shiny::actionButton('ref_outlier', "Auto Refine Outliers"),
+
+                  shiny::selectInput(
+                    'outl_select_input',
+                    label = shiny::h5("Select Outlier"),
+                    choices = base::unique(base::sort(rv$outliers_row))
+                  ),
+                  shiny::selectInput(
+                    inputId = 'indep_outlier',
+                    label = 'Select the independent variable',
+                    choices = input$main_db_indep_val
+                  ),
+                  shiny::actionButton('filter_outlier', "Filter The Dataset")
+                )
+              }
+          })
+        }
+        else {
+          session$sendCustomMessage(type = 'testmessage',
+                                    message = 'Congratulations! There is no outlier')
+        }
+      }, error = function(e) {
+        if (rv$Show_Errors)
+          shiny_showNotification(rv, e$message)
+        else
+          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
+        # base::setwd("../../")
+      })
+      waiter$hide()
+    }
   })
 
   shiny::observeEvent(input$show_pic_outlier, {
@@ -1848,7 +1846,7 @@ output$mice_input <- shiny::renderUI({
     }
   }
 
-  observeEvent(input$structure_change_type,{
+  observeEvent(input$structure_change_type, {
     if (input$str_column_type == 1)
       rv$data[[input$str_column_name]] = as.character(rv$data[[input$str_column_name]])
     else if (input$str_column_type == 2)
@@ -1860,7 +1858,7 @@ output$mice_input <- shiny::renderUI({
   output$structure <- renderUI({
     if (!is.null(rv$data)) {
       shiny::tagList(
-        shiny::HTML(paste0('<br/>', c(' ',' ',' ',' ',capture.output(str(rv$data)))))
+        shiny::HTML(paste0('<br/>', c(' ', ' ', ' ', ' ', capture.output(str(rv$data)))))
       )
     }
   })
@@ -1868,39 +1866,39 @@ output$mice_input <- shiny::renderUI({
   output$o_structure_col_name <- renderUI({
     if (!is.null(rv$data))
       shiny::column(
-          width = 5,
-          shiny::selectInput(
-            inputId = 'str_column_name',
-            label = 'Column name',
-            choices = base::colnames(rv$data)
-          )
+        width = 5,
+        shiny::selectInput(
+          inputId = 'str_column_name',
+          label = 'Column name',
+          choices = base::colnames(rv$data)
         )
+      )
   })
 
   output$o_structure_col_type <- renderUI({
     if (!is.null(rv$data))
       shiny::column(
-          width = 5,
-          shiny::selectInput(
-            inputId = 'str_column_type',
-            label = 'Set structure',
-            choices = list(
-              'Character' = 1,
-              'Numeric' = 2,
-              'Factor' = 3,
-              'Undefined' = 4
-            ),
-            selected = get_col_type(input$str_column_name))
-        )
+        width = 5,
+        shiny::selectInput(
+          inputId = 'str_column_type',
+          label = 'Set structure',
+          choices = list(
+            'Character' = 1,
+            'Numeric' = 2,
+            'Factor' = 3,
+            'Undefined' = 4
+          ),
+          selected = get_col_type(input$str_column_name))
+      )
 
   })
 
   output$o_structure_col_btn <- renderUI({
     if (!is.null(rv$data))
       shiny::column(
-          width = 2,
-          class = "structure_change_type_col",
-          shiny::actionButton('structure_change_type','Apply')
+        width = 2,
+        class = "structure_change_type_col",
+        shiny::actionButton('structure_change_type', 'Apply')
       )
   })
 
@@ -2240,18 +2238,18 @@ output$mice_input <- shiny::renderUI({
   output$content_save_db <- shiny::renderUI({
     flag = F
     for (i in 1:base::length(rv$filter.k)) {
-      if(rv$filter.k[[i]]$search != '')
+      if (rv$filter.k[[i]]$search != '')
         flag = T
     }
     shiny::tagList(
-      column(width = 3,shiny::actionButton('active_opt_db', 'Upload Dataset')),
-      column(width = 3,shiny::actionButton('active_opt_ind_var', 'Select Variables')),
-      column(width = 3,shiny::actionButton('active_opt_interaction', 'Create Interactions')),
-      column(width = 3,shiny::actionButton('active_opt_subset', 'Subset Dataset')),
-      column(width = 3,shiny::downloadButton('download_db', 'Save As')),
-      if(flag)
-        column(width = 3,shiny::actionButton('filter_outlier_reset', "Revert filters!!!",
-                                             style = 'color : black; background-color : var(--secondary-color)'))
+      column(width = 3, shiny::actionButton('active_opt_db', 'Upload Dataset')),
+      column(width = 3, shiny::actionButton('active_opt_ind_var', 'Select Variables')),
+      column(width = 3, shiny::actionButton('active_opt_interaction', 'Create Interactions')),
+      column(width = 3, shiny::actionButton('active_opt_subset', 'Subset Dataset')),
+      column(width = 3, shiny::downloadButton('download_db', 'Save As')),
+      if (flag)
+        column(width = 3, shiny::actionButton('filter_outlier_reset', "Revert filters!!!",
+                                              style = 'color : black; background-color : var(--secondary-color)'))
       # ,column(width = 3,shiny::actionButton('debug', "debug"))
     )
   })
@@ -2441,7 +2439,7 @@ output$mice_input <- shiny::renderUI({
             value = rv$data[k, base::paste0(i)]
           )))
         }else {
-          if(!is.null(input[[base::paste0("OTL_", i)]])){
+          if (!is.null(input[[base::paste0("OTL_", i)]])) {
             str_temp = base::paste0('<h4>', i, ' (', input$indep_outlier_2, ')</h4>')
             args1 = base::append(args1, base::list(shiny::textInput(
               base::paste0("OTL_", i),

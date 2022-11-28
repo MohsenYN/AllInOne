@@ -263,10 +263,10 @@ body <- shinydashboard::dashboardBody(
           # shiny::actionButton('save_setting', 'Export Setting')
         )
       )
-    ),
-    shiny::a(href = "https://www.uoguelph.ca/oac/", shiny::img(src = "www/OACL.png", class = "MYNGuelph"))
+    )
 
-  )
+  ),
+  shiny::a(href = "https://www.uoguelph.ca/oac/", shiny::img(src = "www/OACL.png", class = "MYNGuelph"))
 )
 
 Header <- shinydashboard::dashboardHeader(
