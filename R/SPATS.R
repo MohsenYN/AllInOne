@@ -116,6 +116,8 @@ ExSPATS <- function(input, rv) {
 
   p <- ggplot2::ggplot(Data, ggplot2::aes(get(input$spat_col), get(input$spat_row), fill = RawValue)) +
     ggplot2::geom_tile() +
+    ggplot2::xlab(input$spat_col) +
+    ggplot2::ylab(input$spat_row) +
     viridis::scale_fill_viridis(discrete = F) +
     ggplot2::theme_classic() +
     ggplot2::labs(title = "Raw Value", fill = 'Response Variable')
@@ -137,6 +139,8 @@ ExSPATS <- function(input, rv) {
 
   p <- ggplot2::ggplot(Data, ggplot2::aes(base::get(input$spat_col), base::get(input$spat_row), fill = FittedValue)) +
     ggplot2::geom_tile() +
+    ggplot2::xlab(input$spat_col) +
+    ggplot2::ylab(input$spat_row) +
     viridis::scale_fill_viridis(discrete = FALSE) +
     ggplot2::theme_classic() +
     ggplot2::labs(title = "Fitted Value", fill = 'Response Variable')
@@ -158,6 +162,8 @@ ExSPATS <- function(input, rv) {
 
   p <- ggplot2::ggplot(Data, ggplot2::aes(get(input$spat_col), get(input$spat_row), fill = ResidualValue)) +
     ggplot2::geom_tile() +
+    ggplot2::xlab(input$spat_col) +
+    ggplot2::ylab(input$spat_row) +
     viridis::scale_fill_viridis(discrete = FALSE) +
     ggplot2::theme_classic() +
     ggplot2::labs(title = "Residual Value", fill = 'Response Variable')
