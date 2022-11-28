@@ -76,7 +76,7 @@ header.main-header {
 }
 
 #sidebarItemExpanded {
-    padding-bottom: 65px;
+    padding-bottom: 50px;
 }
 
 .MYNGuelph {
@@ -169,7 +169,7 @@ ul.nav.navbar-nav {
 }
 
 ul.sidebar-menu {
-    min-height: calc(100vh - 50px);
+    min-height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
 }
@@ -200,4 +200,8 @@ div#o_results {
     width: 100%;
     min-height: 70vh;
     align-items: center;
+}
+
+.tab-pane {
+    padding-top: 20px;
 }
