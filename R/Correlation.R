@@ -26,7 +26,7 @@ CoReLaTiOnSS <- function(input, rv) {
   if (input$cor_opt == 'Non-independent-based correlation') {
     M <- stats::cor(SelectedTraits)
     rv$buffer <- M
-    utils::write.csv(M, 'Correlation Table.csv', row.names = F)
+    utils::write.csv(M, base::paste0(input$project_name,' -- Correlation Table.csv'), row.names = F)
   }
   else if (input$cor_opt == 'Inter correlation') {
     y = COL_INDEP
@@ -52,9 +52,9 @@ CoReLaTiOnSS <- function(input, rv) {
     M <- stats::cor(D, use = "pairwise.complete.obs")
     rv$buffer <- M
 
-    utils::write.csv(D, 'Mean Values Table.csv', row.names = F)
+    utils::write.csv(D, base::paste0(input$project_name,' -- Mean Values Table.csv'), row.names = F)
 
-    utils::write.csv(M, 'Correlation Table.csv', row.names = F)
+    utils::write.csv(M, base::paste0(input$project_name,' -- Correlation Table.csv'), row.names = F)
 
 
   }
@@ -92,7 +92,7 @@ CoReLaTiOnSS <- function(input, rv) {
     base::colnames(result) = base::c(MainV, 'Correlation')
 
     rv$buffer = result
-    utils::write.csv(result, 'Correlation Table.csv', row.names = F)
+    utils::write.csv(result, base::paste0(input$project_name,' -- Correlation Table.csv'), row.names = F)
 
     Cordata <- base::as.data.frame(result)
 

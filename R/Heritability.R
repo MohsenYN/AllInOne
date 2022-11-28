@@ -57,7 +57,7 @@ Heritability <- function(input, rv) {
     dplyr::summarize(h = (Variance[grp == genom_dep_col]) / (base::sum(Variance)))
   rv$buffer = bs_her
 
-  utils::write.csv(bs_her, 'Heritability Values.csv', row.names = F)
+  utils::write.csv(bs_her, base::paste0(input$project_name,' -- Heritability Values.csv'), row.names = F)
 
   p <- function() {
     var <- ggplot2::ggplot(data = bs_her, ggplot2::aes(x = DTriats, y = h, group = 5, fill = DTriats)) +

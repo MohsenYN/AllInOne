@@ -485,7 +485,7 @@ output$mice_input <- shiny::renderUI({
     l[['General']][3] = Ign_Res_Wrd
     l[['Plots']][1] = Max_levels_GB
 
-    write.csv(l,'setting_me.csv',row.names = F)
+    write.csv(l,'My_Setting.csv',row.names = F)
   })
 
   observeEvent(

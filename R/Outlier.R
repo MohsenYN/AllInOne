@@ -123,8 +123,8 @@ PoSiBlEoUtLieR <- function(input, rv) {
 
     buf = k$ckd
     buf[['obs']] <- rownames(buf)
-    utils::write.csv(buf, 'Cooks distance values.csv', row.names = F)
-    utils::write.csv(f, 'Cooks distance outliers.csv')
+    utils::write.csv(buf, base::paste0(input$project_name,' -- Cooks distance values.csv'), row.names = F)
+    utils::write.csv(f, base::paste0(input$project_name,' -- Cooks distance outliers.csv'))
 
     rv$outliers <- NULL
     rv$outliers_row <- buf[['obs']][k$ckd$obs[base::which(k$ckd$color == 'outlier')]]
