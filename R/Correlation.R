@@ -52,7 +52,7 @@ CoReLaTiOnSS <- function(input, rv) {
     M <- stats::cor(D, use = "pairwise.complete.obs")
     rv$buffer <- M
 
-    utils::write.csv(D, base::paste0(input$project_name,' -- Mean Values Table.csv'), row.names = F)
+    utils::write.csv(D, base::paste0(input$project_name,' -- Observed Value Table.csv'), row.names = F)
 
     utils::write.csv(M, base::paste0(input$project_name,' -- Correlation Table.csv'), row.names = F)
 
