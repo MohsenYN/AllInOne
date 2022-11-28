@@ -1712,16 +1712,6 @@ output$mice_input <- shiny::renderUI({
       waiter$show()
       base::tryCatch({
         PoSiBlEoUtLieR(input, rv)
-      }, error = function(e) {
-        if (rv$Show_Errors)
-          shiny_showNotification(rv, e$message)
-        else
-          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
-        # base::setwd("../../")
-      })
-      waiter$hide()
-
-      base::tryCatch({
         if (base::length(rv$outliers_row) > 0) {
           session$sendCustomMessage(
             type = 'testmessage',
@@ -1751,7 +1741,8 @@ output$mice_input <- shiny::renderUI({
                 )
               }
           })
-        } else {
+        }
+        else {
           session$sendCustomMessage(type = 'testmessage',
                                     message = 'Congratulations! There is no outlier')
         }
@@ -1759,8 +1750,10 @@ output$mice_input <- shiny::renderUI({
         if (rv$Show_Errors)
           shiny_showNotification(rv, e$message)
         else
-          shiny_showNotification(rv, 'Error in applying outlier tools')
+          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
+        # base::setwd("../../")
       })
+      waiter$hide()
     }
   })
 
