@@ -198,7 +198,7 @@ div#o_results {
     display: flex;
     justify-content: center;
     width: 100%;
-    min-height: 70vh;
+    min-height: calc(100vh - 250px);
     align-items: center;
 }
 
