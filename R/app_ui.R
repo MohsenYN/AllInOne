@@ -18,13 +18,13 @@ interface <- shiny::fluidPage(
   shiny::tags$head(
     shiny::tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css?v16")
   ),
-  { shiny::tags$head(
-    shiny::tags$script(shiny::HTML('Shiny.addCustomMessageHandler("testmessage",
+{ shiny::tags$head(
+  shiny::tags$script(shiny::HTML('Shiny.addCustomMessageHandler("testmessage",
   function(message) {
     alert(message);
   }
 );')),
-    shiny::tags$style(shiny::HTML("
+  shiny::tags$style(shiny::HTML("
         @import url('//fonts.googleapis.com/css?family=Lobster|Cabin:400,700');
          h1 {
         font-family: 'Trattatello', fantasy;
@@ -41,68 +41,62 @@ interface <- shiny::fluidPage(
           -column-fill: auto;
       }
     "))
-  ) }
+) }
 
 )
 
 menu_setting <- shiny::tagList(
-
-  shiny::numericInput(
-    'Max_levels_GB',
-    label = tags$span(
-      'Maximum levels in a factor for creating graph:',
-      tags$i(
-       class = "glyphicon glyphicon-info-sign",
-       style = "color: var(--Just-color);",
-       title = 'The independant variable with a level number more than the maximum set will be ignored for creating plots'
-      )),
-    20,
-    5,
-    100,
-    '100%'
-  ),
-  shiny::numericInput(
-    'notif_delay',
-    label = tags$span(
-      'Duration (seconds) to display the notifications:',
-      tags$i(
-       class = "glyphicon glyphicon-info-sign",
-       style = "color: var(--Just-color);",
-       title = 'How long notifications will appear on the screen?'
-      )),
-    6,
-    1,
-    60,
-    '100%'
-  ),
-  shiny::selectInput(
-    'notif_size',
-    label = tags$span(
-      'Size of the notifications',
-      tags$i(
-       class = "glyphicon glyphicon-info-sign",
-       style = "color: var(--Just-color);",
-       title = 'Size of the notifications which appears on the right-bottom of the screen in case of facing an error'
-      )),
-    choices = base::list(
-      'Big' = '4',
-      'Normal Interactions' = '5',
-      'Small' = '6'
-    ),
-    selected = '5'
-  ),
-  shiny::checkboxInput(
-    'Ign_Res_Wrd',
-    label = shiny::tags$span(
-      'Ignore special character',
-      shiny::tags$i(
-       class = "glyphicon glyphicon-info-sign",
-       style = "color: var(--Just-color);",
-       title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
+  shiny::column(
+    width = 8,
+    shiny::numericInput(
+      'notif_delay',
+      label = tags$span(
+        'Duration (seconds) to display the notifications:',
+        tags$i(
+          class = "glyphicon glyphicon-info-sign",
+          style = "color: var(--Just-color);",
+          title = 'How long notifications will appear on the screen?'
+        )),
+      value = 6,
+      min = 1,
+      max = 60,
+      step = '100%',
+      width = '100%'
+    )),
+  shiny::column(
+    width = 8,
+    shiny::selectInput(
+      inputId = 'notif_size',
+      label = tags$span(
+        'Size of the notifications',
+        tags$i(
+          class = "glyphicon glyphicon-info-sign",
+          style = "color: var(--Just-color);",
+          title = 'Size of the notifications which appears on the right-bottom of the screen in case of facing an error'
+        )),
+      choices = base::list(
+        'Big' = '4',
+        'Normal Interactions' = '5',
+        'Small' = '6'
+      ),
+      selected = '5',
+      width = '100%'
+    )),
+  shiny::column(
+    width = 8,
+    shiny::checkboxInput(
+      inputId = 'Ign_Res_Wrd',
+      label = shiny::tags$span(
+        'Ignore special character',
+        shiny::tags$i(
+          class = "glyphicon glyphicon-info-sign",
+          style = "color: var(--Just-color);",
+          title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
        By checking the box, AllInOne ignores the limitation. however, it is highly recommended not to check the box!'
-      )),
-    T
-  ),
+        )),
+      value = F,
+      width = '100%'
+    )),
   # shiny::checkboxInput(
   #   'Rep_Res_Wrd',
   #   label = shiny::tags$span(
@@ -134,6 +128,26 @@ menu_setting <- shiny::tagList(
   # )
   # ,
   # shiny::textInput('results_folder_path', 'Selected a folder')
+)
+
+menu_plots <- shiny::tagList(
+  shiny::column(
+    width = 8,
+    shiny::numericInput(
+      'Max_levels_GB',
+      label = tags$span(
+        'Maximum levels in a factor for creating graph:',
+        tags$i(
+          class = "glyphicon glyphicon-info-sign",
+          style = "color: var(--Just-color);",
+          title = 'The independant variable with a level number more than the maximum set will be ignored for creating plots'
+        )),
+      value = 20,
+      min = 5,
+      max = 100,
+      step = '100%',
+      width = '100%'
+    ))
 )
 
 menu_db <- shinydashboard::menuItem(
@@ -181,8 +195,8 @@ sidebar <- shinydashboard::dashboardSidebar({
     menu_operators,
     shiny::uiOutput('content_3'), #Outliers content
     shiny::uiOutput('content_7'), #apply changes outliers
-    shiny::div(class="needhelp-spacer"),
-    shiny::a(href="mailto:myoosefz@uoguelph.ca",shiny::img(src="www/Picture3.png", class="MYNHelp"), class="MYNHelpL")
+    shiny::div(class = "needhelp-spacer"),
+    shiny::a(href = "mailto:myoosefz@uoguelph.ca", shiny::img(src = "www/Picture3.png", class = "MYNHelp"), class = "MYNHelpL")
   )
 })
 
@@ -214,7 +228,7 @@ body <- shinydashboard::dashboardBody(
       title = "Results",
       shiny::column(width = 4, shiny::selectInput(
         'res_blue_str', 'Results folder',
-        c('None','Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
+        c('None', 'Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
           'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
       )),
       shiny::column(width = 8, shiny::uiOutput('o_res_blue_k')),
@@ -223,7 +237,17 @@ body <- shinydashboard::dashboardBody(
     ),
     shiny::tabPanel(
       title = 'Setting',
-      menu_setting
+      shiny::tabsetPanel(
+        type = "pills",
+        shiny::tabPanel(
+          title = "General",
+          menu_setting
+        ),
+        shiny::tabPanel(
+          title = "Plots",
+          menu_plots
+        )
+      )
     ),
     shiny::a(href = "https://www.uoguelph.ca/oac/", shiny::img(src = "www/OACL.png", class = "MYNGuelph"))
 
@@ -232,8 +256,8 @@ body <- shinydashboard::dashboardBody(
 
 Header <- shinydashboard::dashboardHeader(
 
-  shiny::tags$li(shiny::a(href="https://github.com/MohsenYN",
-                   shiny::img(src="www/PictureRM2.png", class="title-image")), class='dropdown title-logo'),
+  shiny::tags$li(shiny::a(href = "https://github.com/MohsenYN",
+                          shiny::img(src = "www/PictureRM2.png", class = "title-image")), class = 'dropdown title-logo'),
   shinydashboard::dropdownMenuOutput('header_notification')
 )
 
@@ -253,8 +277,8 @@ app_ui <- function(request) {
       Header,
       sidebar,
       body,
-      skin = "red",# Don't Remove this!
-      title="AllInOne"
+      skin = "red", # Don't Remove this!
+      title = "AllInOne"
     )
   )
 }
@@ -273,13 +297,13 @@ golem_add_external_resources <- function() {
     app_sys("app/www")
   )
   add_resource_path(
-      "Results",
-      app_sys("app/Results")
-    )
+    "Results",
+    app_sys("app/Results")
+  )
   add_resource_path(
-      "SampleDB",
-      app_sys("app/SampleDB")
-    )
+    "SampleDB",
+    app_sys("app/SampleDB")
+  )
 
   tags$head(
     favicon(),
