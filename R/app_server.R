@@ -26,15 +26,29 @@ app_server <- function(input, output, session) {
     rv$outliers_row = NULL
     rv$selected.col = NULL
     rv$review_flag = TRUE
-    if (dir.exists(app_sys('app/Results')))
-      unlink(app_sys('app/Results'), recursive = T)
-    dir.create(paste0(app_sys('app'), '/Results'))
+    if (!base::dir.exists(app_sys('app/Results')))
+      base::dir.create(base::paste0(app_sys('app'), '/Results'))
+    else{
+      res = app_sys('app/Results/')
+      for (i in Results_subfolders){
+        if(base::dir.exists(base::paste0(res,'/',i))){
+          unlink(base::paste0(res,'/',i), recursive = T)
+        }
+      }
+    }
     cat("\014")
   }
 
-  if (dir.exists(app_sys('app/Results')))
-    unlink(app_sys('app/Results'), recursive = T)
-  dir.create(paste0(app_sys('app'), '/Results'))
+  if (!base::dir.exists(app_sys('app/Results')))
+    base::dir.create(base::paste0(app_sys('app'), '/Results'))
+  else {
+    res = app_sys('app/Results/')
+    for (i in Results_subfolders) {
+      if (base::dir.exists(base::paste0(res, '/', i))) {
+        unlink(base::paste0(res,'/',i), recursive = T)
+      }
+    }
+  }
 
   forbidden_characters <- base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"',
                                   ' ', '!', ';', ',', '|', '!', '@', '#', '$',
@@ -281,19 +295,6 @@ app_server <- function(input, output, session) {
 
   output$information <- shiny::renderUI({
     information_ui
-  })
-
-  output$o_opt_list <- shiny::renderUI({
-    shiny::selectInput(
-      inputId = 'active_opt',
-      label = shiny::h6('Select Operator'),
-      choices = base::list(
-        'Dataset' = 'db',
-        'Select variables' = 'ind_var',
-        'Interaction' = 'interaction',
-        'Subset the dataset' = 'subset'
-      ), selected = rv$active_opt_
-    )
   })
 
   output$mice_input <- shiny::renderUI({
@@ -1897,6 +1898,9 @@ app_server <- function(input, output, session) {
       }
     }
 
+    if(interacted_name %in% colnames(rv$data))
+      ath_flag = F
+
     if (base::length(input$main_db_interaction_col) > 1 & ath_flag) {
       shiny::removeModal()
       waiter$show()
@@ -1939,7 +1943,11 @@ app_server <- function(input, output, session) {
       session$sendCustomMessage(
         type = 'testmessage',
         message = 'Please select at least two independent variables to interact!')
-    }
+    } else
+      shiny_showNotification(
+        rv,
+        'Repetitive column name!'
+      )
 
   })
 
@@ -2156,7 +2164,7 @@ app_server <- function(input, output, session) {
                                 message = "Please select variables !")
     }else {
       defult_name = base::paste0('Interacted_Column_', base::sample(1:99, 1))
-      # Check if this name already exists
+
       shiny::showModal(
         shiny::modalDialog(
           shiny::checkboxGroupInput(

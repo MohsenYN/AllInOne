@@ -1,3 +1,7 @@
+
+Results_subfolders <- c('Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
+          'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
+
 #______________UI__________________
 interface <- shiny::fluidPage(
   shinydisconnect::disconnectMessage(
@@ -198,8 +202,7 @@ body <- shinydashboard::dashboardBody(
       title = "Results",
       shiny::column(width = 4, shiny::selectInput(
         'res_blue_str', 'Results folder',
-        c('None', 'Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
-          'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
+        c('None', Results_subfolders)
       )),
       shiny::column(width = 8, shiny::uiOutput('o_res_blue_k')),
       shiny::uiOutput('o_results_btns'),
