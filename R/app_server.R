@@ -90,8 +90,8 @@ app_server <- function(input, output, session) {
           shiny::downloadButton('download_png_res', 'Download full size image'),
         if (base::file.exists(rv$csv_address))
           shiny::downloadButton('download_csv_res', 'Download the table'),
-        # if (base::file.exists(rv$csv_address))
-        #   shiny::actionButton('csvs_use', 'Set the table as main dataset'),
+        if (base::file.exists(rv$csv_address))
+          shiny::actionButton('csvs_use', 'Set the table as main dataset'),
       )
   })
 
