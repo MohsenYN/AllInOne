@@ -972,59 +972,71 @@ app_server <- function(input, output, session) {
     for (i in indep_cols) {
       if (base::length(base::unique(rv$data[[i]])) < 2) {
         indep_cols = base::subset(indep_cols, indep_cols != i)
-        shiny_showNotification(rv,
-                               base::paste0(i,
-                                            ' is removed from independent variables list as it has less then two levels!'
-                               )
+        shiny_showNotification(
+          rv,
+          base::paste0(i, ' is removed from independent variables list as it has less then two levels!')
         )
       }
     }
     if (base::length(indep_cols)) {
-
       if (input$her_action == 'spatial') {
-        shiny::showModal(shiny::modalDialog(
-          shiny::selectInput('spat_resp',
-                             'Dependent/response variable',
-                             choices = dep_cols
-          ),
-          shiny::selectInput(
-            inputId = 'spat_gen',
-            label = 'Genotype variable',
-            choices = indep_cols),
-          shiny::selectInput(
-            inputId = 'spat_row',
-            label = 'Row variable',
-            choices = indep_cols,
-            selected = 'Row'),
+        cols = base::colnames(rv$data)
+        ResidualValue_flag = T
+        for (i in cols) {
+          if (i == 'ResidualValue') {
+            shiny_showNotification(
+              rv,
+              ' Dataset include a column with name [ResidualValue]. Please rename it!'
+            )
+            ResidualValue_flag = F
+            break
+          }
+        }
+        if (ResidualValue_flag) {
+          shiny::showModal(shiny::modalDialog(
+            shiny::selectInput('spat_resp',
+                               'Dependent/response variable',
+                               choices = dep_cols
+            ),
+            shiny::selectInput(
+              inputId = 'spat_gen',
+              label = 'Genotype variable',
+              choices = indep_cols),
+            shiny::selectInput(
+              inputId = 'spat_row',
+              label = 'Row variable',
+              choices = indep_cols,
+              selected = 'Row'),
 
-          shiny::selectInput(
-            inputId = 'spat_col',
-            label = 'Column variable',
-            choices = indep_cols,
-            selected = 'Col'),
-          shiny::checkboxGroupInput('spat_fix',
-                                    'Fixed effects',
-                                    choices = indep_cols),
+            shiny::selectInput(
+              inputId = 'spat_col',
+              label = 'Column variable',
+              choices = indep_cols,
+              selected = 'Col'),
+            shiny::checkboxGroupInput('spat_fix',
+                                      'Fixed effects',
+                                      choices = indep_cols),
 
-          shiny::selectInput('spat_fix_interact',
-                             'If you have interaction for fixed effects; please select interacted columns two by two',
-                             choices = indep_cols,
-                             multiple = T),
-          shiny::uiOutput('help_fix'),
+            shiny::selectInput('spat_fix_interact',
+                               'If you have interaction for fixed effects; please select interacted columns two by two',
+                               choices = indep_cols,
+                               multiple = T),
+            shiny::uiOutput('help_fix'),
 
-          shiny::checkboxGroupInput('spat_rand',
-                                    'Random effects',
-                                    choices = indep_cols),
+            shiny::checkboxGroupInput('spat_rand',
+                                      'Random effects',
+                                      choices = indep_cols),
 
-          shiny::selectInput('spat_rand_interact',
-                             'If you have interaction for random effects; please select interacted columns two by two',
-                             choices = indep_cols,
-                             multiple = T),
-          shiny::uiOutput('help_rand'),
+            shiny::selectInput('spat_rand_interact',
+                               'If you have interaction for random effects; please select interacted columns two by two',
+                               choices = indep_cols,
+                               multiple = T),
+            shiny::uiOutput('help_rand'),
 
-          footer = shiny::tagList(shiny::actionButton('indep_spat_btn', 'OK'),
-                                  shiny::modalButton('Dismiss'))
-        ))
+            footer = shiny::tagList(shiny::actionButton('indep_spat_btn', 'OK'),
+                                    shiny::modalButton('Dismiss'))
+          ))
+        }
       }
 
       else if (input$her_action == 'heritability') {
@@ -1104,9 +1116,10 @@ app_server <- function(input, output, session) {
         ))
       }
     }else {
-      session$sendCustomMessage(
-        type = 'testmessage',
-        message = 'There should be at least one independent variable with more than one level')
+      shiny_showNotification(
+        rv,
+        'There should be at least one independent variable with more than one level'
+      )
     }
 
   })
