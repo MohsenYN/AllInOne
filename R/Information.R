@@ -52,7 +52,7 @@ information_ui <- shiny::fluidRow(
         shiny::img(src = 'www/MP.png', align = "center", width = "60%", height = "60%"),
         shiny::hr(),
         shiny::tags$ul(
-          shiny::h3(shiny::strong("Missing data imputation "), shiny::tags$a("(Video Tutorial)", href = 'https://youtu.be/vCdu-_WyuJU', style = "font-size: 22px"), shiny::strong(" : "))),
+          shiny::h3(shiny::strong("Missing data imputation "), shiny::tags$a("(Video Tutorial)", href = '', style = "font-size: 22px"), shiny::strong(" : "))),
         shiny::img(src = 'www/MII1.png', align = "center", width = "60%", height = "60%"),
         shiny::img(src = 'www/MII2.png', align = "center", width = "60%", height = "60%"),
         shiny::img(src = 'www/MII3.png', align = "center", width = "60%", height = "60%"),
