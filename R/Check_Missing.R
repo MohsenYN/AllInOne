@@ -27,11 +27,6 @@ CheckMissing <- function(input, rv) {
            func_mplot, rv)
 
 
-  P <- finalfit::ff_glimpse(rv$dependent_variables)
-  utils::write.csv(P$Continuous,
-            file = base::paste0(input$project_name, " -- Descriptive statistics.csv"), row.names = FALSE)
-
-
   func_pp <- function()
     VIM::aggr(
       rv$dependent_variables,
