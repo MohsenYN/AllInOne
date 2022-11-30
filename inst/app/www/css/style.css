@@ -152,6 +152,12 @@ ul.nav.navbar-nav {
     order: 1;
 }
 
+.title-image-tab {
+    height: 25px;
+    width: unset;
+    order: 1;
+}
+
 .title-logo > a {
     display: block !important;
     padding: 0 10px !important;

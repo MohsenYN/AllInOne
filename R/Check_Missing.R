@@ -12,6 +12,15 @@ CheckMissing <- function(input, rv) {
   if (!require(naniar))
     utils::install.packages("naniar")
 
+
+  # include Independent variables TOO
+  rv$independent_variables <-
+    rv$data %>% dplyr::select(input$main_db_indep_val)
+
+  # include Dependent variables TOO
+  rv$dependent_variables <-
+      rv$data %>% dplyr::select(input$main_db_dep_val)
+
   set_wd('Missing Values')
 
   func_mplot <- function()
@@ -25,11 +34,6 @@ CheckMissing <- function(input, rv) {
            input$project_name,
            " -- Missing values in each trait",
            func_mplot, rv)
-
-
-  P <- finalfit::ff_glimpse(rv$dependent_variables)
-  utils::write.csv(P$Continuous,
-            file = base::paste0(input$project_name, " -- Descriptive statistics.csv"), row.names = FALSE)
 
 
   func_pp <- function()

@@ -18,7 +18,7 @@ app_server <- function(input, output, session) {
     csv_value = NULL, csv_value2 = NULL, review_flag = TRUE, refresh_flag = NULL,
     blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
     Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F, User_Config_notif_delay = 8, User_Config_notif_size = 4
-    , Path_For_Saving_Results = '', Show_Errors = T,
+    , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T,
   )
 
   allinone_initialize <- function(rv) {
@@ -26,15 +26,29 @@ app_server <- function(input, output, session) {
     rv$outliers_row = NULL
     rv$selected.col = NULL
     rv$review_flag = TRUE
-    if (dir.exists(app_sys('app/Results')))
-      unlink(app_sys('app/Results'), recursive = T)
-    dir.create(paste0(app_sys('app'), '/Results'))
+    if (!base::dir.exists(app_sys('app/Results')))
+      base::dir.create(base::paste0(app_sys('app'), '/Results'))
+    else {
+      res = app_sys('app/Results/')
+      for (i in Results_subfolders) {
+        if (base::dir.exists(base::paste0(res, '/', i))) {
+          unlink(base::paste0(res, '/', i), recursive = T)
+        }
+      }
+    }
     cat("\014")
   }
 
-  if (dir.exists(app_sys('app/Results')))
-    unlink(app_sys('app/Results'), recursive = T)
-  dir.create(paste0(app_sys('app'), '/Results'))
+  if (!base::dir.exists(app_sys('app/Results')))
+    base::dir.create(base::paste0(app_sys('app'), '/Results'))
+  else {
+    res = app_sys('app/Results/')
+    for (i in Results_subfolders) {
+      if (base::dir.exists(base::paste0(res, '/', i))) {
+        unlink(base::paste0(res, '/', i), recursive = T)
+      }
+    }
+  }
 
   forbidden_characters <- base::c('/', ':', '\\', '<', '>', '|', '*', '?', '"',
                                   ' ', '!', ';', ',', '|', '!', '@', '#', '$',
@@ -49,7 +63,7 @@ app_server <- function(input, output, session) {
     rv$Ignore_Reserved_Letters = input$Ign_Res_Wrd
   })
 
-  output$o_res_blue_k <- renderUI({
+  output$o_res_blue_k <- shiny::renderUI({
     if (!is.null(input$res_blue_str)) {
       str = input$res_blue_str
       if (base::dir.exists(app_sys(paste0("app/Results/"), str))) {
@@ -81,7 +95,7 @@ app_server <- function(input, output, session) {
     )
   })
 
-  output$o_results_btns <- renderUI({
+  output$o_results_btns <- shiny::renderUI({
     if ((input$res_blue_str != 'None') & (!is.null(rv$png_address)))
       shiny::tagList(
         if (base::file.exists(rv$pdf_address))
@@ -102,7 +116,7 @@ app_server <- function(input, output, session) {
     rv$csv_value = NULL
   })
 
-  output$o_results <- renderUI({
+  output$o_results <- shiny::renderUI({
     tryCatch({
       if (!is.null(input$res_blue_str) & !is.null(input$res_blue_k)) {
         str = input$res_blue_str
@@ -283,19 +297,6 @@ app_server <- function(input, output, session) {
     information_ui
   })
 
-  output$o_opt_list <- shiny::renderUI({
-    shiny::selectInput(
-      inputId = 'active_opt',
-      label = shiny::h6('Select Operator'),
-      choices = base::list(
-        'Dataset' = 'db',
-        'Select variables' = 'ind_var',
-        'Interaction' = 'interaction',
-        'Subset the dataset' = 'subset'
-      ), selected = rv$active_opt_
-    )
-  })
-
   output$mice_input <- shiny::renderUI({
     if (input$impute_method != 'rm') {
       shiny::tagList(
@@ -458,7 +459,7 @@ app_server <- function(input, output, session) {
     write.csv(l, 'My_Setting.csv', row.names = F)
   })
 
-  observeEvent(
+  shiny::observeEvent(
     ignoreInit = TRUE, c(
       input$dataC_delimiter,
       input$dataC_header), {
@@ -494,7 +495,7 @@ app_server <- function(input, output, session) {
     })
   })
 
-  observeEvent(input$sheet_name, {
+  shiny::observeEvent(input$sheet_name, {
     tryCatch({
       address = input$file$data
       postfix = base::substring(
@@ -722,7 +723,7 @@ app_server <- function(input, output, session) {
             )
           )
         )
-        output$mice_input2 <- renderUI({
+        output$mice_input2 <- shiny::renderUI({
           if (input$missing_handler_opt == 'impute') {
             shiny::tagList(
               shiny::selectInput(
@@ -776,7 +777,18 @@ app_server <- function(input, output, session) {
         })
 
         output$cooksdistance_ui <- shiny::renderUI({
-          if (input$outlier_method == 'B')
+          if (input$outlier_method == 'B') {
+            indep_cols = input$main_db_indep_val
+            for (i in indep_cols) {
+              if (base::length(base::unique(rv$data[[i]])) < 2) {
+                indep_cols = base::subset(indep_cols, indep_cols != i)
+                shiny_showNotification(rv,
+                                       base::paste0('The variable {', i,
+                                                    '} is removed from independent variables list as it has less then two levels!'
+                                       )
+                )
+              }
+            }
             shiny::tagList(
               shiny::selectInput('outlier_resp',
                                  'Dependant/response variable',
@@ -784,8 +796,9 @@ app_server <- function(input, output, session) {
               ),
               shiny::checkboxGroupInput('outlier_rand',
                                         'Select the independent variable(s)',
-                                        choices = input$main_db_indep_val)
+                                        choices = indep_cols)
             )
+          }
         })
 
         shiny::showModal(shiny::modalDialog(
@@ -818,6 +831,15 @@ app_server <- function(input, output, session) {
         }
 
         str = NULL
+
+        # include Independent variables TOO
+        rv$independent_variables <-
+          rv$data %>% dplyr::select(input$main_db_indep_val)
+
+        # include Dependent variables TOO
+        rv$dependent_variables <-
+          rv$data %>% dplyr::select(input$main_db_dep_val)
+
         for (n in base::colnames(rv$dependent_variables)) {
           if (base::is.character(rv$data[[n]]))
             if (base::is.null(str))
@@ -963,6 +985,7 @@ app_server <- function(input, output, session) {
       }
     }
   })
+
   shiny::observeEvent(input$her_btn, {
     shiny::removeModal()
     dep_cols = input$main_db_dep_val
@@ -971,94 +994,71 @@ app_server <- function(input, output, session) {
     for (i in indep_cols) {
       if (base::length(base::unique(rv$data[[i]])) < 2) {
         indep_cols = base::subset(indep_cols, indep_cols != i)
-        shiny_showNotification(rv,
-                               base::paste0(i,
-                                            ' is removed from independent variables list as it has less then two levels!'
-                               )
+        shiny_showNotification(
+          rv,
+          base::paste0(i, ' is removed from independent variables list as it has less then two levels!')
         )
       }
     }
     if (base::length(indep_cols)) {
-
       if (input$her_action == 'spatial') {
-        shiny::showModal(shiny::modalDialog(
-          shiny::selectInput('spat_resp',
-                             'Dependent/response variable',
-                             choices = dep_cols
-          ),
-          shiny::selectInput(
-            inputId = 'spat_gen',
-            label = 'Genotype variable',
-            choices = indep_cols),
-          shiny::selectInput(
-            inputId = 'spat_row',
-            label = 'Row variable',
-            choices = indep_cols,
-            selected = 'Row'),
-
-          shiny::selectInput(
-            inputId = 'spat_col',
-            label = 'Column variable',
-            choices = indep_cols,
-            selected = 'Col'),
-          shiny::checkboxGroupInput('spat_fix',
-                                    'Fixed effects',
-                                    choices = indep_cols),
-
-          shiny::selectInput('spat_fix_interact',
-                             'If you have interaction for fixed effects; please select interacted columns two by two',
-                             choices = indep_cols,
-                             multiple = T),
-          shiny::uiOutput('help_fix'),
-
-          shiny::checkboxGroupInput('spat_rand',
-                                    'Random effects',
-                                    choices = indep_cols),
-
-          shiny::selectInput('spat_rand_interact',
-                             'If you have interaction for random effects; please select interacted columns two by two',
-                             choices = indep_cols,
-                             multiple = T),
-          shiny::uiOutput('help_rand'),
-
-          footer = shiny::tagList(shiny::actionButton('indep_spat_btn', 'OK'),
-                                  shiny::modalButton('Dismiss'))
-        ))
-      }
-
-      else if (input$her_action == 'blue') {
-        shiny::showModal(shiny::modalDialog(
-          shiny::selectInput('blue_resp',
-                             'Dependent/response variable',
-                             choices = dep_cols
-          ),
-          if (base::length(dep_cols) > 1)
-            shiny::selectInput('blue_cof',
-                               'Cofactor variable (if there is any)',
-                               choices = dep_cols, multiple = TRUE
+        cols = base::colnames(rv$data)
+        ResidualValue_flag = T
+        for (i in cols) {
+          if (i == 'ResidualValue') {
+            shiny_showNotification(
+              rv,
+              ' Dataset include a column with name [ResidualValue]. Please rename it!'
+            )
+            ResidualValue_flag = F
+            break
+          }
+        }
+        if (ResidualValue_flag) {
+          shiny::showModal(shiny::modalDialog(
+            shiny::selectInput('spat_resp',
+                               'Dependent/response variable',
+                               choices = dep_cols
             ),
-          shiny::checkboxGroupInput('blue_fix',
-                                    'Fixed variable(s)',
-                                    choices = indep_cols),
+            shiny::selectInput(
+              inputId = 'spat_gen',
+              label = 'Genotype variable',
+              choices = indep_cols),
+            shiny::selectInput(
+              inputId = 'spat_row',
+              label = 'Row variable',
+              choices = indep_cols,
+              selected = 'Row'),
 
-          shiny::selectInput('blue_fix_interact',
-                             'If you have interaction for fixed effects; please select interacted columns two by two',
-                             choices = indep_cols,
-                             multiple = T),
-          shiny::uiOutput('help_fix_blue'),
+            shiny::selectInput(
+              inputId = 'spat_col',
+              label = 'Column variable',
+              choices = indep_cols,
+              selected = 'Col'),
+            shiny::checkboxGroupInput('spat_fix',
+                                      'Fixed effects',
+                                      choices = indep_cols),
 
-          shiny::checkboxGroupInput('blue_rand',
-                                    'Random variable(s)',
-                                    choices = indep_cols),
+            shiny::selectInput('spat_fix_interact',
+                               'If you have interaction for fixed effects; please select interacted columns two by two',
+                               choices = indep_cols,
+                               multiple = T),
+            shiny::uiOutput('help_fix'),
 
-          shiny::selectInput('blue_rand_interact',
-                             'If you have interaction for random effects; please select interacted columns two by two',
-                             choices = indep_cols,
-                             multiple = T),
-          shiny::uiOutput('help_rand_blue'),
-          footer = shiny::tagList(shiny::actionButton('indep_blue_btn', 'OK'),
-                                  shiny::modalButton('Dismiss'))
-        ))
+            shiny::checkboxGroupInput('spat_rand',
+                                      'Random effects',
+                                      choices = indep_cols),
+
+            shiny::selectInput('spat_rand_interact',
+                               'If you have interaction for random effects; please select interacted columns two by two',
+                               choices = indep_cols,
+                               multiple = T),
+            shiny::uiOutput('help_rand'),
+
+            footer = shiny::tagList(shiny::actionButton('indep_spat_btn', 'OK'),
+                                    shiny::modalButton('Dismiss'))
+          ))
+        }
       }
 
       else if (input$her_action == 'heritability') {
@@ -1074,34 +1074,6 @@ app_server <- function(input, output, session) {
             label = 'Genotype column',
             choices = indep_cols),
           footer = shiny::tagList(shiny::actionButton('indep_her_btn', 'OK'),
-                                  shiny::modalButton('Dismiss')),
-          shiny::uiOutput('help_her')
-        ))
-      }
-
-      else if (input$her_action == 'blup') {
-        shiny::showModal(shiny::modalDialog(
-          shiny::selectInput('blup_resp',
-                             'Please select dependant/response variable',
-                             choices = dep_cols
-          ),
-          shiny::selectInput('blup_indep',
-                             'Please select independent variable for estimating BLUP',
-                             choices = indep_cols
-          ),
-          if (base::length(dep_cols) > 1)
-            shiny::selectInput('blup_cof',
-                               'Please select cofactor variable (if there is any)',
-                               choices = dep_cols, multiple = TRUE
-            ),
-          shiny::checkboxGroupInput('her_rand',
-                                    'Please select random variable(s)',
-                                    choices = indep_cols),
-          shiny::selectInput('her_rand_interact',
-                             'If you have interaction for random effects; please select interacted columns two by two',
-                             choices = indep_cols, multiple = TRUE),
-
-          footer = shiny::tagList(shiny::actionButton('indep_blup_btn', 'OK'),
                                   shiny::modalButton('Dismiss')),
           shiny::uiOutput('help_her')
         ))
@@ -1166,32 +1138,39 @@ app_server <- function(input, output, session) {
         ))
       }
     }else {
-      session$sendCustomMessage(
-        type = 'testmessage',
-        message = 'There should be at least one independent variable with more than one level')
+      shiny_showNotification(
+        rv,
+        'There should be at least one independent variable with more than one level'
+      )
     }
 
   })
 
   shiny::observeEvent(input$indep_spat_btn, {
-    shiny::removeModal()
-    if (base::dir.exists(app_sys("app/Results/Spatial Analysis")))
-      base::unlink(app_sys("app/Results/Spatial Analysis"), recursive = TRUE)
-    waiter$show()
+    if (input$rv_spat_fix == '' | input$rv_spat_rand == '') {
+      shiny_showNotification(rv, 'Fix or Random part can not be empty!')
+    }else {
 
-    base::tryCatch({
-      ExSPATS(input, rv)
-    }, error = function(e) {
+
+      shiny::removeModal()
+      if (base::dir.exists(app_sys("app/Results/Spatial Analysis")))
+        base::unlink(app_sys("app/Results/Spatial Analysis"), recursive = TRUE)
+      waiter$show()
+      i
+      base::tryCatch({
+        ExSPATS(input, rv)
+      }, error = function(e) {
+        waiter$hide()
+        if (rv$Show_Errors)
+          shiny_showNotification(rv, e$message)
+        else
+          shiny_showNotification(rv, 'Something is wrong! Would you like to check everything again? ')
+        # base::setwd("../../")
+      })
+
       waiter$hide()
-      if (rv$Show_Errors)
-        shiny_showNotification(rv, e$message)
-      else
-        shiny_showNotification(rv, 'Something is wrong! Would you like to check everything again? ')
-      # base::setwd("../../")
-    })
-
-    waiter$hide()
-    show_slider('Spatial Analysis')
+      show_slider('Spatial Analysis')
+    }
   })
 
   shiny::observeEvent(input$spat_show, {
@@ -1199,49 +1178,7 @@ app_server <- function(input, output, session) {
     show_slider('Spatial Analysis')
   })
 
-  shiny::observeEvent(input$use_spat_buffer, {
-    rv$spat_buffer[['ResidualValue']] = NULL
-    rv$data = rv$spat_buffer
-    #   rv$spat_buffer should be NULL again but if you NULL it now it will be disappeared
-  })
-
-  shiny::observeEvent(input$indep_blue_btn, {
-    if (base::length(input$blue_cof) > 2)
-      shiny_showNotification(rv, 'You can only select one cofactor!')
-    else if (
-      input$rv_blue_rand == '' |
-        input$rv_blue_fix == '' |
-        base::length(input$blue_fix_interact) %% 2 != 0 |
-        base::length(input$blue_rand_interact) %% 2 != 0 |
-        base::length(input$blue_fix) + base::length(input$blue_fix_interact) == 0 |
-        base::length(input$blue_rand) + base::length(input$blue_rand_interact) == 0
-    )
-      shiny_showNotification(rv, 'Error in formula')
-    else {
-      shiny::removeModal()
-      if (base::dir.exists(app_sys("app/Results/Blue")))
-        base::unlink(app_sys("app/Results/Blue"), recursive = TRUE)
-      waiter$show()
-      base::tryCatch({
-
-        ExBLUE(input = input, rv = rv)
-
-      }, error = function(e) {
-
-        if (rv$Show_Errors)
-          shiny_showNotification(rv, e$message)
-        else
-          shiny_showNotification(rv, 'Something is wrong! Would you like to check the dataset? ')
-        # base::setwd("../../")
-      })
-      waiter$hide()
-      show_slider('Blue')
-    }
-  })
-
   shiny::observeEvent(input$indep_mixed_btn, {
-
-
     shiny::removeModal()
     if (base::dir.exists(app_sys("app/Results/Mixed Analysis")))
       base::unlink(app_sys("app/Results/Mixed Analysis"), recursive = TRUE)
@@ -1400,72 +1337,6 @@ app_server <- function(input, output, session) {
     shiny::textInput('rv_blue_rand', value = res, label = 'Random equation')
   })
 
-  output$help_fix_outlier <- shiny::renderUI({
-    a = input$outlier_fix
-    f = ''
-    flag = T
-    for (s in a)
-    {
-      if (flag) {
-        f = s
-        flag = F
-      }else {
-        f = base::paste0(f, ' + ', s)
-      }
-    }
-    res = f
-    f = ''
-    a = input$outlier_fix_interact
-    if (base::length(a) %% 2 == 0 && base::length(a) != 0) {
-      for (i in base::seq(from = 1, to = base::length(a), by = 2))
-      {
-        s = base::paste0(a[i], ':', a[i + 1])
-
-        if (flag) {
-          f = s
-          flag = F
-        }else {
-          f = base::paste0(f, ' + ', s)
-        }
-      }
-      res = base::paste0(res, f)
-    }
-
-    shiny::textInput('rv_outlier_fix', value = res, label = 'Fixed equation')
-  })
-
-  output$help_rand_outlier <- shiny::renderUI({
-    a = input$outlier_rand
-    f = ''
-    flag = T
-    for (s in a)
-    {
-      if (flag) {
-        f = base::paste0('(1|', s, ')')
-        flag = F
-      }else {
-        f = base::paste0(f, ' + (1|', s, ')')
-      }
-    }
-    res = f
-    f = ''
-    a = input$outlier_rand_interact
-    if (base::length(a) %% 2 == 0 && base::length(a) != 0) {
-      for (i in base::seq(from = 1, to = base::length(a), by = 2))
-      {
-        s = base::paste0('(1|', a[i], ':', a[i + 1], ')')
-        if (flag) {
-          f = base::paste0('~', s)
-          flag = F
-        }else {
-          f = base::paste0(f, ' + ', s)
-        }
-      }
-      res = base::paste0(res, f)
-    }
-    shiny::textInput('rv_outlier_rand', value = res, label = 'Random equation')
-  })
-
   output$help_her <- shiny::renderUI({
     a = input$her_rand
     f = ''
@@ -1514,31 +1385,6 @@ app_server <- function(input, output, session) {
     }
   })
 
-  shiny::observeEvent(input$indep_blup_btn, {
-    if (input$rv_her == '')
-      shiny_showNotification(rv, 'Please select variable(s) first!')
-    else if (base::length(input$blup_cof) > 1)
-      shiny_showNotification(rv, 'You can only select one co-factor!')
-    else {
-      shiny::removeModal()
-      if (base::dir.exists(app_sys("app/Results/blup")))
-        base::unlink(app_sys("app/Results/blup"), recursive = TRUE)
-      waiter$show()
-      base::tryCatch({
-        BLUP(input, rv)
-      }, error = function(e) {
-        if (rv$Show_Errors)
-          shiny_showNotification(rv, e$message)
-        else
-          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
-        # base::setwd("../../")
-      })
-      waiter$hide()
-      show_slider('Blup')
-    }
-  })
-
-
   shiny::observeEvent(input$indep_cor_btn, {
     if ((input$cor_opt == 'Intra correlation' && base::length(input$indep_cor) == 0) |
       (input$cor_opt == 'Intra correlation' && base::length(input$dep_cor) != 2)) {
@@ -1559,31 +1405,6 @@ app_server <- function(input, output, session) {
       })
       waiter$hide()
       show_slider("Correlation")
-    }
-  })
-
-  shiny::observeEvent(input$density_modal_btn, {
-    if (!base::is.null(input$density_vars))
-    {
-      shiny::removeModal()
-      if (base::dir.exists(app_sys("app/Results/Density Plots")))
-        base::unlink(app_sys("app/Results/Density Plots"), recursive = TRUE)
-      waiter$show()
-      base::tryCatch({
-        DensityPlot(input, rv)
-      }, error = function(e) {
-        if (rv$Show_Errors)
-          shiny_showNotification(rv, e$message)
-        else
-          shiny_showNotification(rv, 'Incorrect arguments, please review the data!')
-        # base::setwd("../../")
-      })
-      waiter$hide()
-      show_slider("Density Plots")
-    }else {
-      session$sendCustomMessage(
-        type = 'testmessage',
-        message = 'At least one variable need to be selected')
     }
   })
 
@@ -1693,8 +1514,6 @@ app_server <- function(input, output, session) {
             if (input$active_opt_2 == 'outlier')
               if (base::length(base::unique(base::sort(rv$outliers_row)))) {
                 shiny::tagList(
-                  shiny::actionButton('show_pic_outlier', "See Plots"),
-
                   shiny::actionButton('ref_outlier', "Auto Refine Outliers"),
 
                   shiny::selectInput(
@@ -1725,10 +1544,7 @@ app_server <- function(input, output, session) {
       })
       waiter$hide()
     }
-  })
-
-  shiny::observeEvent(input$show_pic_outlier, {
-    show_slider("Outlier")
+    show_slider('Outlier')
   })
 
   shiny::observeEvent(input$interacted_name, {
@@ -1769,13 +1585,23 @@ app_server <- function(input, output, session) {
             break
           }
         }
+        if (!flag) {
+          shiny_showNotification(rv, 'Column/Project name can not include " \ | ? * : < > () and space')
+        }
+        if (base::length(base::colnames(rv$dataC)) != base::length(base::unique(base::colnames(rv$dataC)))) {
+          flag = F
+          shiny_showNotification(rv, 'Error! Repetitive column name found!')
+        }
+        for (i in base::colnames(rv$dataC)) {
+          if (i == 'ResidualValue') {
+            shiny_showNotification(rv, 'Warning! Name of the columns can not be [ResidualValue]!')
+            colnames(rv$dataC)[which(colnames(rv$dataC) == i)] = 'Residual_Value'
+          }
+        }
         if (flag) {
           shiny::removeModal()
           rv$data <- base::as.data.frame(rv$dataC)
           allinone_initialize(rv)
-
-        }else {
-          shiny_showNotification(rv, 'Column/Project name can not include " \ | ? * : < > () and space')
         }
         base::rm(flag)
       }
@@ -1784,23 +1610,23 @@ app_server <- function(input, output, session) {
     })
   })
 
-  output$summary <- renderUI({
-    if (!is.null(rv$data)) {
-      s = base::summary(rv$data)
-      write.csv(s, 'summary.csv', row.names = F)
-      s = read.csv('summary.csv',
-                   header = T
-      )
-      unlink('summary.csv')
-      colnames(s) = colnames(rv$data)
-      DT::renderDataTable(
-        s,
-        rownames = F,
-        options = base::list(
-          scrollX = TRUE,
-          scrollCollapse = TRUE,
-          selection = 'none',
-          dom = 'lti'
+  output$summary <- shiny::renderUI({
+    if (!rv$review_flag) {
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
+      s <- finalfit::ff_glimpse(rv$dependent_variables)
+      s = s$Continuous
+      shiny::tagList(
+        DT::renderDataTable(
+          s,
+          rownames = F,
+          options = base::list(
+            scrollX = TRUE,
+            scrollCollapse = TRUE,
+            selection = 'none',
+            dom = 'lti'
+          )
         )
       )
     }
@@ -1819,24 +1645,24 @@ app_server <- function(input, output, session) {
     }
   }
 
-  observeEvent(input$structure_change_type, {
+  shiny::observeEvent(input$structure_change_type, {
     if (input$str_column_type == 1)
-      rv$data[[input$str_column_name]] = as.character(rv$data[[input$str_column_name]])
+      rv$data[[input$str_column_name]] = base::as.character(rv$data[[input$str_column_name]])
     else if (input$str_column_type == 2)
-      rv$data[[input$str_column_name]] = as.numeric(rv$data[[input$str_column_name]])
+      rv$data[[input$str_column_name]] = base::as.numeric(rv$data[[input$str_column_name]])
     else if (input$str_column_type == 3)
-      rv$data[[input$str_column_name]] = as.factor(rv$data[[input$str_column_name]])
+      rv$data[[input$str_column_name]] = base::as.factor(rv$data[[input$str_column_name]])
   })
 
-  output$structure <- renderUI({
+  output$structure <- shiny::renderUI({
     if (!is.null(rv$data)) {
       shiny::tagList(
-        shiny::HTML(paste0('<br/>', c(' ', ' ', ' ', ' ', capture.output(str(rv$data)))))
+        shiny::HTML(base::paste0('<br/>', c(' ', ' ', ' ', ' ', utils::capture.output(utils::str(rv$data)))))
       )
     }
   })
 
-  output$o_structure_col_name <- renderUI({
+  output$o_structure_col_name <- shiny::renderUI({
     if (!is.null(rv$data))
       shiny::column(
         width = 5,
@@ -1848,7 +1674,7 @@ app_server <- function(input, output, session) {
       )
   })
 
-  output$o_structure_col_type <- renderUI({
+  output$o_structure_col_type <- shiny::renderUI({
     if (!is.null(rv$data))
       shiny::column(
         width = 5,
@@ -1866,20 +1692,13 @@ app_server <- function(input, output, session) {
 
   })
 
-  output$o_structure_col_btn <- renderUI({
+  output$o_structure_col_btn <- shiny::renderUI({
     if (!is.null(rv$data))
       shiny::column(
         width = 2,
         class = "structure_change_type_col",
         shiny::actionButton('structure_change_type', 'Apply')
       )
-  })
-
-  shiny::observeEvent(input$data_structure, {
-    shiny::showModal(shiny::modalDialog(
-      shiny::HTML((paste0(capture.output(str(rv$data)), '<br/><br/>'))),
-      easyClose = T, title = 'Structure of your data'
-    ))
   })
 
   shiny::observeEvent(input$interaction_btn_apply, {
@@ -1896,6 +1715,11 @@ app_server <- function(input, output, session) {
         break
       }
     }
+    if (interacted_name == 'ResidualValue')
+      interacted_name = 'Residual_Value'
+
+    if (interacted_name %in% colnames(rv$data))
+      ath_flag = F
 
     if (base::length(input$main_db_interaction_col) > 1 & ath_flag) {
       shiny::removeModal()
@@ -1939,7 +1763,11 @@ app_server <- function(input, output, session) {
       session$sendCustomMessage(
         type = 'testmessage',
         message = 'Please select at least two independent variables to interact!')
-    }
+    } else
+      shiny_showNotification(
+        rv,
+        'Repetitive column name!'
+      )
 
   })
 
@@ -1979,19 +1807,6 @@ app_server <- function(input, output, session) {
     }
   })
 
-  shiny::observeEvent(input$show_res_outlier, {
-    if (!base::is.null(rv$outliers_row)) {
-      outl_rows = base::unique(base::sort(rv$outliers_row))
-    }
-    else {
-      shiny::showModal(shiny::modalDialog(
-        title = "Results",
-        footer = shiny::modalButton("Return"),
-        shiny::h1("There is no outlier!"),
-        easyClose = FALSE))
-    }
-  })
-
   shiny::observeEvent(input$filter_outlier_reset, {
     rv$selected.col = NULL
     for (i in 1:base::length(rv$filter.k)) {
@@ -2005,7 +1820,6 @@ app_server <- function(input, output, session) {
       rv$filter.k[[i]]$search <- ''
     }
     rv$selected.col <- input$indep_outlier
-    row_num = input$outl_select_input
     val_filter = rv$data[input$outl_select_input, input$indep_outlier]
     col_num = base::which(base::colnames(rv$data) == input$indep_outlier)
     if (base::is.numeric(rv$data[, input$indep_outlier])) {
@@ -2020,8 +1834,6 @@ app_server <- function(input, output, session) {
   shiny::observeEvent(input$ref_outlier, {
     if (!base::is.null(rv$outliers_row)) {
       waiter$show()
-      o_col <- NULL
-      o_row <- NULL
       len = base::length(rv$outliers)
 
       for (i in rv$outliers_row) {
@@ -2052,16 +1864,9 @@ app_server <- function(input, output, session) {
       waiter$hide()
       show_slider("Refine")
     }
-    else {
-      shiny::showModal(shiny::modalDialog(
-        title = "Results",
-        footer = shiny::modalButton("Return"),
-        shiny::h1("There is no outlier!"),
-        easyClose = FALSE))
-    }
   })
 
-  observeEvent(input$active_opt_db, {
+  shiny::observeEvent(input$active_opt_db, {
     base::options(shiny.maxRequestSize = 50 * 1024^2)
     shiny::showModal(shiny::modalDialog(
       shiny::fileInput('file', 'Upload Dataset File :'),
@@ -2079,13 +1884,13 @@ app_server <- function(input, output, session) {
     ))
   })
 
-  observeEvent(input$active_opt_ind_var, {
+  shiny::observeEvent(input$active_opt_ind_var, {
     if (base::is.null(rv$data)) {
       session$sendCustomMessage(type = 'testmessage',
                                 message = "Please select the main detaset first !")
     } else {
       temp_indep = input$main_db_indep_val
-      if (rv$Show_Errors)if (base::is.null(temp_indep)) {
+      if (rv$Pre_Select_vars)if (base::is.null(temp_indep)) {
         temp_indep = base::c(
           'T',
           'Treatment',
@@ -2105,7 +1910,7 @@ app_server <- function(input, output, session) {
           'Plot')
       }
       temp_dep = input$main_db_dep_val
-      if (rv$Show_Errors)if (base::is.null(temp_dep)) {
+      if (rv$Pre_Select_vars)if (base::is.null(temp_dep)) {
         temp_dep = base::c(
           'Yield',
           'Oil',
@@ -2145,7 +1950,7 @@ app_server <- function(input, output, session) {
     }
   })
 
-  observeEvent(input$active_opt_interaction, {
+  shiny::observeEvent(input$active_opt_interaction, {
     if (base::is.null(rv$data)) {
 
       session$sendCustomMessage(type = 'testmessage',
@@ -2156,7 +1961,7 @@ app_server <- function(input, output, session) {
                                 message = "Please select variables !")
     }else {
       defult_name = base::paste0('Interacted_Column_', base::sample(1:99, 1))
-      # Check if this name already exists
+
       shiny::showModal(
         shiny::modalDialog(
           shiny::checkboxGroupInput(
@@ -2178,7 +1983,7 @@ app_server <- function(input, output, session) {
     }
   })
 
-  observeEvent(input$active_opt_subset, {
+  shiny::observeEvent(input$active_opt_subset, {
     if (base::is.null(rv$data)) {
 
       session$sendCustomMessage(type = 'testmessage',
@@ -2341,11 +2146,6 @@ app_server <- function(input, output, session) {
 
   })
 
-  output$save_as <- shiny::renderUI({
-    if (!base::is.null(rv$data))
-      shiny::actionButton("save_db", "Save as the database")
-  })
-
   output$table1 <- DT::renderDT({
     tryCatch({
       k = rv$selected.col
@@ -2373,7 +2173,6 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$OTL_apply_changes, {
-
     rv$outliers_row <-
       base::subset(
         rv$outliers_row,
@@ -2493,5 +2292,219 @@ app_server <- function(input, output, session) {
       )
     )
     rv$review_flag = FALSE
+  })
+
+  shiny::observeEvent(input$sum_mis_select, {
+    rv$dependent_variables <-
+      rv$data %>% dplyr::select(input$main_db_dep_val)
+
+    output$o_sum_mis_figure <- shiny::renderPlot(width = 500, height = 300, {
+      if (input$sum_mis_select == 'Missing values in each trait')
+        base::print(finalfit::missing_plot(rv$dependent_variables))
+
+      else if (input$sum_mis_select == 'Missing values percentage and pattern')
+        VIM::aggr(
+          rv$dependent_variables,
+          col = base::c('navyblue', 'yellow'),
+          numbers = TRUE,
+          sortVars = TRUE,
+          labels = base::names(rv$dependent_variables),
+          cex.axis = 0.7,
+          cex.numbers = 0.55,
+          gap = 3,
+          ylab = base::c("Missing data", "Pattern")
+        )
+    })
+  })
+
+  output$o_sum_missing <- shiny::renderUI({
+    if (!rv$review_flag) {
+      shiny::tagList(
+        shiny::selectInput(
+          inputId = 'sum_mis_select',
+          label = 'Figure',
+          choices = c('Missing values in each trait', 'Missing values percentage and pattern'),
+          selected = input$sum_mis_select
+        )
+        , shiny::plotOutput('o_sum_mis_figure')
+      )
+    }
+  })
+
+  shiny::observeEvent(ignoreInit = TRUE, c(
+    input$sum_box_select_i,
+    input$sum_box_select_j),
+  {
+    output$o_sum_box_figure <- shiny::renderPlot(width = 500, height = 300, {
+      i = input$sum_box_select_i
+      j = input$sum_box_select_j
+      levels_j = base::length(base::unique(rv$data[[j]]))
+      if (levels_j <= rv$Maximum_Level_For_Group_By) {
+        ggpubr::ggsummarystats(
+          rv$data,
+          j,
+          i,
+          ggfunc = ggpubr::ggboxplot,
+          add = "jitter",
+          color = j,
+          labeller = "label_value",
+          legend = "top",
+          ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
+        )
+      }
+    })
+  })
+
+  output$o_sum_boxplot <- shiny::renderUI({
+    if (!rv$review_flag) {
+
+      # include Independent variables TOO
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
+
+      # include Dependent variables TOO
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
+      shiny::tagList(
+        shiny::column(width = 6, shiny::selectInput(
+          inputId = 'sum_box_select_i',
+          label = 'Dependent vaiable',
+          choices = colnames(rv$dependent_variables),
+          selected = input$sum_box_select_i
+        )),
+        shiny::column(width = 6, shiny::selectInput(
+          inputId = 'sum_box_select_j',
+          label = 'Independent vaiable',
+          choices = base::colnames(rv$independent_variables),
+          selected = input$sum_box_select_j
+        )),
+        shiny::plotOutput('o_sum_box_figure')
+      )
+    }
+  })
+
+  shiny::observeEvent(ignoreInit = TRUE, c(
+    input$sum_density_select_i,
+    input$sum_density_select_j),
+  {
+    rv$dependent_variables <-
+      rv$data %>% dplyr::select(input$main_db_dep_val)
+
+    output$o_sum_density_figure <- shiny::renderPlot(width = 500, height = 300, {
+      SelectedTraits = rv$dependent_variables
+      i = input$sum_density_select_i
+      j = input$sum_density_select_j
+      levels_j = base::length(base::unique(rv$data[[j]]))
+      if(levels_j <= rv$Maximum_Level_For_Group_By)
+        if (base::is.numeric(SelectedTraits[, i])) {
+        ME <- base::as.factor(rv$data[, j])
+        ggplot2::ggplot(data = SelectedTraits, ggplot2::aes_string(x = i,
+                                                                   fill = ME)) +
+          ggplot2::geom_density(alpha = 0.1) +
+          ggplot2::labs(
+            x = i,
+            title = base::paste0(input$project_name, " -- Density plot -- ", j),
+            subtitle = i
+          ) +
+          ggplot2::guides(fill = ggplot2::guide_legend(j)) +
+          ggplot2::theme_classic()
+      }
+    })
+  })
+
+  output$o_sum_density <- shiny::renderUI({
+
+    if (!rv$review_flag) {
+      # include Independent variables TOO
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
+
+      # include Dependent variables TOO
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
+      shiny::tagList(
+        shiny::column(width = 6, shiny::selectInput(
+          inputId = 'sum_density_select_i',
+          label = 'Dependent vaiable',
+          choices = base::colnames(rv$dependent_variables),
+          selected = input$sum_density_select_i
+        )),
+        shiny::column(width = 6, shiny::selectInput(
+          inputId = 'sum_density_select_j',
+          label = 'Independent vaiable',
+          choices = base::colnames(rv$independent_variables),
+          selected = input$sum_density_select_j
+        )),
+        shiny::plotOutput('o_sum_density_figure')
+      )
+    }
+  })
+
+  shiny::observeEvent(ignoreInit = TRUE, c(
+    input$sum_violin_select_i,
+    input$sum_violin_select_j),
+  {
+    output$o_sum_violin_figure <- shiny::renderPlot(width = 500, height = 300, {
+      i = input$sum_violin_select_i
+      j = input$sum_violin_select_j
+      levels_j = base::length(base::unique(rv$data[[j]]))
+      if(levels_j <= rv$Maximum_Level_For_Group_By)
+        ggpubr::ggsummarystats(
+          rv$data, j, i,
+          ggfunc = ggpubr::ggviolin, add = "jitter", labeller = "label_value",
+          color = j,
+          legend = "top",
+          ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
+        )
+    })
+  })
+
+  output$o_sum_violin <- shiny::renderUI({
+    if (!rv$review_flag) {
+
+      # include Independent variables TOO
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
+
+      # include Dependent variables TOO
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
+      shiny::tagList(
+        shiny::column(width = 6, shiny::selectInput(
+          inputId = 'sum_violin_select_i',
+          label = 'Dependent vaiable',
+          choices = colnames(rv$dependent_variables),
+          selected = input$sum_violin_select_i
+        )),
+        shiny::column(width = 6, shiny::selectInput(
+          inputId = 'sum_violin_select_j',
+          label = 'Independent vaiable',
+          choices = base::colnames(rv$independent_variables),
+          selected = input$sum_violin_select_j
+        )),
+        shiny::plotOutput('o_sum_violin_figure')
+      )
+    }
+  })
+
+  output$o_sum_correlation <- shiny::renderUI({
+    if (!rv$review_flag) {
+
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
+      M <- stats::cor(stats::na.omit(rv$dependent_variables))
+      DT::renderDataTable(
+        M,
+        options = base::list(
+          scrollX = TRUE,
+          scrollCollapse = TRUE,
+          dom = 'ltip'
+        )
+      )
+    }
   })
 }

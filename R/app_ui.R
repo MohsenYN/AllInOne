@@ -1,3 +1,6 @@
+Results_subfolders <- c('Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
+                        'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
+
 #______________UI__________________
 interface <- shiny::fluidPage(
   shinydisconnect::disconnectMessage(
@@ -184,22 +187,47 @@ body <- shinydashboard::dashboardBody(
       interface
     ),
     shiny::tabPanel(
-      title = "Summary",
-      shiny::uiOutput("summary")
-    ),
-    shiny::tabPanel(
-      title = "Structure",
-      shiny::uiOutput("o_structure_col_name"),
-      shiny::uiOutput("o_structure_col_type"),
-      shiny::uiOutput("o_structure_col_btn"),
-      shiny::uiOutput("structure")
+      title = shiny::img(src = "www/PictureRM2.png", class = "title-image-tab"),
+      shiny::tabsetPanel(
+        type = "pills",
+        shiny::tabPanel(
+          title = "Structure",
+          shiny::uiOutput("o_structure_col_name"),
+          shiny::uiOutput("o_structure_col_type"),
+          shiny::uiOutput("o_structure_col_btn"),
+          shiny::uiOutput("structure")
+        ),
+        shiny::tabPanel(
+          title = "Summary",
+          shiny::uiOutput("summary")
+        ),
+        shiny::tabPanel(
+          title = "Missing",
+          shiny::uiOutput("o_sum_missing")
+        ),
+        shiny::tabPanel(
+          title = "BoxPlot",
+          shiny::uiOutput("o_sum_boxplot")
+        ),
+        shiny::tabPanel(
+          title = "Density",
+          shiny::uiOutput("o_sum_density")
+        ),
+        shiny::tabPanel(
+          title = "Violin",
+          shiny::uiOutput("o_sum_violin")
+        ),
+        shiny::tabPanel(
+          title = "Correlation",
+          shiny::uiOutput("o_sum_correlation")
+        )
+      )
     ),
     shiny::tabPanel(
       title = "Results",
       shiny::column(width = 4, shiny::selectInput(
         'res_blue_str', 'Results folder',
-        c('None', 'Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
-          'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
+        c('None', Results_subfolders)
       )),
       shiny::column(width = 8, shiny::uiOutput('o_res_blue_k')),
       shiny::uiOutput('o_results_btns'),

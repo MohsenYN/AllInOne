@@ -10,6 +10,14 @@ DensityPlot <- function(input, rv) {
 
   set_wd('Data Visualization')
 
+  # include Independent variables TOO
+  rv$independent_variables <-
+    rv$data %>% dplyr::select(input$main_db_indep_val)
+
+  # include Dependent variables TOO
+  rv$dependent_variables <-
+      rv$data %>% dplyr::select(input$main_db_dep_val)
+
   dat = rv$data
   VarPYSLK <- dplyr::select(rv$independent_variables, dplyr::all_of(input$boxplot_vars))
   SelectedTraits <- rv$dependent_variables
