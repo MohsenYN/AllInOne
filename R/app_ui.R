@@ -189,7 +189,33 @@ body <- shinydashboard::dashboardBody(
     ),
     shiny::tabPanel(
       title = "Summary",
-      shiny::uiOutput("summary")
+      shiny::tabsetPanel(
+        type = "pills",
+        shiny::tabPanel(
+          title = "Summary",
+          shiny::uiOutput("summary")
+        ),
+        shiny::tabPanel(
+          title = "Missing",
+          shiny::uiOutput("o_sum_missing")
+        ),
+        shiny::tabPanel(
+          title = "BoxPlot",
+          shiny::uiOutput("o_sum_boxplot")
+        ),
+        shiny::tabPanel(
+          title = "Density",
+          shiny::uiOutput("o_sum_density")
+        ),
+        shiny::tabPanel(
+          title = "Violin",
+          shiny::uiOutput("o_sum_violin")
+        ),
+        shiny::tabPanel(
+          title = "Correlation",
+          shiny::uiOutput("o_sum_correlation")
+        )
+      )
     ),
     shiny::tabPanel(
       title = "Structure",

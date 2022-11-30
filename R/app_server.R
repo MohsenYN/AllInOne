@@ -459,7 +459,7 @@ app_server <- function(input, output, session) {
     write.csv(l, 'My_Setting.csv', row.names = F)
   })
 
-  observeEvent(
+  shiny::observeEvent(
     ignoreInit = TRUE, c(
       input$dataC_delimiter,
       input$dataC_header), {
@@ -495,7 +495,7 @@ app_server <- function(input, output, session) {
     })
   })
 
-  observeEvent(input$sheet_name, {
+  shiny::observeEvent(input$sheet_name, {
     tryCatch({
       address = input$file$data
       postfix = base::substring(
@@ -964,6 +964,7 @@ app_server <- function(input, output, session) {
       }
     }
   })
+
   shiny::observeEvent(input$her_btn, {
     shiny::removeModal()
     dep_cols = input$main_db_dep_val
@@ -1825,7 +1826,7 @@ app_server <- function(input, output, session) {
     }
   })
 
-  observeEvent(input$active_opt_db, {
+  shiny::observeEvent(input$active_opt_db, {
     base::options(shiny.maxRequestSize = 50 * 1024^2)
     shiny::showModal(shiny::modalDialog(
       shiny::fileInput('file', 'Upload Dataset File :'),
@@ -1843,7 +1844,7 @@ app_server <- function(input, output, session) {
     ))
   })
 
-  observeEvent(input$active_opt_ind_var, {
+  shiny::observeEvent(input$active_opt_ind_var, {
     if (base::is.null(rv$data)) {
       session$sendCustomMessage(type = 'testmessage',
                                 message = "Please select the main detaset first !")
@@ -1909,7 +1910,7 @@ app_server <- function(input, output, session) {
     }
   })
 
-  observeEvent(input$active_opt_interaction, {
+  shiny::observeEvent(input$active_opt_interaction, {
     if (base::is.null(rv$data)) {
 
       session$sendCustomMessage(type = 'testmessage',
@@ -1942,7 +1943,7 @@ app_server <- function(input, output, session) {
     }
   })
 
-  observeEvent(input$active_opt_subset, {
+  shiny::observeEvent(input$active_opt_subset, {
     if (base::is.null(rv$data)) {
 
       session$sendCustomMessage(type = 'testmessage',
@@ -2251,5 +2252,170 @@ app_server <- function(input, output, session) {
       )
     )
     rv$review_flag = FALSE
+  })
+
+  shiny::observeEvent(input$sum_mis_select, {
+    output$o_sum_mis_figure <- shiny::renderPlot(width = 500, height = 300, {
+      if(input$sum_mis_select == 'Missing values in each trait')
+        base::print(finalfit::missing_plot(rv$dependent_variables))
+
+      else if(input$sum_mis_select == 'Missing values percentage and pattern')
+        VIM::aggr(
+          rv$dependent_variables,
+          col = base::c('navyblue', 'yellow'),
+          numbers = TRUE,
+          sortVars = TRUE,
+          labels = base::names(rv$dependent_variables),
+          cex.axis = 0.7,
+          cex.numbers = 0.55,
+          gap = 3,
+          ylab = base::c("Missing data", "Pattern")
+        )
+    })
+  })
+
+  output$o_sum_missing <- renderUI({
+    if(!rv$review_flag){
+      shiny::tagList(
+        selectInput(
+          inputId = 'sum_mis_select',
+          label = 'Figures',
+          choices = c('Missing values in each trait', 'Missing values percentage and pattern')
+        )
+        , shiny::plotOutput('o_sum_mis_figure')
+      )
+    }
+  })
+
+  shiny::observeEvent(ignoreInit = TRUE, c(
+      input$sum_box_select_i,
+      input$sum_box_select_j),
+  {
+    output$o_sum_box_figure <- shiny::renderPlot(width = 500, height = 300, {
+      levels_j = base::length(base::unique(rv$data[[input$sum_box_select_j]]))
+      i = input$sum_box_select_i
+      j = input$sum_box_select_j
+      ggpubr::ggsummarystats(
+        rv$data,
+        j,
+        i,
+        ggfunc = ggpubr::ggboxplot,
+        add = "jitter",
+        color = j,
+        labeller = "label_value",
+        legend = "top",
+        ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
+      )
+    })
+  })
+
+  output$o_sum_boxplot <- renderUI({
+    if(!rv$review_flag){
+      shiny::tagList(
+        column(width = 6,selectInput(
+          inputId = 'sum_box_select_i',
+          label = 'Figures',
+          choices = colnames(rv$dependent_variables)
+        )),
+        column(width = 6,selectInput(
+          inputId = 'sum_box_select_j',
+          label = 'Figures',
+          choices = colnames(rv$independent_variables)
+        )),
+        shiny::plotOutput('o_sum_box_figure')
+      )
+    }
+  })
+
+  shiny::observeEvent(ignoreInit = TRUE, c(
+      input$sum_density_select_i,
+      input$sum_density_select_j),
+  {
+    output$o_sum_density_figure <- shiny::renderPlot(width = 500, height = 300, {
+      SelectedTraits = rv$dependent_variables
+      i = input$sum_density_select_i
+      j = input$sum_density_select_j
+      if (base::is.numeric(SelectedTraits[, i])) {
+        ME <- base::as.factor(rv$data[, j])
+        ggplot2::ggplot(data = SelectedTraits, ggplot2::aes_string(x = i,
+                                                                             fill = ME)) +
+          ggplot2::geom_density(alpha = 0.1) +
+          ggplot2::labs(
+            x = i,
+            title = base::paste0(input$project_name, " -- Density plot -- ", j),
+            subtitle = i
+          ) +
+          ggplot2::guides(fill = ggplot2::guide_legend(j)) +
+          ggplot2::theme_classic()
+      }
+    })
+  })
+
+  output$o_sum_density <- renderUI({
+    if(!rv$review_flag){
+      shiny::tagList(
+        column(width = 6,selectInput(
+          inputId = 'sum_density_select_i',
+          label = 'Figures',
+          choices = colnames(rv$dependent_variables)
+        )),
+        column(width = 6,selectInput(
+          inputId = 'sum_density_select_j',
+          label = 'Figures',
+          choices = colnames(rv$independent_variables)
+        )),
+        shiny::plotOutput('o_sum_density_figure')
+      )
+    }
+  })
+
+  shiny::observeEvent(ignoreInit = TRUE, c(
+      input$sum_violin_select_i,
+      input$sum_violin_select_j),
+  {
+    output$o_sum_violin_figure <- shiny::renderPlot(width = 500, height = 300, {
+      i = input$sum_violin_select_i
+      j = input$sum_violin_select_j
+      levels_j = base::length(base::unique(rv$data[[j]]))
+      ggpubr::ggsummarystats(
+        rv$data, j, i,
+        ggfunc = ggpubr::ggviolin, add = "jitter", labeller = "label_value",
+        color = j,
+        legend = "top",
+        ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
+      )
+    })
+  })
+
+  output$o_sum_violin <- renderUI({
+    if(!rv$review_flag){
+      shiny::tagList(
+        column(width = 6,selectInput(
+          inputId = 'sum_violin_select_i',
+          label = 'Figures',
+          choices = colnames(rv$dependent_variables)
+        )),
+        column(width = 6,selectInput(
+          inputId = 'sum_violin_select_j',
+          label = 'Figures',
+          choices = colnames(rv$independent_variables)
+        )),
+        shiny::plotOutput('o_sum_violin_figure')
+      )
+    }
+  })
+
+  output$o_sum_correlation <- renderUI({
+    if (!rv$review_flag) {
+      M <- stats::cor(rv$dependent_variables)
+      DT::renderDataTable(
+        M,
+        options = base::list(
+          scrollX = TRUE,
+          scrollCollapse = TRUE,
+          dom = 'ltip'
+        )
+      )
+    }
   })
 }
