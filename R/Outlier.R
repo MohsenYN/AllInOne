@@ -14,6 +14,14 @@ PoSiBlEoUtLieR <- function(input, rv) {
 
   rv$outliers_row = rv$outliers = NULL
 
+  # include Independent variables TOO
+  rv$independent_variables <-
+    rv$data %>% dplyr::select(input$main_db_indep_val)
+
+  # include Dependent variables TOO
+  rv$dependent_variables <-
+    rv$data %>% dplyr::select(input$main_db_dep_val)
+
   if (input$outlier_method == 'A') {
 
     COLN = base::colnames(rv$dependent_variables)
@@ -73,20 +81,25 @@ PoSiBlEoUtLieR <- function(input, rv) {
               # ggplot2::guides(fill = ggplot2::guide_legend(j)) + ggplot2::scale_x_discrete(name = j) +
               ggplot2::scale_y_continuous(name = i) +
               ggplot2::scale_x_discrete(name = j)
-          ggplot2::ggsave(
-            A[[i]],
-            file = base::paste0("Detecting outlier in each ", j, " for ", i, ".png"),
-            width = 32,
-            height = 15,
-            units = "cm"
-          )
-          ggplot2::ggsave(
-            A[[i]],
-            file = base::paste0("Detecting outlier in each ", j, " for ", i, ".pdf"),
-            width = 32,
-            height = 15,
-            units = "cm"
-          )
+          levels_j = base::length(base::unique(rv$data[[j]]))
+          if (levels_j <= rv$Maximum_Level_For_Group_By) {
+            ggplot2::ggsave(
+              A[[i]],
+              file = base::paste0("Detecting outlier in each ", j, " for ", i, ".png"),
+              width = 32,
+              height = 15,
+              units = "cm"
+            )
+            ggplot2::ggsave(
+              A[[i]],
+              file = base::paste0("Detecting outlier in each ", j, " for ", i, ".pdf"),
+              width = 32,
+              height = 15,
+              units = "cm"
+            )
+          }else
+            shiny_showNotification(rv ,base::paste0('As the ', j, ' column has ',
+                                             levels_j, ' Levels we ignore it for grouped by plots'))
         }
       }
     }
