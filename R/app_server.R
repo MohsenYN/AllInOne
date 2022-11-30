@@ -2339,20 +2339,22 @@ app_server <- function(input, output, session) {
     input$sum_box_select_j),
   {
     output$o_sum_box_figure <- shiny::renderPlot(width = 500, height = 300, {
-      levels_j = base::length(base::unique(rv$data[[input$sum_box_select_j]]))
       i = input$sum_box_select_i
       j = input$sum_box_select_j
-      ggpubr::ggsummarystats(
-        rv$data,
-        j,
-        i,
-        ggfunc = ggpubr::ggboxplot,
-        add = "jitter",
-        color = j,
-        labeller = "label_value",
-        legend = "top",
-        ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
-      )
+      levels_j = base::length(base::unique(rv$data[[j]]))
+      if (levels_j <= rv$Maximum_Level_For_Group_By) {
+        ggpubr::ggsummarystats(
+          rv$data,
+          j,
+          i,
+          ggfunc = ggpubr::ggboxplot,
+          add = "jitter",
+          color = j,
+          labeller = "label_value",
+          legend = "top",
+          ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
+        )
+      }
     })
   })
 
@@ -2396,7 +2398,9 @@ app_server <- function(input, output, session) {
       SelectedTraits = rv$dependent_variables
       i = input$sum_density_select_i
       j = input$sum_density_select_j
-      if (base::is.numeric(SelectedTraits[, i])) {
+      levels_j = base::length(base::unique(rv$data[[j]]))
+      if(levels_j <= rv$Maximum_Level_For_Group_By)
+        if (base::is.numeric(SelectedTraits[, i])) {
         ME <- base::as.factor(rv$data[, j])
         ggplot2::ggplot(data = SelectedTraits, ggplot2::aes_string(x = i,
                                                                    fill = ME)) +
@@ -2449,13 +2453,14 @@ app_server <- function(input, output, session) {
       i = input$sum_violin_select_i
       j = input$sum_violin_select_j
       levels_j = base::length(base::unique(rv$data[[j]]))
-      ggpubr::ggsummarystats(
-        rv$data, j, i,
-        ggfunc = ggpubr::ggviolin, add = "jitter", labeller = "label_value",
-        color = j,
-        legend = "top",
-        ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
-      )
+      if(levels_j <= rv$Maximum_Level_For_Group_By)
+        ggpubr::ggsummarystats(
+          rv$data, j, i,
+          ggfunc = ggpubr::ggviolin, add = "jitter", labeller = "label_value",
+          color = j,
+          legend = "top",
+          ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
+        )
     })
   })
 
