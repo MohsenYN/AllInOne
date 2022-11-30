@@ -187,7 +187,7 @@ body <- shinydashboard::dashboardBody(
       interface
     ),
     shiny::tabPanel(
-      title = "AllInOne Glance",
+      title = shiny::img(src = "www/PictureRM2.png", class = "title-image-tab"),
       shiny::tabsetPanel(
         type = "pills",
         shiny::tabPanel(
