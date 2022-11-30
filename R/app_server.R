@@ -1614,22 +1614,22 @@ app_server <- function(input, output, session) {
   })
 
   output$summary <- shiny::renderUI({
-    if (!is.null(rv$data)) {
-      s = base::summary(rv$data)
-      write.csv(s, 'summary.csv', row.names = F)
-      s = read.csv('summary.csv',
-                   header = T
-      )
-      unlink('summary.csv')
-      colnames(s) = colnames(rv$data)
-      DT::renderDataTable(
-        s,
-        rownames = F,
-        options = base::list(
-          scrollX = TRUE,
-          scrollCollapse = TRUE,
-          selection = 'none',
-          dom = 'lti'
+    if (!rv$review_flag) {
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
+      s <- finalfit::ff_glimpse(rv$dependent_variables)
+      s = s$Continuous
+      shiny::tagList(
+        DT::renderDataTable(
+          s,
+          rownames = F,
+          options = base::list(
+            scrollX = TRUE,
+            scrollCollapse = TRUE,
+            selection = 'none',
+            dom = 'lti'
+          )
         )
       )
     }
@@ -2298,12 +2298,6 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$sum_mis_select, {
-
-    # include Independent variables TOO
-    rv$independent_variables <-
-      rv$data %>% dplyr::select(input$main_db_indep_val)
-
-    # include Dependent variables TOO
     rv$dependent_variables <-
       rv$data %>% dplyr::select(input$main_db_dep_val)
 
@@ -2395,12 +2389,6 @@ app_server <- function(input, output, session) {
     input$sum_density_select_i,
     input$sum_density_select_j),
   {
-
-    # include Independent variables TOO
-    rv$independent_variables <-
-      rv$data %>% dplyr::select(input$main_db_indep_val)
-
-    # include Dependent variables TOO
     rv$dependent_variables <-
       rv$data %>% dplyr::select(input$main_db_dep_val)
 
@@ -2503,11 +2491,6 @@ app_server <- function(input, output, session) {
   output$o_sum_correlation <- shiny::renderUI({
     if (!rv$review_flag) {
 
-      # include Independent variables TOO
-      rv$independent_variables <-
-        rv$data %>% dplyr::select(input$main_db_indep_val)
-
-      # include Dependent variables TOO
       rv$dependent_variables <-
         rv$data %>% dplyr::select(input$main_db_dep_val)
 
