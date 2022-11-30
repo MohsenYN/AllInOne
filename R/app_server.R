@@ -777,7 +777,27 @@ app_server <- function(input, output, session) {
         })
 
         output$cooksdistance_ui <- shiny::renderUI({
-          if (input$outlier_method == 'B')
+          if (input$outlier_method == 'B') {
+            indep_cols = input$main_db_indep_val
+            for (i in indep_cols) {
+              if (base::length(base::unique(rv$data[[i]])) < 2) {
+                indep_cols = base::subset(indep_cols, indep_cols != i)
+                shiny_showNotification(rv,
+                                       base::paste0('The variable {', i,
+                                                    '} is removed from independent variables list as it has less then two levels!'
+                                       )
+                )
+              } else if (base::length(base::unique(rv$data[[i]])) > rv$Maximum_Level_For_Group_By) {
+                indep_cols = base::subset(indep_cols, indep_cols != i)
+                shiny_showNotification(rv,
+                                       base::paste0(
+                                         'The variable {', i,
+                                         '} is removed from independent variables list as it has more than ',
+                                         rv$Maximum_Level_For_Group_By, ' levels!'
+                                       )
+                )
+              }
+            }
             shiny::tagList(
               shiny::selectInput('outlier_resp',
                                  'Dependant/response variable',
@@ -785,8 +805,9 @@ app_server <- function(input, output, session) {
               ),
               shiny::checkboxGroupInput('outlier_rand',
                                         'Select the independent variable(s)',
-                                        choices = input$main_db_indep_val)
+                                        choices = indep_cols)
             )
+          }
         })
 
         shiny::showModal(shiny::modalDialog(
