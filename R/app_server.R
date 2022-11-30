@@ -1687,6 +1687,8 @@ app_server <- function(input, output, session) {
         break
       }
     }
+    if(interacted_name == 'ResidualValue')
+      interacted_name = 'Residual_Value'
 
     if(interacted_name %in% colnames(rv$data))
       ath_flag = F
