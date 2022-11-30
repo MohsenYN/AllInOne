@@ -1147,24 +1147,30 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$indep_spat_btn, {
-    shiny::removeModal()
-    if (base::dir.exists(app_sys("app/Results/Spatial Analysis")))
-      base::unlink(app_sys("app/Results/Spatial Analysis"), recursive = TRUE)
-    waiter$show()
+    if (input$rv_spat_fix == '' | input$rv_spat_rand == '') {
+      shiny_showNotification(rv, 'Fix or Random part can not be empty!')
+    }else {
 
-    base::tryCatch({
-      ExSPATS(input, rv)
-    }, error = function(e) {
+
+      shiny::removeModal()
+      if (base::dir.exists(app_sys("app/Results/Spatial Analysis")))
+        base::unlink(app_sys("app/Results/Spatial Analysis"), recursive = TRUE)
+      waiter$show()
+      i
+      base::tryCatch({
+        ExSPATS(input, rv)
+      }, error = function(e) {
+        waiter$hide()
+        if (rv$Show_Errors)
+          shiny_showNotification(rv, e$message)
+        else
+          shiny_showNotification(rv, 'Something is wrong! Would you like to check everything again? ')
+        # base::setwd("../../")
+      })
+
       waiter$hide()
-      if (rv$Show_Errors)
-        shiny_showNotification(rv, e$message)
-      else
-        shiny_showNotification(rv, 'Something is wrong! Would you like to check everything again? ')
-      # base::setwd("../../")
-    })
-
-    waiter$hide()
-    show_slider('Spatial Analysis')
+      show_slider('Spatial Analysis')
+    }
   })
 
   shiny::observeEvent(input$spat_show, {
