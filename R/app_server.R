@@ -1547,6 +1547,7 @@ app_server <- function(input, output, session) {
       })
       waiter$hide()
     }
+    show_slider('Outlier')
   })
 
   shiny::observeEvent(input$interacted_name, {
@@ -2332,7 +2333,7 @@ app_server <- function(input, output, session) {
           inputId = 'sum_mis_select',
           label = 'Figure',
           choices = c('Missing values in each trait', 'Missing values percentage and pattern'),
-          value = input$sum_mis_select
+          selected = input$sum_mis_select
         )
         , shiny::plotOutput('o_sum_mis_figure')
       )
@@ -2377,13 +2378,13 @@ app_server <- function(input, output, session) {
           inputId = 'sum_box_select_i',
           label = 'Dependent vaiable',
           choices = colnames(rv$dependent_variables),
-          value = input$sum_box_select_i
+          selected = input$sum_box_select_i
         )),
         shiny::column(width = 6,shiny::selectInput(
           inputId = 'sum_box_select_j',
           label = 'Independent vaiable',
           choices = base::colnames(rv$independent_variables),
-          value = input$sum_box_select_j
+          selected = input$sum_box_select_j
         )),
         shiny::plotOutput('o_sum_box_figure')
       )
@@ -2439,13 +2440,13 @@ app_server <- function(input, output, session) {
           inputId = 'sum_density_select_i',
           label = 'Dependent vaiable',
           choices = base::colnames(rv$dependent_variables),
-          value = input$sum_density_select_i
+          selected = input$sum_density_select_i
         )),
         shiny::column(width = 6,shiny::selectInput(
           inputId = 'sum_density_select_j',
           label = 'Independent vaiable',
           choices = base::colnames(rv$independent_variables),
-          value = input$sum_density_select_j
+          selected = input$sum_density_select_j
         )),
         shiny::plotOutput('o_sum_density_figure')
       )
@@ -2486,13 +2487,13 @@ app_server <- function(input, output, session) {
           inputId = 'sum_violin_select_i',
           label = 'Dependent vaiable',
           choices = colnames(rv$dependent_variables),
-          value = input$sum_violin_select_i
+          selected = input$sum_violin_select_i
         )),
         shiny::column(width = 6,shiny::selectInput(
           inputId = 'sum_violin_select_j',
           label = 'Independent vaiable',
           choices = base::colnames(rv$independent_variables),
-          value = input$sum_violin_select_j
+          selected = input$sum_violin_select_j
         )),
         shiny::plotOutput('o_sum_violin_figure')
       )
