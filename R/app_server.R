@@ -819,6 +819,15 @@ app_server <- function(input, output, session) {
         }
 
         str = NULL
+
+        # include Independent variables TOO
+        rv$independent_variables <-
+          rv$data %>% dplyr::select(input$main_db_indep_val)
+
+        # include Dependent variables TOO
+        rv$dependent_variables <-
+            rv$data %>% dplyr::select(input$main_db_dep_val)
+
         for (n in base::colnames(rv$dependent_variables)) {
           if (base::is.character(rv$data[[n]]))
             if (base::is.null(str))
@@ -2267,6 +2276,15 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$sum_mis_select, {
+
+  # include Independent variables TOO
+  rv$independent_variables <-
+    rv$data %>% dplyr::select(input$main_db_indep_val)
+
+  # include Dependent variables TOO
+  rv$dependent_variables <-
+      rv$data %>% dplyr::select(input$main_db_dep_val)
+
     output$o_sum_mis_figure <- shiny::renderPlot(width = 500, height = 300, {
       if(input$sum_mis_select == 'Missing values in each trait')
         base::print(finalfit::missing_plot(rv$dependent_variables))
@@ -2286,10 +2304,10 @@ app_server <- function(input, output, session) {
     })
   })
 
-  output$o_sum_missing <- renderUI({
+  output$o_sum_missing <- shiny::renderUI({
     if(!rv$review_flag){
       shiny::tagList(
-        selectInput(
+        shiny::selectInput(
           inputId = 'sum_mis_select',
           label = 'Figure',
           choices = c('Missing values in each trait', 'Missing values percentage and pattern')
@@ -2321,18 +2339,27 @@ app_server <- function(input, output, session) {
     })
   })
 
-  output$o_sum_boxplot <- renderUI({
-    if(!rv$review_flag){
+  output$o_sum_boxplot <- shiny::renderUI({
+    if (!rv$review_flag) {
+
+      # include Independent variables TOO
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
+
+      # include Dependent variables TOO
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
       shiny::tagList(
-        column(width = 6,selectInput(
+        shiny::column(width = 6,shiny::selectInput(
           inputId = 'sum_box_select_i',
           label = 'Dependent vaiable',
           choices = colnames(rv$dependent_variables)
         )),
-        column(width = 6,selectInput(
+        shiny::column(width = 6,shiny::selectInput(
           inputId = 'sum_box_select_j',
           label = 'Independent vaiable',
-          choices = colnames(rv$independent_variables)
+          choices = base::colnames(rv$independent_variables)
         )),
         shiny::plotOutput('o_sum_box_figure')
       )
@@ -2343,6 +2370,15 @@ app_server <- function(input, output, session) {
       input$sum_density_select_i,
       input$sum_density_select_j),
   {
+
+    # include Independent variables TOO
+    rv$independent_variables <-
+      rv$data %>% dplyr::select(input$main_db_indep_val)
+
+    # include Dependent variables TOO
+    rv$dependent_variables <-
+      rv$data %>% dplyr::select(input$main_db_dep_val)
+
     output$o_sum_density_figure <- shiny::renderPlot(width = 500, height = 300, {
       SelectedTraits = rv$dependent_variables
       i = input$sum_density_select_i
@@ -2363,18 +2399,27 @@ app_server <- function(input, output, session) {
     })
   })
 
-  output$o_sum_density <- renderUI({
-    if(!rv$review_flag){
+  output$o_sum_density <- shiny::renderUI({
+
+    if (!rv$review_flag) {
+      # include Independent variables TOO
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
+
+      # include Dependent variables TOO
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
       shiny::tagList(
-        column(width = 6,selectInput(
+        shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_density_select_i',
           label = 'Dependent vaiable',
-          choices = colnames(rv$dependent_variables)
+          choices = base::colnames(rv$dependent_variables)
         )),
-        column(width = 6,selectInput(
+        shiny::column(width = 6,shiny::selectInput(
           inputId = 'sum_density_select_j',
           label = 'Independent vaiable',
-          choices = colnames(rv$independent_variables)
+          choices = base::colnames(rv$independent_variables)
         )),
         shiny::plotOutput('o_sum_density_figure')
       )
@@ -2399,27 +2444,45 @@ app_server <- function(input, output, session) {
     })
   })
 
-  output$o_sum_violin <- renderUI({
-    if(!rv$review_flag){
+  output$o_sum_violin <- shiny::renderUI({
+    if (!rv$review_flag) {
+
+      # include Independent variables TOO
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
+
+      # include Dependent variables TOO
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
       shiny::tagList(
-        column(width = 6,selectInput(
+        shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_violin_select_i',
           label = 'Dependent vaiable',
           choices = colnames(rv$dependent_variables)
         )),
-        column(width = 6,selectInput(
+        shiny::column(width = 6,shiny::selectInput(
           inputId = 'sum_violin_select_j',
           label = 'Independent vaiable',
-          choices = colnames(rv$independent_variables)
+          choices = base::colnames(rv$independent_variables)
         )),
         shiny::plotOutput('o_sum_violin_figure')
       )
     }
   })
 
-  output$o_sum_correlation <- renderUI({
+  output$o_sum_correlation <- shiny::renderUI({
     if (!rv$review_flag) {
-      M <- stats::cor(rv$dependent_variables)
+
+      # include Independent variables TOO
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
+
+      # include Dependent variables TOO
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
+      M <- stats::cor(stats::na.omit(rv$dependent_variables))
       DT::renderDataTable(
         M,
         options = base::list(

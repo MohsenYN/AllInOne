@@ -12,6 +12,15 @@ CheckMissing <- function(input, rv) {
   if (!require(naniar))
     utils::install.packages("naniar")
 
+
+  # include Independent variables TOO
+  rv$independent_variables <-
+    rv$data %>% dplyr::select(input$main_db_indep_val)
+
+  # include Dependent variables TOO
+  rv$dependent_variables <-
+      rv$data %>% dplyr::select(input$main_db_dep_val)
+
   set_wd('Missing Values')
 
   func_mplot <- function()

@@ -188,9 +188,16 @@ body <- shinydashboard::dashboardBody(
       interface
     ),
     shiny::tabPanel(
-      title = "Summary",
+      title = "AllInOne Glance",
       shiny::tabsetPanel(
         type = "pills",
+        shiny::tabPanel(
+          title = "Structure",
+          shiny::uiOutput("o_structure_col_name"),
+          shiny::uiOutput("o_structure_col_type"),
+          shiny::uiOutput("o_structure_col_btn"),
+          shiny::uiOutput("structure")
+        ),
         shiny::tabPanel(
           title = "Summary",
           shiny::uiOutput("summary")
@@ -216,13 +223,6 @@ body <- shinydashboard::dashboardBody(
           shiny::uiOutput("o_sum_correlation")
         )
       )
-    ),
-    shiny::tabPanel(
-      title = "Structure",
-      shiny::uiOutput("o_structure_col_name"),
-      shiny::uiOutput("o_structure_col_type"),
-      shiny::uiOutput("o_structure_col_btn"),
-      shiny::uiOutput("structure")
     ),
     shiny::tabPanel(
       title = "Results",

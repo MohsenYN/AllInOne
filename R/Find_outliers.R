@@ -11,6 +11,14 @@ find_outliers <- function(rv, input) {
   db = rv$data
   outliers_pos = NULL
 
+  # include Independent variables TOO
+  rv$independent_variables <-
+    rv$data %>% dplyr::select(input$main_db_indep_val)
+
+  # include Dependent variables TOO
+  rv$dependent_variables <-
+      rv$data %>% dplyr::select(input$main_db_dep_val)
+
   COLN = base::colnames(rv$dependent_variables)
   COL_INDEP <- input$indep_outlier_2
   cloned <- data.table::data.table(db)

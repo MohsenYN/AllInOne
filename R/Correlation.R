@@ -14,6 +14,15 @@ CoReLaTiOnSS <- function(input, rv) {
     utils::install.packages("RColorBrewer")
   set_wd('Correlation')
 
+
+  # include Independent variables TOO
+  rv$independent_variables <-
+    rv$data %>% dplyr::select(input$main_db_indep_val)
+
+  # include Dependent variables TOO
+  rv$dependent_variables <-
+      rv$data %>% dplyr::select(input$main_db_dep_val)
+
   dat <- stats::na.omit(rv$data)
 
   SelectedTraits <- stats::na.omit(rv$dependent_variables)
