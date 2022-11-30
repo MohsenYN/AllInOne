@@ -1557,13 +1557,23 @@ app_server <- function(input, output, session) {
             break
           }
         }
+        if(!flag){
+          shiny_showNotification(rv, 'Column/Project name can not include " \ | ? * : < > () and space')
+        }
+        if(base::length(base::colnames(rv$dataC)) != base::length(base::unique(base::colnames(rv$dataC)))){
+          flag = F
+          shiny_showNotification(rv, 'Error! Repetitive column name found!')
+        }
+        for (i in base::colnames(rv$dataC)) {
+          if (i == 'ResidualValue') {
+            shiny_showNotification(rv, 'Warning! Name of the columns can not be [ResidualValue]!')
+            colnames(rv$dataC)[which(colnames(rv$dataC) == i)] = 'Residual_Value'
+          }
+        }
         if (flag) {
           shiny::removeModal()
           rv$data <- base::as.data.frame(rv$dataC)
           allinone_initialize(rv)
-
-        }else {
-          shiny_showNotification(rv, 'Column/Project name can not include " \ | ? * : < > () and space')
         }
         base::rm(flag)
       }
