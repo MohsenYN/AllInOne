@@ -2279,7 +2279,7 @@ app_server <- function(input, output, session) {
       shiny::tagList(
         selectInput(
           inputId = 'sum_mis_select',
-          label = 'Figures',
+          label = 'Figure',
           choices = c('Missing values in each trait', 'Missing values percentage and pattern')
         )
         , shiny::plotOutput('o_sum_mis_figure')
@@ -2314,12 +2314,12 @@ app_server <- function(input, output, session) {
       shiny::tagList(
         column(width = 6,selectInput(
           inputId = 'sum_box_select_i',
-          label = 'Figures',
+          label = 'Dependent vaiable',
           choices = colnames(rv$dependent_variables)
         )),
         column(width = 6,selectInput(
           inputId = 'sum_box_select_j',
-          label = 'Figures',
+          label = 'Independent vaiable',
           choices = colnames(rv$independent_variables)
         )),
         shiny::plotOutput('o_sum_box_figure')
@@ -2356,12 +2356,12 @@ app_server <- function(input, output, session) {
       shiny::tagList(
         column(width = 6,selectInput(
           inputId = 'sum_density_select_i',
-          label = 'Figures',
+          label = 'Dependent vaiable',
           choices = colnames(rv$dependent_variables)
         )),
         column(width = 6,selectInput(
           inputId = 'sum_density_select_j',
-          label = 'Figures',
+          label = 'Independent vaiable',
           choices = colnames(rv$independent_variables)
         )),
         shiny::plotOutput('o_sum_density_figure')
@@ -2392,12 +2392,12 @@ app_server <- function(input, output, session) {
       shiny::tagList(
         column(width = 6,selectInput(
           inputId = 'sum_violin_select_i',
-          label = 'Figures',
+          label = 'Dependent vaiable',
           choices = colnames(rv$dependent_variables)
         )),
         column(width = 6,selectInput(
           inputId = 'sum_violin_select_j',
-          label = 'Figures',
+          label = 'Independent vaiable',
           choices = colnames(rv$independent_variables)
         )),
         shiny::plotOutput('o_sum_violin_figure')
