@@ -28,11 +28,11 @@ app_server <- function(input, output, session) {
     rv$review_flag = TRUE
     if (!base::dir.exists(app_sys('app/Results')))
       base::dir.create(base::paste0(app_sys('app'), '/Results'))
-    else{
+    else {
       res = app_sys('app/Results/')
-      for (i in Results_subfolders){
-        if(base::dir.exists(base::paste0(res,'/',i))){
-          unlink(base::paste0(res,'/',i), recursive = T)
+      for (i in Results_subfolders) {
+        if (base::dir.exists(base::paste0(res, '/', i))) {
+          unlink(base::paste0(res, '/', i), recursive = T)
         }
       }
     }
@@ -45,7 +45,7 @@ app_server <- function(input, output, session) {
     res = app_sys('app/Results/')
     for (i in Results_subfolders) {
       if (base::dir.exists(base::paste0(res, '/', i))) {
-        unlink(base::paste0(res,'/',i), recursive = T)
+        unlink(base::paste0(res, '/', i), recursive = T)
       }
     }
   }
@@ -63,7 +63,7 @@ app_server <- function(input, output, session) {
     rv$Ignore_Reserved_Letters = input$Ign_Res_Wrd
   })
 
-  output$o_res_blue_k <-  shiny::renderUI({
+  output$o_res_blue_k <- shiny::renderUI({
     if (!is.null(input$res_blue_str)) {
       str = input$res_blue_str
       if (base::dir.exists(app_sys(paste0("app/Results/"), str))) {
@@ -95,7 +95,7 @@ app_server <- function(input, output, session) {
     )
   })
 
-  output$o_results_btns <-  shiny::renderUI({
+  output$o_results_btns <- shiny::renderUI({
     if ((input$res_blue_str != 'None') & (!is.null(rv$png_address)))
       shiny::tagList(
         if (base::file.exists(rv$pdf_address))
@@ -116,7 +116,7 @@ app_server <- function(input, output, session) {
     rv$csv_value = NULL
   })
 
-  output$o_results <-  shiny::renderUI({
+  output$o_results <- shiny::renderUI({
     tryCatch({
       if (!is.null(input$res_blue_str) & !is.null(input$res_blue_k)) {
         str = input$res_blue_str
@@ -723,7 +723,7 @@ app_server <- function(input, output, session) {
             )
           )
         )
-        output$mice_input2 <-  shiny::renderUI({
+        output$mice_input2 <- shiny::renderUI({
           if (input$missing_handler_opt == 'impute') {
             shiny::tagList(
               shiny::selectInput(
@@ -847,7 +847,7 @@ app_server <- function(input, output, session) {
 
         # include Dependent variables TOO
         rv$dependent_variables <-
-            rv$data %>% dplyr::select(input$main_db_dep_val)
+          rv$data %>% dplyr::select(input$main_db_dep_val)
 
         for (n in base::colnames(rv$dependent_variables)) {
           if (base::is.character(rv$data[[n]]))
@@ -1588,10 +1588,10 @@ app_server <- function(input, output, session) {
             break
           }
         }
-        if(!flag){
+        if (!flag) {
           shiny_showNotification(rv, 'Column/Project name can not include " \ | ? * : < > () and space')
         }
-        if(base::length(base::colnames(rv$dataC)) != base::length(base::unique(base::colnames(rv$dataC)))){
+        if (base::length(base::colnames(rv$dataC)) != base::length(base::unique(base::colnames(rv$dataC)))) {
           flag = F
           shiny_showNotification(rv, 'Error! Repetitive column name found!')
         }
@@ -1613,7 +1613,7 @@ app_server <- function(input, output, session) {
     })
   })
 
-  output$summary <-  shiny::renderUI({
+  output$summary <- shiny::renderUI({
     if (!is.null(rv$data)) {
       s = base::summary(rv$data)
       write.csv(s, 'summary.csv', row.names = F)
@@ -1657,7 +1657,7 @@ app_server <- function(input, output, session) {
       rv$data[[input$str_column_name]] = base::as.factor(rv$data[[input$str_column_name]])
   })
 
-  output$structure <-  shiny::renderUI({
+  output$structure <- shiny::renderUI({
     if (!is.null(rv$data)) {
       shiny::tagList(
         shiny::HTML(base::paste0('<br/>', c(' ', ' ', ' ', ' ', utils::capture.output(utils::str(rv$data)))))
@@ -1665,7 +1665,7 @@ app_server <- function(input, output, session) {
     }
   })
 
-  output$o_structure_col_name <-  shiny::renderUI({
+  output$o_structure_col_name <- shiny::renderUI({
     if (!is.null(rv$data))
       shiny::column(
         width = 5,
@@ -1677,7 +1677,7 @@ app_server <- function(input, output, session) {
       )
   })
 
-  output$o_structure_col_type <-  shiny::renderUI({
+  output$o_structure_col_type <- shiny::renderUI({
     if (!is.null(rv$data))
       shiny::column(
         width = 5,
@@ -1695,7 +1695,7 @@ app_server <- function(input, output, session) {
 
   })
 
-  output$o_structure_col_btn <-  shiny::renderUI({
+  output$o_structure_col_btn <- shiny::renderUI({
     if (!is.null(rv$data))
       shiny::column(
         width = 2,
@@ -1718,10 +1718,10 @@ app_server <- function(input, output, session) {
         break
       }
     }
-    if(interacted_name == 'ResidualValue')
+    if (interacted_name == 'ResidualValue')
       interacted_name = 'Residual_Value'
 
-    if(interacted_name %in% colnames(rv$data))
+    if (interacted_name %in% colnames(rv$data))
       ath_flag = F
 
     if (base::length(input$main_db_interaction_col) > 1 & ath_flag) {
@@ -2299,19 +2299,19 @@ app_server <- function(input, output, session) {
 
   shiny::observeEvent(input$sum_mis_select, {
 
-  # include Independent variables TOO
-  rv$independent_variables <-
-    rv$data %>% dplyr::select(input$main_db_indep_val)
+    # include Independent variables TOO
+    rv$independent_variables <-
+      rv$data %>% dplyr::select(input$main_db_indep_val)
 
-  # include Dependent variables TOO
-  rv$dependent_variables <-
+    # include Dependent variables TOO
+    rv$dependent_variables <-
       rv$data %>% dplyr::select(input$main_db_dep_val)
 
     output$o_sum_mis_figure <- shiny::renderPlot(width = 500, height = 300, {
-      if(input$sum_mis_select == 'Missing values in each trait')
+      if (input$sum_mis_select == 'Missing values in each trait')
         base::print(finalfit::missing_plot(rv$dependent_variables))
 
-      else if(input$sum_mis_select == 'Missing values percentage and pattern')
+      else if (input$sum_mis_select == 'Missing values percentage and pattern')
         VIM::aggr(
           rv$dependent_variables,
           col = base::c('navyblue', 'yellow'),
@@ -2327,7 +2327,7 @@ app_server <- function(input, output, session) {
   })
 
   output$o_sum_missing <- shiny::renderUI({
-    if(!rv$review_flag){
+    if (!rv$review_flag) {
       shiny::tagList(
         shiny::selectInput(
           inputId = 'sum_mis_select',
@@ -2341,8 +2341,8 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(ignoreInit = TRUE, c(
-      input$sum_box_select_i,
-      input$sum_box_select_j),
+    input$sum_box_select_i,
+    input$sum_box_select_j),
   {
     output$o_sum_box_figure <- shiny::renderPlot(width = 500, height = 300, {
       levels_j = base::length(base::unique(rv$data[[input$sum_box_select_j]]))
@@ -2374,13 +2374,13 @@ app_server <- function(input, output, session) {
         rv$data %>% dplyr::select(input$main_db_dep_val)
 
       shiny::tagList(
-        shiny::column(width = 6,shiny::selectInput(
+        shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_box_select_i',
           label = 'Dependent vaiable',
           choices = colnames(rv$dependent_variables),
           selected = input$sum_box_select_i
         )),
-        shiny::column(width = 6,shiny::selectInput(
+        shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_box_select_j',
           label = 'Independent vaiable',
           choices = base::colnames(rv$independent_variables),
@@ -2392,8 +2392,8 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(ignoreInit = TRUE, c(
-      input$sum_density_select_i,
-      input$sum_density_select_j),
+    input$sum_density_select_i,
+    input$sum_density_select_j),
   {
 
     # include Independent variables TOO
@@ -2411,7 +2411,7 @@ app_server <- function(input, output, session) {
       if (base::is.numeric(SelectedTraits[, i])) {
         ME <- base::as.factor(rv$data[, j])
         ggplot2::ggplot(data = SelectedTraits, ggplot2::aes_string(x = i,
-                                                                             fill = ME)) +
+                                                                   fill = ME)) +
           ggplot2::geom_density(alpha = 0.1) +
           ggplot2::labs(
             x = i,
@@ -2442,7 +2442,7 @@ app_server <- function(input, output, session) {
           choices = base::colnames(rv$dependent_variables),
           selected = input$sum_density_select_i
         )),
-        shiny::column(width = 6,shiny::selectInput(
+        shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_density_select_j',
           label = 'Independent vaiable',
           choices = base::colnames(rv$independent_variables),
@@ -2454,8 +2454,8 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(ignoreInit = TRUE, c(
-      input$sum_violin_select_i,
-      input$sum_violin_select_j),
+    input$sum_violin_select_i,
+    input$sum_violin_select_j),
   {
     output$o_sum_violin_figure <- shiny::renderPlot(width = 500, height = 300, {
       i = input$sum_violin_select_i
@@ -2489,7 +2489,7 @@ app_server <- function(input, output, session) {
           choices = colnames(rv$dependent_variables),
           selected = input$sum_violin_select_i
         )),
-        shiny::column(width = 6,shiny::selectInput(
+        shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_violin_select_j',
           label = 'Independent vaiable',
           choices = base::colnames(rv$independent_variables),

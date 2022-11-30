@@ -1,6 +1,5 @@
-
 Results_subfolders <- c('Outlier', 'Missing Values', 'Missing Imputation', 'Data Visualization', 'Correlation',
-          'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
+                        'Normalization', 'Spatial Analysis', 'Mixed Analysis', 'Heritability')
 
 #______________UI__________________
 interface <- shiny::fluidPage(
