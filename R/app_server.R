@@ -8,17 +8,17 @@
 app_server <- function(input, output, session) {
 
   rv <- shiny::reactiveValues(
-    data = NULL, dataC = NULL, dataT = NULL, VarPYSL = NULL, flags = 1,
-    SelectedTraits = NULL, Vec_LASTV = NULL, dependent_variables = NULL,
-    independent_variables = NULL, dep_col = NULL, buffer = NULL, spat_buffer = NULL,
-    indep_col = NULL, outliers = NULL, outliers_row = NULL,
+    data = NULL, dataC = NULL, flags = 1,
+    dependent_variables = NULL,
+    independent_variables = NULL, buffer = NULL, spat_buffer = NULL,
+    outliers = NULL, outliers_row = NULL,
     active_opt_ = 'db', slider.k = 1, filter.k = base::rep(base::list(base::list(search = "")), 500),
     selected.col = NULL, cor_temp = NULL, slider.str = '', filter_flag = 0,
     pdf_address = NULL, png_address = NULL, csv_address = NULL, txt_address = NULL,
-    csv_value = NULL, csv_value2 = NULL, review_flag = TRUE, refresh_flag = NULL,
-    blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
-    Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F, User_Config_notif_delay = 8, User_Config_notif_size = 4
-    , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T,
+    csv_value = NULL, review_flag = TRUE,
+    Maximum_Level_For_Group_By = 20, Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F,
+    User_Config_notif_delay = 8, User_Config_notif_size = 4
+    , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL
   )
 
   allinone_initialize <- function(rv) {
@@ -277,13 +277,6 @@ app_server <- function(input, output, session) {
       rv$data <- res
       base::rownames(rv$data) = 1:base::nrow(rv$data)
     }
-    rv$VarPYSL <-
-      rv$data %>% dplyr::select(dplyr::all_of(input$main_db_indep_val))
-
-    # include Dependent variables
-    rv$SelectedTraits <-
-      rv$data %>% dplyr::select(dplyr::all_of(input$main_db_dep_val))
-
     # include Independent variables TOO
     rv$independent_variables <-
       rv$data %>% dplyr::select(input$main_db_indep_val)
@@ -1789,14 +1782,6 @@ app_server <- function(input, output, session) {
       )
     }else {
       shiny::removeModal()
-      # include Independent variables
-      rv$VarPYSL <-
-        rv$data %>% dplyr::select(dplyr::all_of(input$main_db_indep_val))
-
-      # include Dependent variables
-      rv$SelectedTraits <-
-        rv$data %>% dplyr::select(dplyr::all_of(input$main_db_dep_val))
-
       # include Independent variables TOO
       rv$independent_variables <-
         rv$data %>% dplyr::select(input$main_db_indep_val)
@@ -2336,21 +2321,23 @@ app_server <- function(input, output, session) {
     input$sum_box_select_j),
   {
     output$o_sum_box_figure <- shiny::renderPlot(width = 500, height = 300, {
-      i = input$sum_box_select_i
-      j = input$sum_box_select_j
-      levels_j = base::length(base::unique(rv$data[[j]]))
-      if (levels_j <= rv$Maximum_Level_For_Group_By) {
-        ggpubr::ggsummarystats(
-          rv$data,
-          j,
-          i,
-          ggfunc = ggpubr::ggboxplot,
-          add = "jitter",
-          color = j,
-          labeller = "label_value",
-          legend = "top",
-          ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
-        )
+      if (input$sum_box_select_j != '**') {
+        i = input$sum_box_select_i
+        j = input$sum_box_select_j
+        levels_j = base::length(base::unique(rv$data[[j]]))
+        if (levels_j <= rv$Maximum_Level_For_Group_By) {
+          ggpubr::ggsummarystats(
+            rv$data,
+            j,
+            i,
+            ggfunc = ggpubr::ggboxplot,
+            add = "jitter",
+            color = j,
+            labeller = "label_value",
+            legend = "top",
+            ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
+          )
+        }
       }
     })
   })
@@ -2366,18 +2353,17 @@ app_server <- function(input, output, session) {
       rv$dependent_variables <-
         rv$data %>% dplyr::select(input$main_db_dep_val)
 
+      indep_c = base::colnames(rv$independent_variables)
       shiny::tagList(
         shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_box_select_i',
           label = 'Dependent vaiable',
-          choices = colnames(rv$dependent_variables),
-          selected = input$sum_box_select_i
+          choices = colnames(rv$dependent_variables)
         )),
         shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_box_select_j',
           label = 'Independent vaiable',
-          choices = base::colnames(rv$independent_variables),
-          selected = input$sum_box_select_j
+          choices = c('None' = '**', indep_c)
         )),
         shiny::plotOutput('o_sum_box_figure')
       )
@@ -2392,24 +2378,27 @@ app_server <- function(input, output, session) {
       rv$data %>% dplyr::select(input$main_db_dep_val)
 
     output$o_sum_density_figure <- shiny::renderPlot(width = 500, height = 300, {
-      SelectedTraits = rv$dependent_variables
-      i = input$sum_density_select_i
-      j = input$sum_density_select_j
-      levels_j = base::length(base::unique(rv$data[[j]]))
-      if(levels_j <= rv$Maximum_Level_For_Group_By)
-        if (base::is.numeric(SelectedTraits[, i])) {
-        ME <- base::as.factor(rv$data[, j])
-        ggplot2::ggplot(data = SelectedTraits, ggplot2::aes_string(x = i,
-                                                                   fill = ME)) +
-          ggplot2::geom_density(alpha = 0.1) +
-          ggplot2::labs(
-            x = i,
-            title = base::paste0(input$project_name, " -- Density plot -- ", j),
-            subtitle = i
-          ) +
-          ggplot2::guides(fill = ggplot2::guide_legend(j)) +
-          ggplot2::theme_classic()
+      if (input$sum_density_select_j != '**') {
+        SelectedTraits = rv$dependent_variables
+        i = input$sum_density_select_i
+        j = input$sum_density_select_j
+        levels_j = base::length(base::unique(rv$data[[j]]))
+        if (levels_j <= rv$Maximum_Level_For_Group_By)
+          if (base::is.numeric(SelectedTraits[, i])) {
+            ME <- base::as.factor(rv$data[, j])
+            ggplot2::ggplot(data = SelectedTraits, ggplot2::aes_string(x = i,
+                                                                       fill = ME)) +
+              ggplot2::geom_density(alpha = 0.1) +
+              ggplot2::labs(
+                x = i,
+                title = base::paste0(input$project_name, " -- Density plot -- ", j),
+                subtitle = i
+              ) +
+              ggplot2::guides(fill = ggplot2::guide_legend(j)) +
+              ggplot2::theme_classic()
+          }
       }
+
     })
   })
 
@@ -2424,18 +2413,17 @@ app_server <- function(input, output, session) {
       rv$dependent_variables <-
         rv$data %>% dplyr::select(input$main_db_dep_val)
 
+      indep_c = base::colnames(rv$independent_variables)
       shiny::tagList(
         shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_density_select_i',
           label = 'Dependent vaiable',
-          choices = base::colnames(rv$dependent_variables),
-          selected = input$sum_density_select_i
+          choices = base::colnames(rv$dependent_variables)
         )),
         shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_density_select_j',
           label = 'Independent vaiable',
-          choices = base::colnames(rv$independent_variables),
-          selected = input$sum_density_select_j
+          choices = c('None' = '**', indep_c)
         )),
         shiny::plotOutput('o_sum_density_figure')
       )
@@ -2447,45 +2435,132 @@ app_server <- function(input, output, session) {
     input$sum_violin_select_j),
   {
     output$o_sum_violin_figure <- shiny::renderPlot(width = 500, height = 300, {
-      i = input$sum_violin_select_i
-      j = input$sum_violin_select_j
-      levels_j = base::length(base::unique(rv$data[[j]]))
-      if(levels_j <= rv$Maximum_Level_For_Group_By)
-        ggpubr::ggsummarystats(
-          rv$data, j, i,
-          ggfunc = ggpubr::ggviolin, add = "jitter", labeller = "label_value",
-          color = j,
-          legend = "top",
-          ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
-        )
+      if (input$sum_violin_select_j != '**') {
+        i = input$sum_violin_select_i
+        j = input$sum_violin_select_j
+        levels_j = base::length(base::unique(rv$data[[j]]))
+        if (levels_j <= rv$Maximum_Level_For_Group_By)
+          ggpubr::ggsummarystats(
+            rv$data, j, i,
+            ggfunc = ggpubr::ggviolin, add = "jitter", labeller = "label_value",
+            color = j,
+            legend = "top",
+            ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
+          )
+      }
     })
   })
 
   output$o_sum_violin <- shiny::renderUI({
     if (!rv$review_flag) {
 
-      # include Independent variables TOO
       rv$independent_variables <-
         rv$data %>% dplyr::select(input$main_db_indep_val)
 
-      # include Dependent variables TOO
       rv$dependent_variables <-
         rv$data %>% dplyr::select(input$main_db_dep_val)
-
+      indep_c = base::colnames(rv$independent_variables)
       shiny::tagList(
         shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_violin_select_i',
           label = 'Dependent vaiable',
-          choices = colnames(rv$dependent_variables),
-          selected = input$sum_violin_select_i
+          choices = base::colnames(rv$dependent_variables)
         )),
         shiny::column(width = 6, shiny::selectInput(
           inputId = 'sum_violin_select_j',
           label = 'Independent vaiable',
-          choices = base::colnames(rv$independent_variables),
-          selected = input$sum_violin_select_j
+          choices = c('None' = '**', indep_c)
         )),
         shiny::plotOutput('o_sum_violin_figure')
+      )
+    }
+  })
+
+  observeEvent(input$glance_outlier_refine_btn,{
+    l = rv$glance_outlier
+    for (i in l){
+      row = i[3]
+      col = i[1]
+      db.edit(row, col, '', 'string')
+    }
+  })
+
+  shiny::observeEvent(ignoreInit = TRUE, c(
+    input$sum_outlier_select_i,
+    input$sum_outlier_select_j),
+  {
+    output$o_sum_outlier_figure <- shiny::renderUI({
+      if (input$sum_outlier_select_j != '**') {
+        i = input$sum_outlier_select_i
+        j = input$sum_outlier_select_j
+        db = rv$data[, c(i, j)]
+        res = find_outliers_beta(db, input$glance_outlier_minp, input$glance_outlier_maxp)
+        Num = base::length(res)
+        res = as.data.frame(res)
+        if(Num > 0)
+          colnames(res) = 1:length(res)
+        rv$glance_outlier = res
+        res = t(res)
+        shiny::tagList(
+          if(Num > 0)
+            shiny::helpText(
+              shiny::HTML(paste0(
+                'We found <b><i>',
+                Num, '</i></b> outlier(s) in <b><i>',
+                i, '</i></b> trait based on <b><i>',
+                j, '</i></b> variable')))
+          ,
+          if(Num == 0)
+            shiny::helpText(
+              shiny::HTML(paste0(
+                'Wow! There is no outlier in <b><i>',
+                i, '</i></b> trait based on <b><i>',
+                j, '</i></b> variable')))
+          ,
+          if(Num > 0) DT::renderDataTable(
+            res,
+            options = base::list(
+              scrollX = TRUE,
+              scrollCollapse = TRUE,
+              dom = 'ltip'
+            )
+          )
+        )
+      }
+    })
+  })
+
+  output$o_sum_outlier <- shiny::renderUI({
+    if (!rv$review_flag) {
+
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
+
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
+      indep_c = base::colnames(rv$independent_variables)
+
+      shiny::tagList(
+        shiny::column(width = 3, shiny::selectInput(
+          inputId = 'sum_outlier_select_i',
+          label = 'Dependent vaiable',
+          choices = base::colnames(rv$dependent_variables)
+        )),
+        shiny::column(width = 3, shiny::selectInput(
+          inputId = 'sum_outlier_select_j',
+          label = 'Independent vaiable',
+          choices = c('None' = '**', indep_c)
+        )),
+        shiny::column(width = 2, shiny::numericInput('glance_outlier_minp','minp',0.25,0,1, 0.05))
+        ,
+        shiny::column(width = 2, shiny::numericInput('glance_outlier_maxp','maxp',0.75,0,1, 0.05))
+        ,
+        shiny::column(width = 2,
+                      class = "structure_change_type_col",
+                      shiny::actionButton('glance_outlier_refine_btn','Refine Outliers'))
+        ,
+        shiny::uiOutput('o_sum_outlier_figure')
       )
     }
   })

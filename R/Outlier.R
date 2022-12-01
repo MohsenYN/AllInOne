@@ -34,8 +34,9 @@ PoSiBlEoUtLieR <- function(input, rv) {
     for (j in base::colnames(VarPYSL)) {
       for (i in COLN) {
         if (base::is.character(rv$data[, i]) == TRUE) {
-          base::print(base::paste0(i, " is not continuous trait"))
-        } else {
+          shiny_showNotification(rv, base::paste0(i, " is not continuous trait so we ignore it"))
+        }
+        else {
           col_i = cloned[[i]]
           if (base::is.numeric(col_i))
           {

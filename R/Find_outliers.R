@@ -5,6 +5,7 @@
 #' @param input object including user's input values
 #' @param rv object including reactive variables
 #'
+#' @importFrom data.table :=
 #' @noRd
 #'
 find_outliers <- function(rv, input) {
@@ -45,4 +46,21 @@ find_outliers <- function(rv, input) {
     }
   }
   base::return(outliers_pos)
+}
+
+find_outliers_beta <- function(db, mini=0.25,maxi=0.75) {
+  input_ = list('minp' = mini, 'maxp' = maxi)
+  cloned = data.table::data.table(db)
+  base::colnames(cloned)[1] <- ".___Buffer_dep"
+  base::colnames(cloned)[2] <- ".___Buffer_indep"
+
+  cloned[, outlier := check_outlier(.___Buffer_dep, input_), by = .___Buffer_indep]
+
+  Res = list()
+  counter = 0
+  for (j in which(cloned[["outlier"]])) {
+    counter <- counter + 1
+    Res[[counter]] = base::c('Trait' = base::colnames(db)[1], 'Independent' = base::colnames(db)[2],'Observation' = j, 'Value' = cloned[['.___Buffer_dep']][j])
+  }
+  return(Res)
 }
