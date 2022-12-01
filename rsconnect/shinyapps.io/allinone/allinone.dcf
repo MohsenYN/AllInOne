@@ -5,7 +5,7 @@ account: allinone
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7674631
-bundleId: 6554252
+bundleId: 6572657
 url: https://allinone.shinyapps.io/allinone/
-when: 1669387387.33216
-lastSyncTime: 1669387387.33216
+when: 1669817806.03371
+lastSyncTime: 1669817806.03371
