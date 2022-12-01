@@ -187,7 +187,17 @@ body <- shinydashboard::dashboardBody(
       interface
     ),
     shiny::tabPanel(
-      title = shiny::img(src = "www/PictureRM2.png", class = "title-image-tab"),
+      title = "Results",
+      shiny::column(width = 4, shiny::selectInput(
+        'res_blue_str', 'Results folder',
+        c('None', Results_subfolders)
+      )),
+      shiny::column(width = 8, shiny::uiOutput('o_res_blue_k')),
+      shiny::uiOutput('o_results_btns'),
+      shiny::uiOutput('o_results')
+    ),
+    shiny::tabPanel(
+      title = shiny::img(src = "www/AllInOneGlance.png", class = "title-image-tab"),
       shiny::tabsetPanel(
         type = "pills",
         shiny::tabPanel(
@@ -226,16 +236,6 @@ body <- shinydashboard::dashboardBody(
           shiny::uiOutput("o_sum_violin")
         )
       )
-    ),
-    shiny::tabPanel(
-      title = "Results",
-      shiny::column(width = 4, shiny::selectInput(
-        'res_blue_str', 'Results folder',
-        c('None', Results_subfolders)
-      )),
-      shiny::column(width = 8, shiny::uiOutput('o_res_blue_k')),
-      shiny::uiOutput('o_results_btns'),
-      shiny::uiOutput('o_results')
     ),
     shiny::tabPanel(
       title = 'Setting',
