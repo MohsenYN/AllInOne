@@ -206,6 +206,14 @@ body <- shinydashboard::dashboardBody(
           shiny::uiOutput("o_sum_missing")
         ),
         shiny::tabPanel(
+          title = "Correlation",
+          shiny::uiOutput("o_sum_correlation")
+        ),
+        shiny::tabPanel(
+          title = "Outlier",
+          shiny::uiOutput("o_sum_outlier")
+        ),
+        shiny::tabPanel(
           title = "BoxPlot",
           shiny::uiOutput("o_sum_boxplot")
         ),
@@ -216,14 +224,6 @@ body <- shinydashboard::dashboardBody(
         shiny::tabPanel(
           title = "Violin",
           shiny::uiOutput("o_sum_violin")
-        ),
-        shiny::tabPanel(
-          title = "Correlation",
-          shiny::uiOutput("o_sum_correlation")
-        ),
-        shiny::tabPanel(
-          title = "Outlier",
-          shiny::uiOutput("o_sum_outlier")
         )
       )
     ),

@@ -277,13 +277,6 @@ app_server <- function(input, output, session) {
       rv$data <- res
       base::rownames(rv$data) = 1:base::nrow(rv$data)
     }
-    rv$VarPYSL <-
-      rv$data %>% dplyr::select(dplyr::all_of(input$main_db_indep_val))
-
-    # include Dependent variables
-    rv$SelectedTraits <-
-      rv$data %>% dplyr::select(dplyr::all_of(input$main_db_dep_val))
-
     # include Independent variables TOO
     rv$independent_variables <-
       rv$data %>% dplyr::select(input$main_db_indep_val)
@@ -1789,14 +1782,6 @@ app_server <- function(input, output, session) {
       )
     }else {
       shiny::removeModal()
-      # include Independent variables
-      rv$VarPYSL <-
-        rv$data %>% dplyr::select(dplyr::all_of(input$main_db_indep_val))
-
-      # include Dependent variables
-      rv$SelectedTraits <-
-        rv$data %>% dplyr::select(dplyr::all_of(input$main_db_dep_val))
-
       # include Independent variables TOO
       rv$independent_variables <-
         rv$data %>% dplyr::select(input$main_db_indep_val)
@@ -2491,6 +2476,15 @@ app_server <- function(input, output, session) {
     }
   })
 
+  observeEvent(input$glance_outlier_refine_btn,{
+    l = rv$glance_outlier
+    for (i in l){
+      row = i[3]
+      col = i[1]
+      db.edit(row, col, '', 'string')
+    }
+  })
+
   shiny::observeEvent(ignoreInit = TRUE, c(
     input$sum_outlier_select_i,
     input$sum_outlier_select_j),
@@ -2500,21 +2494,30 @@ app_server <- function(input, output, session) {
         i = input$sum_outlier_select_i
         j = input$sum_outlier_select_j
         db = rv$data[, c(i, j)]
-        res = find_outliers_beta(db)
+        res = find_outliers_beta(db, input$glance_outlier_minp, input$glance_outlier_maxp)
         Num = base::length(res)
         res = as.data.frame(res)
-        colnames(res) = 1:length(res)
+        if(Num > 0)
+          colnames(res) = 1:length(res)
+        rv$glance_outlier = res
         res = t(res)
         shiny::tagList(
-          shiny::h4(
+          if(Num > 0)
             shiny::helpText(
               shiny::HTML(paste0(
                 'We found <b><i>',
                 Num, '</i></b> outlier(s) in <b><i>',
                 i, '</i></b> trait based on <b><i>',
-                j, '</i></b> variable'))))
+                j, '</i></b> variable')))
           ,
-          DT::renderDataTable(
+          if(Num == 0)
+            shiny::helpText(
+              shiny::HTML(paste0(
+                'Wow! There is no outlier in <b><i>',
+                i, '</i></b> trait based on <b><i>',
+                j, '</i></b> variable')))
+          ,
+          if(Num > 0) DT::renderDataTable(
             res,
             options = base::list(
               scrollX = TRUE,
@@ -2539,20 +2542,24 @@ app_server <- function(input, output, session) {
       indep_c = base::colnames(rv$independent_variables)
 
       shiny::tagList(
-        shiny::column(width = 6, shiny::selectInput(
+        shiny::column(width = 3, shiny::selectInput(
           inputId = 'sum_outlier_select_i',
           label = 'Dependent vaiable',
           choices = base::colnames(rv$dependent_variables)
         )),
-        shiny::column(width = 6, shiny::selectInput(
+        shiny::column(width = 3, shiny::selectInput(
           inputId = 'sum_outlier_select_j',
           label = 'Independent vaiable',
           choices = c('None' = '**', indep_c)
         )),
-        # shiny::column(width = 2, shiny::numericInput('glance_outlier_minp','minp',0.25,0,1, 0.15))
-        # ,
-        # shiny::column(width = 2, shiny::numericInput('glance_outlier_maxp','maxp',0.75,0,1, 0.15))
-        # ,
+        shiny::column(width = 2, shiny::numericInput('glance_outlier_minp','minp',0.25,0,1, 0.05))
+        ,
+        shiny::column(width = 2, shiny::numericInput('glance_outlier_maxp','maxp',0.75,0,1, 0.05))
+        ,
+        shiny::column(width = 2,
+                      class = "structure_change_type_col",
+                      shiny::actionButton('glance_outlier_refine_btn','Refine Outliers'))
+        ,
         shiny::uiOutput('o_sum_outlier_figure')
       )
     }
