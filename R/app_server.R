@@ -2506,7 +2506,13 @@ app_server <- function(input, output, session) {
         colnames(res) = 1:length(res)
         res = t(res)
         shiny::tagList(
-          shiny::h4(shiny::helpText(shiny::HTML(paste0('We found <b><i>', Num, '</i></b> outlier(s) in <b><i>', i, '</i></b> trait based on <b><i>', j, '</i></b> Variable'))))
+          shiny::h4(
+            shiny::helpText(
+              shiny::HTML(paste0(
+                'We found <b><i>',
+                Num, '</i></b> outlier(s) in <b><i>',
+                i, '</i></b> trait based on <b><i>',
+                j, '</i></b> variable'))))
           ,
           DT::renderDataTable(
             res,
