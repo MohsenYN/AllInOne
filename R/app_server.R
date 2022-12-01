@@ -8,17 +8,17 @@
 app_server <- function(input, output, session) {
 
   rv <- shiny::reactiveValues(
-    data = NULL, dataC = NULL, dataT = NULL, VarPYSL = NULL, flags = 1,
-    SelectedTraits = NULL, Vec_LASTV = NULL, dependent_variables = NULL,
-    independent_variables = NULL, dep_col = NULL, buffer = NULL, spat_buffer = NULL,
-    indep_col = NULL, outliers = NULL, outliers_row = NULL,
+    data = NULL, dataC = NULL, flags = 1,
+    dependent_variables = NULL,
+    independent_variables = NULL, buffer = NULL, spat_buffer = NULL,
+    outliers = NULL, outliers_row = NULL,
     active_opt_ = 'db', slider.k = 1, filter.k = base::rep(base::list(base::list(search = "")), 500),
     selected.col = NULL, cor_temp = NULL, slider.str = '', filter_flag = 0,
     pdf_address = NULL, png_address = NULL, csv_address = NULL, txt_address = NULL,
-    csv_value = NULL, csv_value2 = NULL, review_flag = TRUE, refresh_flag = NULL,
-    blup_buffer = NULL, blup_temp = NULL, Maximum_Level_For_Group_By = 20,
-    Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F, User_Config_notif_delay = 8, User_Config_notif_size = 4
-    , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T,
+    csv_value = NULL, review_flag = TRUE,
+    Maximum_Level_For_Group_By = 20, Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F,
+    User_Config_notif_delay = 8, User_Config_notif_size = 4
+    , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL
   )
 
   allinone_initialize <- function(rv) {
