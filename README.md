@@ -2,18 +2,18 @@
 
 # [<img src="inst/app/www/AllInOneRM.gif" width="400px" align="center"/>](https://github.com/MohsenYN)
 
-The AllInOne is an open-Source, R-Shiny user interface package designed in the [Plant Agriculture](https://www.plant.uoguelph.ca/) department at the [University of Guelph](https://www.uoguelph.ca) to provide a broad range of pre-processing analysis features for phenotypic datasets. This app uses different R packages, such as mice, VIM, lme4, bestNormalize, etc., to enable plant scientists to use all the mentioned packages simultaneously in an interactive environment. Furthermore, it allows plant scientists to edit, organize, subset, and sort datasets in a live mode.
+The **AllInOne** is an open-Source, R-Shiny user interface package designed in the [Plant Agriculture](https://www.plant.uoguelph.ca/) department at the [University of Guelph](https://www.uoguelph.ca) to provide a broad range of pre-processing analysis features for phenotypic datasets. This app uses different R packages, such as mice, VIM, lme4, bestNormalize, etc., to enable plant scientists to use all the mentioned packages simultaneously in an interactive environment. Furthermore, it allows plant scientists to edit, organize, subset, and sort datasets in a live mode.
 
-## Demo
+## **Demo**
 
 Just click [HERE](https://allinone.shinyapps.io/allinone/).
 
 
-[<img src="inst/app/www/Website.PNG" width="600px" align="center"/>](https://allinone.shinyapps.io/allinone/)
+[<img src="inst/app/www/Web.PNG" width="600px" align="center"/>](https://allinone.shinyapps.io/allinone/)
 
 <br/>
 
-## Installation
+## **Installation**
 
 Required: [R](https://cran.r-project.org/) version 4.0.0 or later
 <br/>
@@ -37,7 +37,7 @@ install.packages(c("remotes","golem","shinydashboard","shinydisconnect","shinyjs
 ```
 
 
-### Install using source
+### **Install using source**
 
 You can install the AllInOne using its source on your system like so:
 
@@ -45,7 +45,7 @@ You can install the AllInOne using its source on your system like so:
 remotes::install_local('path/to/AllInOne/', force = TRUE)
 ```
 
-### Install from GitHub
+### **Install from GitHub**
 
 You can install the AllInOne from GitHub like so:
 
@@ -53,19 +53,19 @@ You can install the AllInOne from GitHub like so:
 remotes::install_github('MohsenYN/AllInOne')
 ```
 
-## How to run
+## **How to run**
 
-### Run without installing
+### **Run without installing**
 
 You can run the application by just running `app.R` without installing the package.
 
-### Run after installation
+### **Run after installation**
 
 ``` r
 AllInOne::run_app()
 ```
 
-## What do you think about AllInOne?
+## **What do you think about AllInOne?**
 
 Let us know :)
 <br/>
@@ -85,7 +85,7 @@ University of Guelph
 <br/>
 
 
-#### We are proud of our partners:
+#### **We are proud of our partners:**
 <br/>
 
 [<img src="inst/app/www/1.png" width="400px" align="center"/>](https://agriculture.canada.ca/en)
