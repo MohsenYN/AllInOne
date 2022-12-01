@@ -220,6 +220,10 @@ body <- shinydashboard::dashboardBody(
         shiny::tabPanel(
           title = "Correlation",
           shiny::uiOutput("o_sum_correlation")
+        ),
+        shiny::tabPanel(
+          title = "Outlier",
+          shiny::uiOutput("o_sum_outlier")
         )
       )
     ),

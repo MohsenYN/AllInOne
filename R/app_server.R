@@ -2491,6 +2491,67 @@ app_server <- function(input, output, session) {
     }
   })
 
+  shiny::observeEvent(ignoreInit = TRUE, c(
+    input$sum_outlier_select_i,
+    input$sum_outlier_select_j),
+  {
+    output$o_sum_outlier_figure <- shiny::renderUI({
+      if (input$sum_outlier_select_j != '**') {
+        i = input$sum_outlier_select_i
+        j = input$sum_outlier_select_j
+        db = rv$data[, c(i, j)]
+        res = find_outliers_beta(db)
+        Num = base::length(res)
+        res = as.data.frame(res)
+        colnames(res) = 1:length(res)
+        res = t(res)
+        shiny::tagList(
+          shiny::h4(shiny::helpText(shiny::HTML(paste0('We found <b><i>', Num, '</i></b> outlier(s) in <b><i>', i, '</i></b> trait based on <b><i>', j, '</i></b> Variable'))))
+          ,
+          DT::renderDataTable(
+            res,
+            options = base::list(
+              scrollX = TRUE,
+              scrollCollapse = TRUE,
+              dom = 'ltip'
+            )
+          )
+        )
+      }
+    })
+  })
+
+  output$o_sum_outlier <- shiny::renderUI({
+    if (!rv$review_flag) {
+
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
+
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
+      indep_c = base::colnames(rv$independent_variables)
+
+      shiny::tagList(
+        shiny::column(width = 6, shiny::selectInput(
+          inputId = 'sum_outlier_select_i',
+          label = 'Dependent vaiable',
+          choices = base::colnames(rv$dependent_variables)
+        )),
+        shiny::column(width = 6, shiny::selectInput(
+          inputId = 'sum_outlier_select_j',
+          label = 'Independent vaiable',
+          choices = c('None' = '**', indep_c)
+        )),
+        # shiny::column(width = 2, shiny::numericInput('glance_outlier_minp','minp',0.25,0,1, 0.15))
+        # ,
+        # shiny::column(width = 2, shiny::numericInput('glance_outlier_maxp','maxp',0.75,0,1, 0.15))
+        # ,
+        shiny::uiOutput('o_sum_outlier_figure')
+      )
+    }
+  })
+
   output$o_sum_correlation <- shiny::renderUI({
     if (!rv$review_flag) {
 
