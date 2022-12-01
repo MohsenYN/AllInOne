@@ -2476,14 +2476,16 @@ app_server <- function(input, output, session) {
     }
   })
 
-  observeEvent(input$glance_outlier_refine_btn,{
-    l = rv$glance_outlier
-    for (i in l){
-      row = i[3]
-      col = i[1]
-      db.edit(row, col, '', 'string')
-    }
-  })
+  # observeEvent(input$glance_outlier_refine_btn,{
+  #   rv$outliers_row = NULL
+  #   rv$selected.col = NULL
+  #   l = rv$glance_outlier
+  #   for (i in l){
+  #     row = i[3]
+  #     col = i[1]
+  #     db.edit(row, col, '', 'string')
+  #   }
+  # })
 
   shiny::observeEvent(ignoreInit = TRUE, c(
     input$sum_outlier_select_i,
@@ -2542,12 +2544,12 @@ app_server <- function(input, output, session) {
       indep_c = base::colnames(rv$independent_variables)
 
       shiny::tagList(
-        shiny::column(width = 3, shiny::selectInput(
+        shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_outlier_select_i',
           label = 'Dependent vaiable',
           choices = base::colnames(rv$dependent_variables)
         )),
-        shiny::column(width = 3, shiny::selectInput(
+        shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_outlier_select_j',
           label = 'Independent vaiable',
           choices = c('None' = '**', indep_c)
@@ -2556,10 +2558,10 @@ app_server <- function(input, output, session) {
         ,
         shiny::column(width = 2, shiny::numericInput('glance_outlier_maxp','maxp',0.75,0,1, 0.05))
         ,
-        shiny::column(width = 2,
-                      class = "structure_change_type_col",
-                      shiny::actionButton('glance_outlier_refine_btn','Refine Outliers'))
-        ,
+        # shiny::column(width = 2,
+        #               class = "structure_change_type_col",
+        #               shiny::actionButton('glance_outlier_refine_btn','Refine Outliers'))
+        # ,
         shiny::uiOutput('o_sum_outlier_figure')
       )
     }
