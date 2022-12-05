@@ -82,7 +82,7 @@ app_server <- function(input, output, session) {
   output$o_setting_colors_list <- renderUI({
     shiny::selectInput(
       inputId = 'setting_colors_list',
-      label = 'Colors',
+      label = 'Color list',
       choices = rv$setting_colors_list,
       multiple = T,
       selected = rv$setting_colors,

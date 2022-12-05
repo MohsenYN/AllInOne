@@ -107,7 +107,7 @@ menu_setting <- shiny::tagList(
   # TODO add colourpicker library into requirements
   shiny::column(
     width = 8,
-    colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add this color to the list', closeOnClick = T)
+    colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add color', closeOnClick = T)
   ),
   shiny::column(
     width = 4,
@@ -126,12 +126,11 @@ menu_setting_cor <- shiny::tagList(
         width = '100%',
         inputId = 'setting_cor_plot',
         label = tags$span(
-          'Select which plots you need in the correlatin menu',
+          'Select correlation plot',
           tags$i(
             class = "glyphicon glyphicon-info-sign",
             style = "color: var(--Just-color);",
-            title = 'Please select which plots you need in the correlatin menu'
-          )),
+            title = 'Select what kind of correlation plots do you want to have?')),
         choices = c(
           'Circle' = 'circle',
           'Color' = 'color',
