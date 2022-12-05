@@ -55,7 +55,6 @@ Heritability <- function(input, rv) {
     tidyr::unnest(vc.ge) %>%
     dplyr::group_by(DTriats) %>%
     dplyr::summarize(h = (Variance[grp == genom_dep_col]) / (base::sum(Variance)))
-  rv$buffer = bs_her
 
   utils::write.csv(bs_her, base::paste0(input$project_name,' -- Heritability Values.csv'), row.names = F)
 
