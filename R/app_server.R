@@ -73,7 +73,7 @@ app_server <- function(input, output, session) {
   })
 
   observeEvent(input$setting_colors_list,{
-    if(length(input$setting_colors_list > 1))  {
+    if(length(input$setting_colors_list > 0))  {
       rv$setting_colors = input$setting_colors_list
     }
   })

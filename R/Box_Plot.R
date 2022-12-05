@@ -20,6 +20,8 @@ CheckBOXVIO <- function(input, rv) {
 
   VarPYSL <- dplyr::select(rv$independent_variables, dplyr::all_of(input$boxplot_vars))
 
+  colors_f <- grDevices::colorRampPalette(rv$setting_colors)
+
   for (i in base::colnames(rv$dependent_variables)) {
 
     for (j in base::colnames(VarPYSL)) {
@@ -28,6 +30,7 @@ CheckBOXVIO <- function(input, rv) {
         base::print(base::paste0(i, " is not continuous trait"))
       } else {
         levels_j = base::length(base::unique(rv$data[[j]]))
+        colors_ = colors_f(levels_j)
         grDevices::png(file = base::paste0(
           input$project_name,
           " -- Boxplot and scatterplot -- ",
@@ -43,6 +46,7 @@ CheckBOXVIO <- function(input, rv) {
           ggfunc = ggpubr::ggboxplot,
           add = "jitter",
           color = j,
+          palette = colors_,
           labeller = "label_value",
           legend = "top",
           ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
@@ -65,6 +69,7 @@ CheckBOXVIO <- function(input, rv) {
           ggfunc = ggpubr::ggboxplot,
           add = "jitter",
           color = j,
+          palette = colors_,
           labeller = "label_value",
           legend = "top",
           ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
