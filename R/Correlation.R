@@ -32,10 +32,27 @@ CoReLaTiOnSS <- function(input, rv) {
   COL_INDEP = input$indep_cor
   COL_DEP = input$dep_cor
   COLN = base::colnames(SelectedTraits)
+
+  colors <- grDevices::colorRampPalette(rv$setting_colors)
+  colors = colors(rv$setting_cor_cnum)
   if (input$cor_opt == 'Non-independent-based correlation') {
-    M <- stats::cor(SelectedTraits)
-    rv$buffer <- M
-    utils::write.csv(M, base::paste0(input$project_name,' -- Correlation Table.csv'), row.names = F)
+    cor_ <- Hmisc::rcorr(as.matrix(SelectedTraits))
+    M <- cor_$r
+    PV <- cor_$P
+
+    p <- function()
+      corrplot::corrplot(PV, method = "pie", col = colors)
+
+    filesave("png",
+             input$project_name,
+             " -- P-value Correlation (pie)",
+             p, rv)
+    filesave("pdf",
+             input$project_name,
+             " -- P-value Correlation (pie)",
+             p, rv)
+    utils::write.csv(M, base::paste0(input$project_name, ' -- Correlation Table.csv'), row.names = F)
+    utils::write.csv(cor_$P, base::paste0(input$project_name, ' -- P-value.csv'), row.names = F)
   }
   else if (input$cor_opt == 'Inter correlation') {
     y = COL_INDEP
@@ -59,7 +76,6 @@ CoReLaTiOnSS <- function(input, rv) {
     rv$cor_temp = D
 
     M <- stats::cor(D, use = "pairwise.complete.obs")
-    rv$buffer <- M
 
     utils::write.csv(D, base::paste0(input$project_name,' -- Observed Value Table.csv'), row.names = F)
 
@@ -100,8 +116,9 @@ CoReLaTiOnSS <- function(input, rv) {
     base::row.names(result) = 1:base::length(base::row.names(result))
     base::colnames(result) = base::c(MainV, 'Correlation')
 
-    rv$buffer = result
-    utils::write.csv(result, base::paste0(input$project_name,' -- Correlation Table.csv'), row.names = F)
+    buffer = result
+    colnames(buffer)[1] = input$indep_cor
+    utils::write.csv(buffer, base::paste0(input$project_name,' -- Correlation Table.csv'), row.names = F)
 
     Cordata <- base::as.data.frame(result)
 
@@ -118,7 +135,8 @@ CoReLaTiOnSS <- function(input, rv) {
       ggplot2::theme_classic() +
       ggplot2::theme(legend.position = "none", axis.title = red.bold.italic.text) +
       ggplot2::scale_y_continuous(limits = base::c(-1, 1)) +
-      ggplot2::labs(y = "Pearson correlation coefficient")
+      ggplot2::labs(y = "Pearson correlation coefficient")+
+      ggplot2::scale_fill_manual( values = colors )
 
     ggplot2::ggsave(
       UOGAP,
@@ -221,88 +239,107 @@ CoReLaTiOnSS <- function(input, rv) {
   }
 
   if (input$cor_opt != 'Intra correlation') {
+    if ('circle' %in% rv$setting_cor_plot) {
     grDevices::png(
       file = base::paste0(input$project_name, " -- Correlation (circle).png"),
       width = 1000,
       height = 480
     )
-    corrplot::corrplot(M, method = "circle")
+    corrplot::corrplot(M, method = "circle", col = colors)
     base::invisible(grDevices::dev.off())
     grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (circle).pdf"))
-    P <- corrplot::corrplot(M, method = "circle")
+    P <- corrplot::corrplot(M, method = "circle", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
+
+    }
+
+    if ('pie' %in% rv$setting_cor_plot) {
     grDevices::png(
       file = base::paste0(input$project_name, " -- Correlation (pie).png"),
       width = 1000,
       height = 480
     )
-    corrplot::corrplot(M, method = "pie")
+    corrplot::corrplot(M, method = "pie", col = colors)
     base::invisible(grDevices::dev.off())
     grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (pie).pdf"))
-    P <- corrplot::corrplot(M, method = "pie")
+    P <- corrplot::corrplot(M, method = "pie", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
+    }
+    if ('color' %in% rv$setting_cor_plot) {
     grDevices::png(
       file = base::paste0(input$project_name, " -- Correlation (color).png"),
       width = 1000,
       height = 480
     )
-    corrplot::corrplot(M, method = "color")
+    corrplot::corrplot(M, method = "color", col = colors)
     base::invisible(grDevices::dev.off())
     grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (color).pdf"))
-    P <- corrplot::corrplot(M, method = "color")
+    P <- corrplot::corrplot(M, method = "color", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
+    }
+
+    if ('number' %in% rv$setting_cor_plot) {
     grDevices::png(
       file = base::paste0(input$project_name, " -- Correlation (number).png"),
       width = 1000,
       height = 480
     )
-    corrplot::corrplot(M, method = "number")
+    corrplot::corrplot(M, method = "number", col = colors)
     base::invisible(grDevices::dev.off())
     grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (number).pdf"))
-    P <- corrplot::corrplot(M, method = "number")
+    P <- corrplot::corrplot(M, method = "number", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
+    }
+    if ('upper' %in% rv$setting_cor_plot) {
     grDevices::png(
       file = base::paste0(input$project_name, " -- Correlation (upper).png"),
       width = 1000,
       height = 480
     )
-    corrplot::corrplot(M, type = "upper")
+    corrplot::corrplot(M, type = "upper", col = colors)
     base::invisible(grDevices::dev.off())
     grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (upper).pdf"))
-    P <- corrplot::corrplot(M, type = "upper")
+    P <- corrplot::corrplot(M, type = "upper", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
+    }
+    if ('lower' %in% rv$setting_cor_plot) {
     grDevices::png(
       file = base::paste0(input$project_name, " -- Correlation (lower).png"),
       width = 1000,
       height = 480
     )
-    corrplot::corrplot(M, type = "lower")
+    corrplot::corrplot(M, type = "lower", col = colors)
     base::invisible(grDevices::dev.off())
     grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (lower).pdf"))
-    P <- corrplot::corrplot(M, type = "lower")
+    P <- corrplot::corrplot(M, type = "lower", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
 
+    }
+
     if (base::length(COLN) >= 2) {
+      if ('hclust' %in% rv$setting_cor_plot) {
       grDevices::png(
         file = base::paste0(input$project_name, " -- Correlation (hclust).png"),
         width = 1000,
         height = 480
       )
 
-      corrplot::corrplot(M, type = "upper", order = "hclust")
+      corrplot::corrplot(M, type = "upper", order = "hclust", col = colors)
 
       base::invisible(grDevices::dev.off())
       grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (hclust).pdf"))
-      P <- corrplot::corrplot(M, type = "upper", order = "hclust")
+      P <- corrplot::corrplot(M, type = "upper", order = "hclust", col = colors)
       base::invisible(base::print(P))
       base::invisible(grDevices::dev.off())
 
+    }
+    if ('br' %in% rv$setting_cor_plot) {
       col <- colorRampPalette(base::c("red", "white", "blue"))(20)
       grDevices::png(
         file = base::paste0(
@@ -313,9 +350,8 @@ CoReLaTiOnSS <- function(input, rv) {
         height = 480
       )
       corrplot::corrplot(M,
-               type = "upper",
-               order = "hclust",
-               col = col)
+                         type = "upper",
+                         order = "hclust", col = colors)
       base::invisible(grDevices::dev.off())
 
       grDevices::pdf(file = base::paste0(
@@ -323,12 +359,12 @@ CoReLaTiOnSS <- function(input, rv) {
         " -- Correlation (upper and hclust (BR)).pdf"
       ))
       P <- corrplot::corrplot(M,
-                    type = "upper",
-                    order = "hclust",
-                    col = col)
+                              type = "upper",
+                              order = "hclust", col = colors)
       base::invisible(base::print(P))
       base::invisible(grDevices::dev.off())
-
+    }
+    if ('bw' %in% rv$setting_cor_plot) {
       grDevices::png(
         file = base::paste0(
           input$project_name,
@@ -341,7 +377,7 @@ CoReLaTiOnSS <- function(input, rv) {
         M,
         type = "upper",
         order = "hclust",
-        col = base::c("black", "white"),
+        col = colors,
         bg = "lightblue"
       )
       base::invisible(grDevices::dev.off())
@@ -353,12 +389,13 @@ CoReLaTiOnSS <- function(input, rv) {
         corrplot::corrplot(
           M,
           type = "upper",
-          order = "hclust",
-          col = base::c("black", "white"),
+          order = "hclust", col = colors,
           bg = "lightblue"
         )
       base::invisible(base::print(P))
       base::invisible(grDevices::dev.off())
+    }
+      if ('cola' %in% rv$setting_cor_plot) {
       grDevices::png(
         file = base::paste0(
           input$project_name,
@@ -371,7 +408,7 @@ CoReLaTiOnSS <- function(input, rv) {
         M,
         type = "upper",
         order = "hclust",
-        col = RColorBrewer::brewer.pal(n = 8, name = "RdBu")
+        col = colors
       )
       base::invisible(grDevices::dev.off())
       grDevices::pdf(file = base::paste0(
@@ -382,10 +419,12 @@ CoReLaTiOnSS <- function(input, rv) {
         M,
         type = "upper",
         order = "hclust",
-        col = RColorBrewer::brewer.pal(n = 8, name = "RdBu")
+        col = colors
       )
       base::invisible(base::print(P))
       base::invisible(grDevices::dev.off())
+    }
+      if ('colb' %in% rv$setting_cor_plot) {
       grDevices::png(
         file = base::paste0(
           input$project_name,
@@ -398,7 +437,7 @@ CoReLaTiOnSS <- function(input, rv) {
         M,
         type = "upper",
         order = "hclust",
-        col = RColorBrewer::brewer.pal(n = 8, name = "RdYlBu")
+        col = colors
       )
       base::invisible(grDevices::dev.off())
       grDevices::pdf(file = base::paste0(
@@ -409,10 +448,12 @@ CoReLaTiOnSS <- function(input, rv) {
         M,
         type = "upper",
         order = "hclust",
-        col = RColorBrewer::brewer.pal(n = 8, name = "RdYlBu")
+        col = colors
       )
       base::invisible(base::print(P))
       base::invisible(grDevices::dev.off())
+    }
+      if ('axis' %in% rv$setting_cor_plot) {
       grDevices::png(
         file = base::paste0(
           input$project_name,
@@ -426,7 +467,7 @@ CoReLaTiOnSS <- function(input, rv) {
         type = "upper",
         order = "hclust",
         tl.col = "black",
-        tl.srt = 45
+        tl.srt = 45, col = colors
       )
       base::invisible(grDevices::dev.off())
       grDevices::pdf(file = base::paste0(
@@ -439,10 +480,11 @@ CoReLaTiOnSS <- function(input, rv) {
           type = "upper",
           order = "hclust",
           tl.col = "black",
-          tl.srt = 45
+          tl.srt = 45, col = colors
         )
       base::invisible(base::print(P))
       base::invisible(grDevices::dev.off())
+    }
 
       Cor.mtest <- function(mat, ...) {
         mat <- base::as.matrix(mat)
@@ -458,7 +500,7 @@ CoReLaTiOnSS <- function(input, rv) {
         base::colnames(p.mat) <- base::rownames(p.mat) <- base::colnames(mat)
         p.mat
       }
-
+      if ('sig' %in% rv$setting_cor_plot) {
       base::tryCatch({
         # matrix of the p-value of the correlation
         p.mat <- Cor.mtest(SelectedTraits)
@@ -475,7 +517,7 @@ CoReLaTiOnSS <- function(input, rv) {
           type = "upper",
           order = "hclust",
           p.mat = p.mat,
-          sig.level = 0.01
+          sig.level = 0.01, col = colors
         )
         base::invisible(grDevices::dev.off())
       }, error = function(e) {
@@ -483,7 +525,7 @@ CoReLaTiOnSS <- function(input, rv) {
           M,
           type = "upper",
           order = "hclust",
-          sig.level = 0.01
+          sig.level = 0.01, col = colors
         )
         base::invisible(grDevices::dev.off())
       })
@@ -498,7 +540,7 @@ CoReLaTiOnSS <- function(input, rv) {
           type = "upper",
           order = "hclust",
           p.mat = p.mat,
-          sig.level = 0.01
+          sig.level = 0.01, col = colors
         )
         base::invisible(base::print(P))
         base::invisible(grDevices::dev.off())
@@ -509,12 +551,13 @@ CoReLaTiOnSS <- function(input, rv) {
           M,
           type = "upper",
           order = "hclust",
-          sig.level = 0.01
+          sig.level = 0.01, col = colors
         )
         base::invisible(base::print(P))
         base::invisible(grDevices::dev.off())
       })
-
+    }
+      if ('sigblank' %in% rv$setting_cor_plot) {
       base::tryCatch({
         grDevices::png(
           file = base::paste0(
@@ -530,7 +573,7 @@ CoReLaTiOnSS <- function(input, rv) {
           order = "hclust",
           p.mat = p.mat,
           sig.level = 0.01,
-          insig = "blank"
+          insig = "blank", col = colors
         )
         base::invisible(grDevices::dev.off())
 
@@ -541,7 +584,7 @@ CoReLaTiOnSS <- function(input, rv) {
           type = "upper",
           order = "hclust",
           sig.level = 0.01,
-          insig = "blank"
+          insig = "blank", col = colors
         )
         base::invisible(grDevices::dev.off())
 
@@ -558,7 +601,7 @@ CoReLaTiOnSS <- function(input, rv) {
           order = "hclust",
           p.mat = p.mat,
           sig.level = 0.01,
-          insig = "blank"
+          insig = "blank", col = colors
         )
         base::invisible(base::print(P))
         base::invisible(grDevices::dev.off())
@@ -569,15 +612,15 @@ CoReLaTiOnSS <- function(input, rv) {
           type = "upper",
           order = "hclust",
           sig.level = 0.01,
-          insig = "blank"
+          insig = "blank", col = colors
         )
         base::invisible(base::print(P))
         base::invisible(grDevices::dev.off())
       })
 
+    }
+      if ('full' %in% rv$setting_cor_plot) {
       base::tryCatch({
-        col <-
-          colorRampPalette(base::c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
         grDevices::png(
           file = base::paste0(input$project_name, " -- Correlation (Full).png"),
           width = 1000,
@@ -586,7 +629,7 @@ CoReLaTiOnSS <- function(input, rv) {
         corrplot::corrplot(
           M,
           method = "color",
-          col = col(200),
+          col = colors,
           type = "upper",
           order = "hclust",
           addCoef.col = "black",
@@ -604,7 +647,7 @@ CoReLaTiOnSS <- function(input, rv) {
         corrplot::corrplot(
           M,
           method = "color",
-          col = col(200),
+          col = colors,
           type = "upper",
           order = "hclust",
           addCoef.col = "black",
@@ -623,7 +666,7 @@ CoReLaTiOnSS <- function(input, rv) {
         P <- corrplot::corrplot(
           M,
           method = "color",
-          col = col(200),
+          col = colors,
           type = "upper",
           order = "hclust",
           addCoef.col = "black",
@@ -641,7 +684,7 @@ CoReLaTiOnSS <- function(input, rv) {
         P <- corrplot::corrplot(
           M,
           method = "color",
-          col = col(200),
+          col = colors,
           type = "upper",
           order = "hclust",
           addCoef.col = "black",
@@ -653,7 +696,9 @@ CoReLaTiOnSS <- function(input, rv) {
         )
         base::invisible(base::print(P))
         base::invisible(grDevices::dev.off())
-      }) #trycatch
+      })
+    }
+       #trycatch
     }
   }
 

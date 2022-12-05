@@ -18,7 +18,11 @@ app_server <- function(input, output, session) {
     csv_value = NULL, review_flag = TRUE,
     Maximum_Level_For_Group_By = 20, Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F,
     User_Config_notif_delay = 8, User_Config_notif_size = 4
-    , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL
+    , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL,
+    setting_cor_plot = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank'),
+    setting_colors_list = base::c("#FF0000","#0000FF"),
+    setting_colors = base::c("#FF0000","#0000FF"), setting_cor_cnum = 100
+
   )
 
   allinone_initialize <- function(rv) {
@@ -54,13 +58,35 @@ app_server <- function(input, output, session) {
                                   ' ', '!', ';', ',', '|', '!', '@', '#', '$',
                                   '%', '^', '&', '*', '(', ')', '+', '-')
 
-  # shinyjs::hideElement('Rep_Res_Wrd')
-
   shiny::observe({
     rv$User_Config_notif_delay = input$notif_delay
     rv$User_Config_notif_size = input$notif_size
     rv$Maximum_Level_For_Group_By = input$Max_levels_GB
     rv$Ignore_Reserved_Letters = input$Ign_Res_Wrd
+    rv$setting_cor_plot = input$setting_cor_plot
+    rv$setting_cor_cnum = input$setting_cor_cnum
+  })
+
+  shiny::observeEvent(input$setting_add_color, {
+    rv$setting_colors_list = base::c(rv$setting_colors_list, input$setting_color_picker)
+    rv$setting_colors = base::c(rv$setting_colors, input$setting_color_picker)
+  })
+
+  observeEvent(input$setting_colors_list,{
+    if(length(input$setting_colors_list > 1))  {
+      rv$setting_colors = input$setting_colors_list
+    }
+  })
+
+  output$o_setting_colors_list <- renderUI({
+    shiny::selectInput(
+      inputId = 'setting_colors_list',
+      label = 'Colors',
+      choices = rv$setting_colors_list,
+      multiple = T,
+      selected = rv$setting_colors,
+      width = '100%'
+    )
   })
 
   output$o_res_blue_k <- shiny::renderUI({
@@ -685,7 +711,6 @@ app_server <- function(input, output, session) {
   shiny::observeEvent(input$opt_list_btn_2, {
 
     #to make sure that all directories are deletable
-    temp = rv$buffer
     for (c in 1:100) {
       rv$buffer = FALSE
       base::tryCatch(
@@ -694,7 +719,6 @@ app_server <- function(input, output, session) {
           rv$buffer = TRUE
         })
       if (rv$buffer) {
-        rv$buffer = temp
         break
       }
     }

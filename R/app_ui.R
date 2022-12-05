@@ -100,7 +100,67 @@ menu_setting <- shiny::tagList(
       value = F,
       width = '100%'
     )),
+  shiny::column(
+    width = 12,
+    shiny::uiOutput('o_setting_colors_list')
+  ),
+  # TODO add colourpicker library into requirements
+  shiny::column(
+    width = 4,
+    shiny::numericInput(
+      inputId = 'setting_cor_cnum',
+      label = 'classification number',
+      value = 100, min = 2, max = 1000, step = 1, width = '100%')
+  ),
+  shiny::column(
+    width = 4,
+    colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add a color to the list', closeOnClick = T)
+  ),
+  shiny::column(
+    width = 4,
+    class = "structure_change_type_col",
+    shiny::actionButton('setting_add_color', 'Add this color to the colors list')
+  )
+)
 
+menu_setting_cor <- shiny::tagList(
+  shiny::column(
+    width = 12,
+    shiny::tags$div(
+      align = 'left',
+      class = 'multicol',
+      shiny::checkboxGroupInput(
+        width = '100%',
+        inputId = 'setting_cor_plot',
+        label = tags$span(
+          'Select which plots you need in the correlatin menu',
+          tags$i(
+            class = "glyphicon glyphicon-info-sign",
+            style = "color: var(--Just-color);",
+            title = 'Please select which plots you need in the correlatin menu'
+          )),
+        choices = c(
+          'Circle' = 'circle',
+          'Color' = 'color',
+          'Full' = 'full',
+          'Hculst' = 'hclust',
+          'Lower' = 'lower',
+          'Number' = 'number',
+          'pie' = 'pie',
+          'Upper' = 'upper',
+          'upper and hclust (AXIS)' = 'axis',
+          'upper and hclust (BR)' = 'br',
+          'upper and hclust (BW)' = 'bw',
+          'upper and hclust (COLA)' = 'cola',
+          'upper and hclust (COLB)' = 'colb',
+          'upper and hclust (SIG)' = 'sig',
+          'upper and hclust (SIGBLANK)' = 'sigblank'
+        ),
+        selected = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank')
+      )
+    )
+
+  )
 )
 
 menu_plots <- shiny::tagList(
@@ -250,6 +310,10 @@ body <- shinydashboard::dashboardBody(
           menu_plots
         ),
         shiny::tabPanel(
+          title = "Correlation",
+          menu_setting_cor
+        ),
+        shiny::tabPanel(
           title = "Import/Export",
           shiny::column(
             width = 12,
@@ -261,8 +325,9 @@ body <- shinydashboard::dashboardBody(
           shiny::column(
             width = 12,
             shiny::downloadButton(
-              'save_setting', 'Export Setting')),
-          # shiny::actionButton('save_setting', 'Export Setting')
+              'save_setting',
+              'Export Setting')
+          )
         )
       )
     )
