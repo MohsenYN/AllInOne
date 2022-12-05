@@ -57,13 +57,14 @@ Heritability <- function(input, rv) {
     dplyr::summarize(h = (Variance[grp == genom_dep_col]) / (base::sum(Variance)))
 
   utils::write.csv(bs_her, base::paste0(input$project_name,' -- Heritability Values.csv'), row.names = F)
-
+  colors_f <- grDevices::colorRampPalette(rv$setting_colors)
   p <- function() {
     var <- ggplot2::ggplot(data = bs_her, ggplot2::aes(x = DTriats, y = h, group = 5, fill = DTriats)) +
       ggplot2::geom_bar(stat = "identity", position = "dodge", width = 0.5) +
       ggplot2::theme_classic() +
       ggplot2::labs(y = "Heritability", x = "Dependant/Response Variable") +
-      ggplot2::guides(fill = ggplot2::guide_legend(title = "Trait"))
+      ggplot2::guides(fill = ggplot2::guide_legend(title = "Trait"))+
+      ggplot2::scale_fill_manual( values = colors_f(base::length(input$main_db_dep_val)) )
     base::invisible(base::print(var))
   }
 

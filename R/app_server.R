@@ -21,7 +21,7 @@ app_server <- function(input, output, session) {
     , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL,
     setting_cor_plot = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank'),
     setting_colors_list = base::c("#FF0000","#0000FF"),
-    setting_colors = base::c("#FF0000","#0000FF"), setting_cor_cnum = 100
+    setting_colors = base::c("#FF0000","#0000FF"), setting_general_cnum = 100
 
   )
 
@@ -64,7 +64,7 @@ app_server <- function(input, output, session) {
     rv$Maximum_Level_For_Group_By = input$Max_levels_GB
     rv$Ignore_Reserved_Letters = input$Ign_Res_Wrd
     rv$setting_cor_plot = input$setting_cor_plot
-    rv$setting_cor_cnum = input$setting_cor_cnum
+    rv$setting_general_cnum = input$setting_general_cnum
   })
 
   shiny::observeEvent(input$setting_add_color, {
@@ -2349,6 +2349,9 @@ app_server <- function(input, output, session) {
         i = input$sum_box_select_i
         j = input$sum_box_select_j
         levels_j = base::length(base::unique(rv$data[[j]]))
+        colors_f <- grDevices::colorRampPalette(rv$setting_colors)
+        colors_ = colors_f(levels_j)
+
         if (levels_j <= rv$Maximum_Level_For_Group_By) {
           ggpubr::ggsummarystats(
             rv$data,
@@ -2357,6 +2360,7 @@ app_server <- function(input, output, session) {
             ggfunc = ggpubr::ggboxplot,
             add = "jitter",
             color = j,
+            palette = colors_,
             labeller = "label_value",
             legend = "top",
             ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
@@ -2407,6 +2411,7 @@ app_server <- function(input, output, session) {
         i = input$sum_density_select_i
         j = input$sum_density_select_j
         levels_j = base::length(base::unique(rv$data[[j]]))
+        colors_f <- grDevices::colorRampPalette(rv$setting_colors)
         if (levels_j <= rv$Maximum_Level_For_Group_By)
           if (base::is.numeric(SelectedTraits[, i])) {
             ME <- base::as.factor(rv$data[, j])
@@ -2419,7 +2424,8 @@ app_server <- function(input, output, session) {
                 subtitle = i
               ) +
               ggplot2::guides(fill = ggplot2::guide_legend(j)) +
-              ggplot2::theme_classic()
+              ggplot2::theme_classic()+
+              ggplot2::scale_fill_manual( values = colors_f(base::length(base::levels(ME))) )
           }
       }
 
@@ -2463,11 +2469,15 @@ app_server <- function(input, output, session) {
         i = input$sum_violin_select_i
         j = input$sum_violin_select_j
         levels_j = base::length(base::unique(rv$data[[j]]))
+        colors_f <- grDevices::colorRampPalette(rv$setting_colors)
+        colors_ = colors_f(levels_j)
+
         if (levels_j <= rv$Maximum_Level_For_Group_By)
           ggpubr::ggsummarystats(
             rv$data, j, i,
             ggfunc = ggpubr::ggviolin, add = "jitter", labeller = "label_value",
             color = j,
+            palette = colors_,
             legend = "top",
             ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
           )

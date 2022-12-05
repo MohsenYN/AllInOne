@@ -108,7 +108,7 @@ menu_setting <- shiny::tagList(
   shiny::column(
     width = 4,
     shiny::numericInput(
-      inputId = 'setting_cor_cnum',
+      inputId = 'setting_general_cnum',
       label = 'classification number',
       value = 100, min = 2, max = 1000, step = 1, width = '100%')
   ),

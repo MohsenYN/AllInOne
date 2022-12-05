@@ -23,6 +23,8 @@ DensityPlot <- function(input, rv) {
   SelectedTraits <- rv$dependent_variables
 
   A <- base::list()
+  colors_f = grDevices::colorRampPalette(rv$setting_colors)
+
   for (j in base::colnames(VarPYSLK)) {
     for (i in base::colnames(SelectedTraits)) {
       if (base::is.character(SelectedTraits[, i]) == TRUE) {
@@ -38,7 +40,8 @@ DensityPlot <- function(input, rv) {
             subtitle = i
           ) +
           ggplot2::guides(fill = ggplot2::guide_legend(j)) +
-          ggplot2::theme_classic()
+          ggplot2::theme_classic()+
+          ggplot2::scale_fill_manual( values = colors_f(base::length(base::levels(ME))) )
         ggplot2::ggsave(
           A[[i]],
           file = base::paste0(input$project_name, " -- Density plot ( ", j, " -- ", i, " ).png"),
