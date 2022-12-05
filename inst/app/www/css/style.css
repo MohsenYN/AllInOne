@@ -153,6 +153,7 @@ ul.nav.navbar-nav {
 }
 
 .title-image-tab {
+    margin: -10px;
     height: 25px;
     width: unset;
     order: 1;
