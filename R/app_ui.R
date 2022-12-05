@@ -99,12 +99,27 @@ menu_setting <- shiny::tagList(
         )),
       value = F,
       width = '100%'
-    )),
+    ))
+)
+
+menu_plots <- shiny::tagList(
   shiny::column(
-    width = 12,
-    shiny::uiOutput('o_setting_colors_list')
-  ),
-  # TODO add colourpicker library into requirements
+    width = 8,
+    shiny::numericInput(
+      'Max_levels_GB',
+      label = tags$span(
+        'Maximum levels in a factor for creating graph:',
+        tags$i(
+          class = "glyphicon glyphicon-info-sign",
+          style = "color: var(--Just-color);",
+          title = 'The independant variable with a level number more than the maximum set will be ignored for creating plots'
+        )),
+      value = 20,
+      min = 5,
+      max = 100,
+      step = '100%',
+      width = '100%'
+    )),
   shiny::column(
     width = 8,
     colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add color', closeOnClick = T)
@@ -113,10 +128,11 @@ menu_setting <- shiny::tagList(
     width = 4,
     class = "structure_change_type_col",
     shiny::actionButton('setting_add_color', 'Add this color to the colors list')
-  )
-)
-
-menu_setting_cor <- shiny::tagList(
+  ),
+  shiny::column(
+    width = 12,
+    shiny::uiOutput('o_setting_colors_list')
+  ),
   shiny::column(
     width = 12,
     shiny::tags$div(
@@ -153,26 +169,6 @@ menu_setting_cor <- shiny::tagList(
     )
 
   )
-)
-
-menu_plots <- shiny::tagList(
-  shiny::column(
-    width = 8,
-    shiny::numericInput(
-      'Max_levels_GB',
-      label = tags$span(
-        'Maximum levels in a factor for creating graph:',
-        tags$i(
-          class = "glyphicon glyphicon-info-sign",
-          style = "color: var(--Just-color);",
-          title = 'The independant variable with a level number more than the maximum set will be ignored for creating plots'
-        )),
-      value = 20,
-      min = 5,
-      max = 100,
-      step = '100%',
-      width = '100%'
-    ))
 )
 
 menu_db <- shinydashboard::menuItem(
@@ -300,10 +296,6 @@ body <- shinydashboard::dashboardBody(
         shiny::tabPanel(
           title = "Plots",
           menu_plots
-        ),
-        shiny::tabPanel(
-          title = "Correlation",
-          menu_setting_cor
         ),
         shiny::tabPanel(
           title = "Import/Export",
