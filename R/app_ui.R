@@ -122,12 +122,15 @@ menu_plots <- shiny::tagList(
     )),
   shiny::column(
     width = 8,
-    colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add color', closeOnClick = T)
-  ),
-  shiny::column(
-    width = 4,
-    class = "structure_change_type_col",
-    shiny::actionButton('setting_add_color', 'Add this color to the colors list')
+    shiny::column(
+      width = 8,
+      colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add color', closeOnClick = T)
+    ),
+    shiny::column(
+      width = 4,
+      class = "structure_change_type_col",
+      shiny::actionButton('setting_add_color', 'Add this color to the colors list')
+    )
   ),
   shiny::column(
     width = 12,
