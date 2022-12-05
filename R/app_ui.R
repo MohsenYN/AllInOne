@@ -106,15 +106,8 @@ menu_setting <- shiny::tagList(
   ),
   # TODO add colourpicker library into requirements
   shiny::column(
-    width = 4,
-    shiny::numericInput(
-      inputId = 'setting_general_cnum',
-      label = 'classification number',
-      value = 100, min = 2, max = 1000, step = 1, width = '100%')
-  ),
-  shiny::column(
-    width = 4,
-    colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add a color to the list', closeOnClick = T)
+    width = 8,
+    colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add this color to the list', closeOnClick = T)
   ),
   shiny::column(
     width = 4,

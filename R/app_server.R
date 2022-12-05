@@ -21,7 +21,7 @@ app_server <- function(input, output, session) {
     , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL,
     setting_cor_plot = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank'),
     setting_colors_list = base::c("#FF0000","#0000FF"),
-    setting_colors = base::c("#FF0000","#0000FF"), setting_general_cnum = 100
+    setting_colors = base::c("#FF0000","#0000FF")
 
   )
 
@@ -64,7 +64,6 @@ app_server <- function(input, output, session) {
     rv$Maximum_Level_For_Group_By = input$Max_levels_GB
     rv$Ignore_Reserved_Letters = input$Ign_Res_Wrd
     rv$setting_cor_plot = input$setting_cor_plot
-    rv$setting_general_cnum = input$setting_general_cnum
   })
 
   shiny::observeEvent(input$setting_add_color, {
@@ -75,6 +74,8 @@ app_server <- function(input, output, session) {
   observeEvent(input$setting_colors_list,{
     if(length(input$setting_colors_list > 0))  {
       rv$setting_colors = input$setting_colors_list
+    }else{
+      shiny_showNotification(rv, 'There should be at least one color!')
     }
   })
 

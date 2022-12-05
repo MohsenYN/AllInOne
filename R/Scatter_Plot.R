@@ -12,7 +12,7 @@ CheckSatterplot <- function(input, rv) {
   Scatter <- rv$data %>% dplyr::select(input$scatter_vars)
 
   colors_f <- grDevices::colorRampPalette(rv$setting_colors)
-  colors_ = colors_f(rv$setting_general_cnum)
+  colors_ = colors_f(200)
 
   p <- function()
     VIM::marginplot(Scatter,

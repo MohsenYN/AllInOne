@@ -34,7 +34,7 @@ CoReLaTiOnSS <- function(input, rv) {
   COLN = base::colnames(SelectedTraits)
 
   colors <- grDevices::colorRampPalette(rv$setting_colors)
-  colors = colors(rv$setting_general_cnum)
+  colors = colors(200)
   if (input$cor_opt == 'Non-independent-based correlation') {
     cor_ <- Hmisc::rcorr(as.matrix(SelectedTraits))
     M <- cor_$r
