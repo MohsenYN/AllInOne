@@ -17,11 +17,11 @@ app_server <- function(input, output, session) {
     pdf_address = NULL, png_address = NULL, csv_address = NULL, txt_address = NULL,
     csv_value = NULL, review_flag = TRUE,
     Maximum_Level_For_Group_By = 20, Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F,
-    User_Config_notif_delay = 8, User_Config_notif_size = 4
-    , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL,
+    User_Config_notif_delay = 8, User_Config_notif_size = 4,
+    Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL,
     setting_cor_plot = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank'),
-    setting_colors_list = base::c("#FF0000","#0000FF"),
-    setting_colors = base::c("#FF0000","#0000FF")
+    setting_colors_list = base::c('Blue' = '#0000FF', 'Red' = '#FF0000', 'Green' = '#00FF00', 'Yellow' = '#FFFF00'),
+    setting_colors = base::c('#0000FF', '#FF0000', '#00FF00', '#FFFF00')
 
   )
 

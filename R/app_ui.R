@@ -135,7 +135,10 @@ menu_plots <- shiny::tagList(
   shiny::column(
     width = 12,
     shiny::uiOutput('o_setting_colors_list')
-  ),
+  )
+)
+
+menu_setting_cor <- shiny::tagList(
   shiny::column(
     width = 12,
     shiny::tags$div(
@@ -291,10 +294,20 @@ body <- shinydashboard::dashboardBody(
     shiny::tabPanel(
       title = 'Setting',
       shiny::tabsetPanel(
-        type = "pills",
+        type = "tabs",
         shiny::tabPanel(
           title = "General",
-          menu_setting
+          shiny::tabsetPanel(
+            type = 'pill',
+            tabPanel(
+              title = 'Options',
+              menu_setting
+            ),
+            tabPanel(
+              title = 'Correlation',
+              menu_setting_cor
+            )
+          )
         ),
         shiny::tabPanel(
           title = "Plots",
