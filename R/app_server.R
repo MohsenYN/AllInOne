@@ -20,7 +20,7 @@ app_server <- function(input, output, session) {
     User_Config_notif_delay = 8, User_Config_notif_size = 4,
     Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL,
     setting_cor_plot = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank'),
-    setting_colors_list = base::c('Blue' = '#0000FF', 'Red' = '#FF0000', 'Green' = '#00FF00', 'Yellow' = '#FFFF00'),
+    setting_colors_list = base::c('#0000FF', '#FF0000', '#00FF00', '#FFFF00'),
     setting_colors = base::c('#0000FF', '#FF0000', '#00FF00', '#FFFF00')
 
   )
@@ -441,6 +441,8 @@ app_server <- function(input, output, session) {
           fileEncoding = "UTF-8-BOM"
         )
       )
+      ########General
+      ########  Options
       notif_delay = as.numeric(setting_dat[['General']][1])
       notif_size = as.numeric(setting_dat[['General']][2])
       Ign_Res_Wrd = as.logical(setting_dat[['General']][3])
@@ -448,10 +450,25 @@ app_server <- function(input, output, session) {
       shiny::updateNumericInput(inputId = 'notif_delay', value = notif_delay)
       shiny::updateSelectInput(inputId = 'notif_size', selected = notif_size)
       shiny::updateCheckboxInput(inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd)
+
+      ########General
+      ########  Options
+      str_ = setting_dat[['General']][4]
+      setting_cor_plot = base::strsplit(str_, ',')[[1]]
+
+      shiny::updateSelectInput(inputId = 'setting_cor_plot', selected = setting_cor_plot)
+
       ######################################################################################
-      Max_levels_GB = as.numeric(setting_dat[['Plots']][1])
+      ########General
+      ########  Plot
+      Max_levels_GB = base::as.numeric(setting_dat[['Plots']][1])
+      str_ = setting_dat[['Plots']][2]
+      rv$setting_colors_list = base::strsplit(str_, ',')[[1]]
+      str_ = setting_dat[['Plots']][3]
+      rv$setting_colors = base::strsplit(str_, ',')[[1]]
 
       shiny::updateNumericInput(inputId = 'Max_levels_GB', value = Max_levels_GB)
+
     }
     else {
       shiny_showNotification(rv, 'Failed to import setting file')
@@ -459,24 +476,6 @@ app_server <- function(input, output, session) {
     # }, error = function(e) {
     #   shiny_showNotification(rv, e$message)
     # })
-  })
-
-  observeEvent(input$save_setting, {
-    notif_delay = input$notif_delay
-    notif_size = input$notif_size
-    Ign_Res_Wrd = input$Ign_Res_Wrd
-
-    ######################################################################################
-    Max_levels_GB = input$Max_levels_GB
-
-    l = list()
-
-    l[['General']][1] = notif_delay
-    l[['General']][2] = notif_size
-    l[['General']][3] = Ign_Res_Wrd
-    l[['Plots']][1] = Max_levels_GB
-
-    write.csv(l, 'My_Setting.csv', row.names = F)
   })
 
   shiny::observeEvent(
@@ -2059,20 +2058,34 @@ app_server <- function(input, output, session) {
     contentType = "text/csv",
     content = function(path) {
 
-      notif_delay = input$notif_delay
-      notif_size = input$notif_size
-      Ign_Res_Wrd = input$Ign_Res_Wrd
+      ########General
+    ########  Options
+    notif_delay = input$notif_delay
+    notif_size = input$notif_size
+    Ign_Res_Wrd = input$Ign_Res_Wrd
 
-      #####################################
+    ########  Correlation
+    setting_cor_plot = rv$setting_cor_plot
 
-      Max_levels_GB = input$Max_levels_GB
+    ########Plots
+    Max_levels_GB = input$Max_levels_GB
+    setting_colors_list = input$setting_colors_list
 
-      l = list()
+    l = list()
 
-      l[['General']][1] = notif_delay
-      l[['General']][2] = notif_size
-      l[['General']][3] = Ign_Res_Wrd
-      l[['Plots']][1] = Max_levels_GB
+    ########General
+    ########  Options
+    l[['General']][1] = notif_delay
+    l[['General']][2] = notif_size
+    l[['General']][3] = Ign_Res_Wrd
+    ########  Correlation
+    l[['General']][4] = paste(setting_cor_plot, collapse = ',')
+
+    ########Plots
+    l[['Plots']][1] = Max_levels_GB
+    l[['Plots']][2] = paste(rv$setting_colors_list, collapse = ',')
+    l[['Plots']][3] = paste(rv$setting_colors, collapse = ',')
+    l[['Plots']][4] = 'NULL'
 
       utils::write.csv(l, path, row.names = F)
     }
