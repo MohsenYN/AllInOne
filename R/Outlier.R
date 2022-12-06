@@ -31,6 +31,7 @@ PoSiBlEoUtLieR <- function(input, rv) {
 
     COL_INDEP <- input$indep_outlier_2
     cloned <- data.table::data.table(rv$data)
+    colors_f <- grDevices::colorRampPalette(rv$setting_colors)
     for (j in base::colnames(VarPYSL)) {
       for (i in COLN) {
         if (base::is.character(rv$data[, i]) == TRUE) {
@@ -79,9 +80,10 @@ PoSiBlEoUtLieR <- function(input, rv) {
               ggplot2::labs(x = i,
                             title = base::paste0("Detecting outlier in each ",j),
                             subtitle = i) +
-              # ggplot2::guides(fill = ggplot2::guide_legend(j)) + ggplot2::scale_x_discrete(name = j) +
+              # ggplot2::guides(fill = ggplot2::guide_legend(j)) +
               ggplot2::scale_y_continuous(name = i) +
-              ggplot2::scale_x_discrete(name = j)
+              ggplot2::scale_x_discrete(name = j)+
+            ggplot2::scale_fill_manual( values = colors_f(base::length(base::levels(MS))) )
           levels_j = base::length(base::unique(rv$data[[j]]))
           if (levels_j <= rv$Maximum_Level_For_Group_By) {
             ggplot2::ggsave(
@@ -138,12 +140,14 @@ PoSiBlEoUtLieR <- function(input, rv) {
     buf = k$ckd
     buf[['obs']] <- rownames(buf)
     utils::write.csv(buf, base::paste0(input$project_name,' -- Cooks distance values.csv'), row.names = F)
-    utils::write.csv(f, base::paste0(input$project_name,' -- Cooks distance outliers.csv'))
+    utils::write.csv(f, base::paste0(input$project_name,' -- Cooks distance outliers.csv'), row.names = F)
 
     rv$outliers <- NULL
     rv$outliers_row <- buf[['obs']][k$ckd$obs[base::which(k$ckd$color == 'outlier')]]
 
     rv$outliers_row = as.numeric(rv$outliers_row)
+    colors_f <- grDevices::colorRampPalette(rv$setting_colors)
+
     for (i in rv$outliers_row)
       rv$outliers = base::c(rv$outliers, input$outlier_resp, i, rv$data[[input$outlier_resp]][i])
 
@@ -162,7 +166,8 @@ PoSiBlEoUtLieR <- function(input, rv) {
           ggplot2::annotate("text", x = Inf, y = Inf, hjust = 1.2,
                             vjust = 2, family = "serif", fontface = "italic",
                             colour = "darkred", label = base::paste("Threshold:", base::round(k$ts, 3))) +
-          ggplot2::theme_classic()
+          ggplot2::theme_classic()+
+          ggplot2::scale_fill_manual( values = colors_f(base::length(base::levels(asfct))) )
 
         grDevices::png(base::paste0(input$project_name, ' -- cooks distance plot grouped by ', gp, '.png'),
                        width = get_width(rv, 2))
@@ -206,7 +211,8 @@ PoSiBlEoUtLieR <- function(input, rv) {
                         vjust = 2, family = "serif", fontface = "italic",
                         colour = "darkred", label = base::paste("Threshold:",
                                                                 base::round(k$ts, 3))) +
-      ggplot2::theme_classic()
+      ggplot2::theme_classic()+
+      ggplot2::scale_fill_manual( values = colors_f(2) )
     grDevices::png(base::paste0(input$project_name, ' -- cooks distance bar.png'),
                    width = get_width(rv, 2))
     base::invisible(base::print(p))

@@ -7,7 +7,7 @@
 #'
 #' @noRd
 NormaLiZaTIoN <- function(input, rv) {
-
+  colors_f <- grDevices::colorRampPalette(rv$setting_colors)
   if (!require(car))
     utils::install.packages("car")
   if (!require(bestNormalize))
@@ -29,12 +29,12 @@ NormaLiZaTIoN <- function(input, rv) {
       grDevices::png(file = base::paste0(i, " -- Normality plot (before normalization).png"))
       MASS::truehist(SelectedTraits[, base::match(i, COLN)],
                      nbins = base::as.numeric(input$nbin),
-                     xlab = i)
+                     xlab = i, col = colors_f(1))
       base::invisible(grDevices::dev.off())
       grDevices::pdf(file = base::paste0(i, " -- Normality plot (before normalization).pdf"))
       MASS::truehist(SelectedTraits[, base::match(i, COLN)],
                      nbins = base::as.numeric(input$nbin),
-                     xlab = i)
+                     xlab = i, col = colors_f(1))
       base::invisible(grDevices::dev.off())
 
       (arcsinh_obj <-
@@ -53,17 +53,17 @@ NormaLiZaTIoN <- function(input, rv) {
 
       grDevices::png(file = base::paste0(i, " -- Normality plot (after normalization).png"))
       graphics::par(mfrow = base::c(2, 2))
-      MASS::truehist(arcsinh_obj$x.t, main = "Arcsinh transformation", nbins = base::as.numeric(input$nbin))
-      MASS::truehist(boxcox_obj$x.t, main = "Box Cox transformation", nbins = base::as.numeric(input$nbin))
-      MASS::truehist(yeojohnson_obj$x.t, main = "Yeo-Johnson transformation", nbins = base::as.numeric(input$nbin))
-      MASS::truehist(orderNorm_obj$x.t, main = "OrderNorm transformation", nbins = base::as.numeric(input$nbin))
+      MASS::truehist(arcsinh_obj$x.t, main = "Arcsinh transformation", nbins = base::as.numeric(input$nbin), col = colors_f(1))
+      MASS::truehist(boxcox_obj$x.t, main = "Box Cox transformation", nbins = base::as.numeric(input$nbin), col = colors_f(1))
+      MASS::truehist(yeojohnson_obj$x.t, main = "Yeo-Johnson transformation", nbins = base::as.numeric(input$nbin), col = colors_f(1))
+      MASS::truehist(orderNorm_obj$x.t, main = "OrderNorm transformation", nbins = base::as.numeric(input$nbin), col = colors_f(1))
       base::invisible(grDevices::dev.off())
       grDevices::pdf(file = base::paste0(i, " -- Normality plot (after normalization).pdf"))
       graphics::par(mfrow = base::c(2, 2))
-      MASS::truehist(arcsinh_obj$x.t, main = "Arcsinh transformation", nbins = base::as.numeric(input$nbin))
-      MASS::truehist(boxcox_obj$x.t, main = "Box Cox transformation", nbins = base::as.numeric(input$nbin))
-      MASS::truehist(yeojohnson_obj$x.t, main = "Yeo-Johnson transformation", nbins = base::as.numeric(input$nbin))
-      MASS::truehist(orderNorm_obj$x.t, main = "OrderNorm transformation", nbins = base::as.numeric(input$nbin))
+      MASS::truehist(arcsinh_obj$x.t, main = "Arcsinh transformation", nbins = base::as.numeric(input$nbin), col = colors_f(1))
+      MASS::truehist(boxcox_obj$x.t, main = "Box Cox transformation", nbins = base::as.numeric(input$nbin), col = colors_f(1))
+      MASS::truehist(yeojohnson_obj$x.t, main = "Yeo-Johnson transformation", nbins = base::as.numeric(input$nbin), col = colors_f(1))
+      MASS::truehist(orderNorm_obj$x.t, main = "OrderNorm transformation", nbins = base::as.numeric(input$nbin), col = colors_f(1))
       base::invisible(grDevices::dev.off())
 
 
@@ -75,7 +75,7 @@ NormaLiZaTIoN <- function(input, rv) {
           "Best transformation:",
           base::class(BNobject$chosen_transform)[1]
         ),
-        nbins = base::as.numeric(input$nbin)
+        nbins = base::as.numeric(input$nbin), col = colors_f(1)
       )
       base::plot(
         xx,
@@ -95,7 +95,7 @@ NormaLiZaTIoN <- function(input, rv) {
           "Best transformation:",
           base::class(BNobject$chosen_transform)[1]
         ),
-        nbins = base::as.numeric(input$nbin)
+        nbins = base::as.numeric(input$nbin), col = colors_f(1)
       )
       base::plot(
         xx,
@@ -114,7 +114,9 @@ NormaLiZaTIoN <- function(input, rv) {
       )
       graphics::boxplot(base::log10(BNobject$oos_preds),
               yaxt = 'n',
-              xlab = "Normalization test")
+              xlab = "Normalization test",
+                        col = colors_f(1)
+      )
       graphics::axis(2,
            at = base::log10(base::c(.1, .5, 1, 2, 5, 10)),
            labels = base::c(.1, .5, 1, 2, 5, 10))
@@ -122,7 +124,8 @@ NormaLiZaTIoN <- function(input, rv) {
       grDevices::pdf(file = base::paste0(i, " -- Normality approaches (box plot).pdf"))
       graphics::boxplot(base::log10(BNobject$oos_preds),
               yaxt = 'n',
-              xlab = "Normalization test")
+              xlab = "Normalization test",
+                        col = colors_f(1))
       graphics::axis(2,
            at = base::log10(base::c(.1, .5, 1, 2, 5, 10)),
            labels = base::c(.1, .5, 1, 2, 5, 10))

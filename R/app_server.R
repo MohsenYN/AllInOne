@@ -17,8 +17,12 @@ app_server <- function(input, output, session) {
     pdf_address = NULL, png_address = NULL, csv_address = NULL, txt_address = NULL,
     csv_value = NULL, review_flag = TRUE,
     Maximum_Level_For_Group_By = 20, Ignore_Reserved_Letters = T, Replace_Reserved_Letters = F,
-    User_Config_notif_delay = 8, User_Config_notif_size = 4
-    , Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL
+    User_Config_notif_delay = 8, User_Config_notif_size = 4,
+    Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL,
+    setting_cor_plot = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank'),
+    setting_colors_list = base::c('#0000FF', '#FF0000', '#00FF00', '#FFFF00'),
+    setting_colors = base::c('#0000FF', '#FF0000', '#00FF00', '#FFFF00')
+
   )
 
   allinone_initialize <- function(rv) {
@@ -54,13 +58,36 @@ app_server <- function(input, output, session) {
                                   ' ', '!', ';', ',', '|', '!', '@', '#', '$',
                                   '%', '^', '&', '*', '(', ')', '+', '-')
 
-  # shinyjs::hideElement('Rep_Res_Wrd')
-
   shiny::observe({
     rv$User_Config_notif_delay = input$notif_delay
     rv$User_Config_notif_size = input$notif_size
     rv$Maximum_Level_For_Group_By = input$Max_levels_GB
     rv$Ignore_Reserved_Letters = input$Ign_Res_Wrd
+    rv$setting_cor_plot = input$setting_cor_plot
+  })
+
+  shiny::observeEvent(input$setting_add_color, {
+    rv$setting_colors_list = base::c(rv$setting_colors_list, input$setting_color_picker)
+    rv$setting_colors = base::c(rv$setting_colors, input$setting_color_picker)
+  })
+
+  observeEvent(input$setting_colors_list,{
+    if(length(input$setting_colors_list > 0))  {
+      rv$setting_colors = input$setting_colors_list
+    }else{
+      shiny_showNotification(rv, 'There should be at least one color!')
+    }
+  })
+
+  output$o_setting_colors_list <- renderUI({
+    shiny::selectInput(
+      inputId = 'setting_colors_list',
+      label = 'Color list',
+      choices = rv$setting_colors_list,
+      multiple = T,
+      selected = rv$setting_colors,
+      width = '100%'
+    )
   })
 
   output$o_res_blue_k <- shiny::renderUI({
@@ -414,6 +441,8 @@ app_server <- function(input, output, session) {
           fileEncoding = "UTF-8-BOM"
         )
       )
+      ########General
+      ########  Options
       notif_delay = as.numeric(setting_dat[['General']][1])
       notif_size = as.numeric(setting_dat[['General']][2])
       Ign_Res_Wrd = as.logical(setting_dat[['General']][3])
@@ -421,10 +450,25 @@ app_server <- function(input, output, session) {
       shiny::updateNumericInput(inputId = 'notif_delay', value = notif_delay)
       shiny::updateSelectInput(inputId = 'notif_size', selected = notif_size)
       shiny::updateCheckboxInput(inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd)
+
+      ########General
+      ########  Options
+      str_ = setting_dat[['General']][4]
+      setting_cor_plot = base::strsplit(str_, ',')[[1]]
+
+      shiny::updateSelectInput(inputId = 'setting_cor_plot', selected = setting_cor_plot)
+
       ######################################################################################
-      Max_levels_GB = as.numeric(setting_dat[['Plots']][1])
+      ########General
+      ########  Plot
+      Max_levels_GB = base::as.numeric(setting_dat[['Plots']][1])
+      str_ = setting_dat[['Plots']][2]
+      rv$setting_colors_list = base::strsplit(str_, ',')[[1]]
+      str_ = setting_dat[['Plots']][3]
+      rv$setting_colors = base::strsplit(str_, ',')[[1]]
 
       shiny::updateNumericInput(inputId = 'Max_levels_GB', value = Max_levels_GB)
+
     }
     else {
       shiny_showNotification(rv, 'Failed to import setting file')
@@ -432,24 +476,6 @@ app_server <- function(input, output, session) {
     # }, error = function(e) {
     #   shiny_showNotification(rv, e$message)
     # })
-  })
-
-  observeEvent(input$save_setting, {
-    notif_delay = input$notif_delay
-    notif_size = input$notif_size
-    Ign_Res_Wrd = input$Ign_Res_Wrd
-
-    ######################################################################################
-    Max_levels_GB = input$Max_levels_GB
-
-    l = list()
-
-    l[['General']][1] = notif_delay
-    l[['General']][2] = notif_size
-    l[['General']][3] = Ign_Res_Wrd
-    l[['Plots']][1] = Max_levels_GB
-
-    write.csv(l, 'My_Setting.csv', row.names = F)
   })
 
   shiny::observeEvent(
@@ -685,7 +711,6 @@ app_server <- function(input, output, session) {
   shiny::observeEvent(input$opt_list_btn_2, {
 
     #to make sure that all directories are deletable
-    temp = rv$buffer
     for (c in 1:100) {
       rv$buffer = FALSE
       base::tryCatch(
@@ -694,7 +719,6 @@ app_server <- function(input, output, session) {
           rv$buffer = TRUE
         })
       if (rv$buffer) {
-        rv$buffer = temp
         break
       }
     }
@@ -2034,20 +2058,34 @@ app_server <- function(input, output, session) {
     contentType = "text/csv",
     content = function(path) {
 
-      notif_delay = input$notif_delay
-      notif_size = input$notif_size
-      Ign_Res_Wrd = input$Ign_Res_Wrd
+      ########General
+    ########  Options
+    notif_delay = input$notif_delay
+    notif_size = input$notif_size
+    Ign_Res_Wrd = input$Ign_Res_Wrd
 
-      #####################################
+    ########  Correlation
+    setting_cor_plot = rv$setting_cor_plot
 
-      Max_levels_GB = input$Max_levels_GB
+    ########Plots
+    Max_levels_GB = input$Max_levels_GB
+    setting_colors_list = input$setting_colors_list
 
-      l = list()
+    l = list()
 
-      l[['General']][1] = notif_delay
-      l[['General']][2] = notif_size
-      l[['General']][3] = Ign_Res_Wrd
-      l[['Plots']][1] = Max_levels_GB
+    ########General
+    ########  Options
+    l[['General']][1] = notif_delay
+    l[['General']][2] = notif_size
+    l[['General']][3] = Ign_Res_Wrd
+    ########  Correlation
+    l[['General']][4] = paste(setting_cor_plot, collapse = ',')
+
+    ########Plots
+    l[['Plots']][1] = Max_levels_GB
+    l[['Plots']][2] = paste(rv$setting_colors_list, collapse = ',')
+    l[['Plots']][3] = paste(rv$setting_colors, collapse = ',')
+    l[['Plots']][4] = 'NULL'
 
       utils::write.csv(l, path, row.names = F)
     }
@@ -2325,6 +2363,9 @@ app_server <- function(input, output, session) {
         i = input$sum_box_select_i
         j = input$sum_box_select_j
         levels_j = base::length(base::unique(rv$data[[j]]))
+        colors_f <- grDevices::colorRampPalette(rv$setting_colors)
+        colors_ = colors_f(levels_j)
+
         if (levels_j <= rv$Maximum_Level_For_Group_By) {
           ggpubr::ggsummarystats(
             rv$data,
@@ -2333,6 +2374,7 @@ app_server <- function(input, output, session) {
             ggfunc = ggpubr::ggboxplot,
             add = "jitter",
             color = j,
+            palette = colors_,
             labeller = "label_value",
             legend = "top",
             ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
@@ -2383,6 +2425,7 @@ app_server <- function(input, output, session) {
         i = input$sum_density_select_i
         j = input$sum_density_select_j
         levels_j = base::length(base::unique(rv$data[[j]]))
+        colors_f <- grDevices::colorRampPalette(rv$setting_colors)
         if (levels_j <= rv$Maximum_Level_For_Group_By)
           if (base::is.numeric(SelectedTraits[, i])) {
             ME <- base::as.factor(rv$data[, j])
@@ -2395,7 +2438,8 @@ app_server <- function(input, output, session) {
                 subtitle = i
               ) +
               ggplot2::guides(fill = ggplot2::guide_legend(j)) +
-              ggplot2::theme_classic()
+              ggplot2::theme_classic()+
+              ggplot2::scale_fill_manual( values = colors_f(base::length(base::levels(ME))) )
           }
       }
 
@@ -2439,11 +2483,15 @@ app_server <- function(input, output, session) {
         i = input$sum_violin_select_i
         j = input$sum_violin_select_j
         levels_j = base::length(base::unique(rv$data[[j]]))
+        colors_f <- grDevices::colorRampPalette(rv$setting_colors)
+        colors_ = colors_f(levels_j)
+
         if (levels_j <= rv$Maximum_Level_For_Group_By)
           ggpubr::ggsummarystats(
             rv$data, j, i,
             ggfunc = ggpubr::ggviolin, add = "jitter", labeller = "label_value",
             color = j,
+            palette = colors_,
             legend = "top",
             ggtheme = ggpubr::theme_pubr(x.text.angle = get_x_text_angle(levels_j))
           )

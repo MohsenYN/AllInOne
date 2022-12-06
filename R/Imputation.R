@@ -20,9 +20,7 @@ ImputeMissing <- function(input, rv, session) {
 
   set_wd('Missing Imputation')
 
-  rv$buffer = T
   if (base::sum(base::is.na(rv$dependent_variables)) == 0) {
-    rv$buffer = F
     session$sendCustomMessage(
       type = 'testmessage',
       message = " WoW! You do not have any missing data! Cool!")
