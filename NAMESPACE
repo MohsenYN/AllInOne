@@ -2,7 +2,6 @@
 
 export(run_app)
 import(shiny)
-importFrom(colourpicker,colourInput)
 importFrom(data.table,":=")
 importFrom(dplyr,"%>%")
 importFrom(golem,activate_js)

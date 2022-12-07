@@ -349,7 +349,6 @@ Header <- shinydashboard::dashboardHeader(
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
 #' @import shiny
-#' @importFrom colourpicker colourInput
 #' @noRd
 app_ui <- function(request) {
   tagList(
