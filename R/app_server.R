@@ -457,7 +457,6 @@ app_server <- function(input, output, session) {
 
       shiny::updateNumericInput(inputId = 'notif_delay', value = notif_delay)
       shiny::updateSelectInput(inputId = 'notif_size', selected = notif_size)
-      # shiny::updateCheckboxInput(inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd)
       shinyWidgets::updatePrettyCheckbox(
         inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd
       )

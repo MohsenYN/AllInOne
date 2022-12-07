@@ -92,7 +92,7 @@ menu_setting <- shiny::tagList(
     shinyWidgets::switchInput(
       inputId = "Ign_Res_Wrd",
       label = shiny::tags$span(
-        'Special character',
+        'Special characters',
         shiny::tags$i(
           class = "glyphicon glyphicon-info-sign",
           style = "color: var(--Just-color);",
