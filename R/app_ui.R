@@ -129,7 +129,13 @@ menu_plots <- shiny::tagList(
     width = 8,
     shiny::column(
       width = 8,
-      colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add color', closeOnClick = T)
+      # colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add color', closeOnClick = T)
+      shiny::HTML('
+        <div class="form-group shiny-input-container">
+          <label class="control-label" id="idd-label" for="setting_color_picker">Add color</label>
+          <input id="setting_color_picker" type="text" class="form-control" value="#FFFFFF"/>
+        </div>
+      ')
     ),
     shiny::column(
       width = 4,
