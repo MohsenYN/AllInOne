@@ -16,10 +16,7 @@ interface <- shiny::fluidPage(
     top = "center",
     css = "padding: 0 !important; border: 3px solid #000000;"
   ),
-  waiter::use_waiter(),
-  shinyjs::useShinyjs(),
   shiny::tags$head(
-    shiny::tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css?v16"),
     shiny::tags$link(rel = "stylesheet", type = "text/css",
                      href = "https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css")
   ),
@@ -129,14 +126,7 @@ menu_plots <- shiny::tagList(
     width = 8,
     shiny::column(
       width = 8,
-      # colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add color', closeOnClick = T)
-      shiny::HTML('
-        <div class="form-group shiny-input-container">
-          <label class="control-label" id="setting_color_picker-label" for="setting_color_picker">Add color</label>
-          <input id="setting_color_picker" type="text" class="form-control" value="#FF00F0"/>
-          <input id="" type="color" class="form-control"/>
-        </div>
-      ')
+      colourpicker::colourInput(inputId = 'setting_color_picker', label = 'Add color', closeOnClick = T)
     ),
     shiny::column(
       width = 4,
@@ -399,13 +389,16 @@ golem_add_external_resources <- function() {
     "SampleDB",
     app_sys("app/SampleDB")
   )
+  colourpicker::colourInput("ggggtgg", "ggggtgg")
 
   tags$head(
     favicon(),
     bundle_resources(
       path = app_sys("app/www"),
       app_title = "AllInOne"
-    )
+    ),
+    waiter::use_waiter(),
+    shinyjs::useShinyjs(),
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )
