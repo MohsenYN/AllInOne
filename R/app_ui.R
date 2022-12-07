@@ -145,40 +145,41 @@ menu_plots <- shiny::tagList(
 
 menu_setting_cor <- shiny::tagList(
   shiny::column(
-    width = 12,
-    shiny::tags$div(
-      align = 'left',
-      class = 'multicol',
-      shiny::checkboxGroupInput(
-        width = '100%',
-        inputId = 'setting_cor_plot',
-        label = tags$span(
-          'Select correlation plot',
-          tags$i(
-            class = "glyphicon glyphicon-info-sign",
-            style = "color: var(--Just-color);",
-            title = 'Select what kind of correlation plots do you want to have?')),
-        choices = c(
-          'Circle' = 'circle',
-          'Color' = 'color',
-          'Full' = 'full',
-          'Hculst' = 'hclust',
-          'Lower' = 'lower',
-          'Number' = 'number',
-          'pie' = 'pie',
-          'Upper' = 'upper',
-          'upper and hclust (AXIS)' = 'axis',
-          'upper and hclust (BR)' = 'br',
-          'upper and hclust (BW)' = 'bw',
-          'upper and hclust (COLA)' = 'cola',
-          'upper and hclust (COLB)' = 'colb',
-          'upper and hclust (SIG)' = 'sig',
-          'upper and hclust (SIGBLANK)' = 'sigblank'
-        ),
-        selected = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank')
+    width = 8,
+    shinyWidgets::pickerInput(
+      width = '100%',
+      inputId = 'setting_cor_plot',
+      label = tags$span(
+        'Select correlation plot',
+        tags$i(
+          class = "glyphicon glyphicon-info-sign",
+          style = "color: var(--Just-color);",
+          title = 'Select what kind of correlation plots do you want to have?')),
+      choices = c(
+        'Circle' = 'circle',
+        'Color' = 'color',
+        'Full' = 'full',
+        'Hculst' = 'hclust',
+        'Lower' = 'lower',
+        'Number' = 'number',
+        'pie' = 'pie',
+        'Upper' = 'upper',
+        'upper and hclust (AXIS)' = 'axis',
+        'upper and hclust (BR)' = 'br',
+        'upper and hclust (BW)' = 'bw',
+        'upper and hclust (COLA)' = 'cola',
+        'upper and hclust (COLB)' = 'colb',
+        'upper and hclust (SIG)' = 'sig',
+        'upper and hclust (SIGBLANK)' = 'sigblank'
+      ),
+      selected = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank'),
+      multiple = T,
+      options = list(
+        `actions-box` = TRUE,
+        size = 10,
+        `selected-text-format` = "count > 3"
       )
     )
-
   )
 )
 
