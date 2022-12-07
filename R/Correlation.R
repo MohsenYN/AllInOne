@@ -126,6 +126,8 @@ CoReLaTiOnSS <- function(input, rv) {
     is.num <- base::sapply(Cordata, is.numeric)
     Cordata[is.num] <- base::lapply(Cordata[is.num], round, 2)
 
+    colors_f <- grDevices::colorRampPalette(rv$setting_colors)
+
     UOGAP <- Cordata %>%
       dplyr::mutate(name = forcats::fct_reorder(interacted, dplyr::desc(Correlation))) %>%
       ggplot2::ggplot(ggplot2::aes(x = name, y = Correlation, fill = name)) +
@@ -136,7 +138,7 @@ CoReLaTiOnSS <- function(input, rv) {
       ggplot2::theme(legend.position = "none", axis.title = red.bold.italic.text) +
       ggplot2::scale_y_continuous(limits = base::c(-1, 1)) +
       ggplot2::labs(y = "Pearson correlation coefficient")+
-      ggplot2::scale_fill_manual( values = colors )
+      ggplot2::scale_fill_manual( values = colors_f(base::length(base::unique(dat[, MainV]))) )
 
     ggplot2::ggsave(
       UOGAP,
