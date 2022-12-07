@@ -51,7 +51,7 @@ CoReLaTiOnSS <- function(input, rv) {
              input$project_name,
              " -- P-value Correlation (pie)",
              p, rv)
-    utils::write.csv(M, base::paste0(input$project_name, ' -- Correlation Table.csv'), row.names = F)
+    utils::write.csv(M, base::paste0(input$project_name, ' -- Pearson correlation coefficient table.csv'), row.names = F)
     utils::write.csv(cor_$P, base::paste0(input$project_name, ' -- P-value.csv'), row.names = F)
   }
   else if (input$cor_opt == 'Inter correlation') {
@@ -79,7 +79,7 @@ CoReLaTiOnSS <- function(input, rv) {
 
     utils::write.csv(D, base::paste0(input$project_name,' -- Observed Value Table.csv'), row.names = F)
 
-    utils::write.csv(M, base::paste0(input$project_name,' -- Correlation Table.csv'), row.names = F)
+    utils::write.csv(M, base::paste0(input$project_name,' -- Pearson correlation coefficient table.csv'), row.names = F)
 
 
   }
@@ -118,7 +118,7 @@ CoReLaTiOnSS <- function(input, rv) {
 
     buffer = result
     colnames(buffer)[1] = input$indep_cor
-    utils::write.csv(buffer, base::paste0(input$project_name,' -- Correlation Table.csv'), row.names = F)
+    utils::write.csv(buffer, base::paste0(input$project_name,' -- Pearson correlation coefficient table.csv'), row.names = F)
 
     Cordata <- base::as.data.frame(result)
 
@@ -241,13 +241,13 @@ CoReLaTiOnSS <- function(input, rv) {
   if (input$cor_opt != 'Intra correlation') {
     if ('circle' %in% rv$setting_cor_plot) {
     grDevices::png(
-      file = base::paste0(input$project_name, " -- Correlation (circle).png"),
+      file = base::paste0(input$project_name, " -- Pearson correlation coefficient (circle).png"),
       width = 1000,
       height = 480
     )
     corrplot::corrplot(M, method = "circle", col = colors)
     base::invisible(grDevices::dev.off())
-    grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (circle).pdf"))
+    grDevices::pdf(file = base::paste0(input$project_name, " -- Pearson correlation coefficient (circle).pdf"))
     P <- corrplot::corrplot(M, method = "circle", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
@@ -256,26 +256,26 @@ CoReLaTiOnSS <- function(input, rv) {
 
     if ('pie' %in% rv$setting_cor_plot) {
     grDevices::png(
-      file = base::paste0(input$project_name, " -- Correlation (pie).png"),
+      file = base::paste0(input$project_name, " -- Pearson correlation coefficient (pie).png"),
       width = 1000,
       height = 480
     )
     corrplot::corrplot(M, method = "pie", col = colors)
     base::invisible(grDevices::dev.off())
-    grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (pie).pdf"))
+    grDevices::pdf(file = base::paste0(input$project_name, " -- Pearson correlation coefficient (pie).pdf"))
     P <- corrplot::corrplot(M, method = "pie", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
     }
     if ('color' %in% rv$setting_cor_plot) {
     grDevices::png(
-      file = base::paste0(input$project_name, " -- Correlation (color).png"),
+      file = base::paste0(input$project_name, " -- Pearson correlation coefficient (color).png"),
       width = 1000,
       height = 480
     )
     corrplot::corrplot(M, method = "color", col = colors)
     base::invisible(grDevices::dev.off())
-    grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (color).pdf"))
+    grDevices::pdf(file = base::paste0(input$project_name, " -- Pearson correlation coefficient (color).pdf"))
     P <- corrplot::corrplot(M, method = "color", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
@@ -283,39 +283,39 @@ CoReLaTiOnSS <- function(input, rv) {
 
     if ('number' %in% rv$setting_cor_plot) {
     grDevices::png(
-      file = base::paste0(input$project_name, " -- Correlation (number).png"),
+      file = base::paste0(input$project_name, " -- Pearson correlation coefficient (number).png"),
       width = 1000,
       height = 480
     )
     corrplot::corrplot(M, method = "number", col = colors)
     base::invisible(grDevices::dev.off())
-    grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (number).pdf"))
+    grDevices::pdf(file = base::paste0(input$project_name, " -- Pearson correlation coefficient (number).pdf"))
     P <- corrplot::corrplot(M, method = "number", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
     }
     if ('upper' %in% rv$setting_cor_plot) {
     grDevices::png(
-      file = base::paste0(input$project_name, " -- Correlation (upper).png"),
+      file = base::paste0(input$project_name, " -- Pearson correlation coefficient (upper).png"),
       width = 1000,
       height = 480
     )
     corrplot::corrplot(M, type = "upper", col = colors)
     base::invisible(grDevices::dev.off())
-    grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (upper).pdf"))
+    grDevices::pdf(file = base::paste0(input$project_name, " -- Pearson correlation coefficient (upper).pdf"))
     P <- corrplot::corrplot(M, type = "upper", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
     }
     if ('lower' %in% rv$setting_cor_plot) {
     grDevices::png(
-      file = base::paste0(input$project_name, " -- Correlation (lower).png"),
+      file = base::paste0(input$project_name, " -- Pearson correlation coefficient (lower).png"),
       width = 1000,
       height = 480
     )
     corrplot::corrplot(M, type = "lower", col = colors)
     base::invisible(grDevices::dev.off())
-    grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (lower).pdf"))
+    grDevices::pdf(file = base::paste0(input$project_name, " -- Pearson correlation coefficient (lower).pdf"))
     P <- corrplot::corrplot(M, type = "lower", col = colors)
     base::invisible(base::print(P))
     base::invisible(grDevices::dev.off())
@@ -325,7 +325,7 @@ CoReLaTiOnSS <- function(input, rv) {
     if (base::length(COLN) >= 2) {
       if ('hclust' %in% rv$setting_cor_plot) {
       grDevices::png(
-        file = base::paste0(input$project_name, " -- Correlation (hclust).png"),
+        file = base::paste0(input$project_name, " -- Pearson correlation coefficient (hclust).png"),
         width = 1000,
         height = 480
       )
@@ -333,7 +333,7 @@ CoReLaTiOnSS <- function(input, rv) {
       corrplot::corrplot(M, type = "upper", order = "hclust", col = colors)
 
       base::invisible(grDevices::dev.off())
-      grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (hclust).pdf"))
+      grDevices::pdf(file = base::paste0(input$project_name, " -- Pearson correlation coefficient (hclust).pdf"))
       P <- corrplot::corrplot(M, type = "upper", order = "hclust", col = colors)
       base::invisible(base::print(P))
       base::invisible(grDevices::dev.off())
@@ -344,7 +344,7 @@ CoReLaTiOnSS <- function(input, rv) {
       grDevices::png(
         file = base::paste0(
           input$project_name,
-          " -- Correlation (upper and hclust (BR)).png"
+          " -- Pearson correlation coefficient (upper and hclust (BR)).png"
         ),
         width = 1000,
         height = 480
@@ -356,7 +356,7 @@ CoReLaTiOnSS <- function(input, rv) {
 
       grDevices::pdf(file = base::paste0(
         input$project_name,
-        " -- Correlation (upper and hclust (BR)).pdf"
+        " -- Pearson correlation coefficient (upper and hclust (BR)).pdf"
       ))
       P <- corrplot::corrplot(M,
                               type = "upper",
@@ -368,7 +368,7 @@ CoReLaTiOnSS <- function(input, rv) {
       grDevices::png(
         file = base::paste0(
           input$project_name,
-          " -- Correlation (upper and hclust (BW)).png"
+          " -- Pearson correlation coefficient (upper and hclust (BW)).png"
         ),
         width = 1000,
         height = 480
@@ -383,7 +383,7 @@ CoReLaTiOnSS <- function(input, rv) {
       base::invisible(grDevices::dev.off())
       grDevices::pdf(file = base::paste0(
         input$project_name,
-        " -- Correlation (upper and hclust (BW)).pdf"
+        " -- Pearson correlation coefficient (upper and hclust (BW)).pdf"
       ))
       P <-
         corrplot::corrplot(
@@ -399,7 +399,7 @@ CoReLaTiOnSS <- function(input, rv) {
       grDevices::png(
         file = base::paste0(
           input$project_name,
-          " -- Correlation (upper and hclust (COLA)).png"
+          " -- Pearson correlation coefficient (upper and hclust (COLA)).png"
         ),
         width = 1000,
         height = 480
@@ -413,7 +413,7 @@ CoReLaTiOnSS <- function(input, rv) {
       base::invisible(grDevices::dev.off())
       grDevices::pdf(file = base::paste0(
         input$project_name,
-        " -- Correlation (upper and hclust (COLA)).pdf"
+        " -- Pearson correlation coefficient (upper and hclust (COLA)).pdf"
       ))
       P <- corrplot::corrplot(
         M,
@@ -428,7 +428,7 @@ CoReLaTiOnSS <- function(input, rv) {
       grDevices::png(
         file = base::paste0(
           input$project_name,
-          " -- Correlation (upper and hclust (COLB)).png"
+          " -- Pearson correlation coefficient (upper and hclust (COLB)).png"
         ),
         width = 1000,
         height = 480
@@ -442,7 +442,7 @@ CoReLaTiOnSS <- function(input, rv) {
       base::invisible(grDevices::dev.off())
       grDevices::pdf(file = base::paste0(
         input$project_name,
-        " -- Correlation (upper and hclust (COLB)).pdf"
+        " -- Pearson correlation coefficient (upper and hclust (COLB)).pdf"
       ))
       P <- corrplot::corrplot(
         M,
@@ -457,7 +457,7 @@ CoReLaTiOnSS <- function(input, rv) {
       grDevices::png(
         file = base::paste0(
           input$project_name,
-          " -- Correlation (upper and hclust (AXIS)).png"
+          " -- Pearson correlation coefficient (upper and hclust (AXIS)).png"
         ),
         width = 1000,
         height = 480
@@ -472,7 +472,7 @@ CoReLaTiOnSS <- function(input, rv) {
       base::invisible(grDevices::dev.off())
       grDevices::pdf(file = base::paste0(
         input$project_name,
-        " -- Correlation (upper and hclust (AXIS)).pdf"
+        " -- Pearson correlation coefficient (upper and hclust (AXIS)).pdf"
       ))
       P <-
         corrplot::corrplot(
@@ -507,7 +507,7 @@ CoReLaTiOnSS <- function(input, rv) {
         grDevices::png(
           file = base::paste0(
             input$project_name,
-            " -- Correlation (upper and hclust (SIG)).png"
+            " -- Pearson correlation coefficient (upper and hclust (SIG)).png"
           ),
           width = 1000,
           height = 480
@@ -533,7 +533,7 @@ CoReLaTiOnSS <- function(input, rv) {
       base::tryCatch({
         grDevices::pdf(file = base::paste0(
           input$project_name,
-          " -- Correlation (upper and hclust (SIG)).pdf"
+          " -- Pearson correlation coefficient (upper and hclust (SIG)).pdf"
         ))
         P <- corrplot::corrplot(
           M,
@@ -562,7 +562,7 @@ CoReLaTiOnSS <- function(input, rv) {
         grDevices::png(
           file = base::paste0(
             input$project_name,
-            " -- Correlation (upper and hclust (SIGBLANK)).png"
+            " -- Pearson correlation coefficient (upper and hclust (SIGBLANK)).png"
           ),
           width = 1000,
           height = 480
@@ -593,7 +593,7 @@ CoReLaTiOnSS <- function(input, rv) {
       base::tryCatch({
         grDevices::pdf(file = base::paste0(
           input$project_name,
-          " -- Correlation (upper and hclust (SIGBLANK)).pdf"
+          " -- Pearson correlation coefficient (upper and hclust (SIGBLANK)).pdf"
         ))
         P <- corrplot::corrplot(
           M,
@@ -622,7 +622,7 @@ CoReLaTiOnSS <- function(input, rv) {
       if ('full' %in% rv$setting_cor_plot) {
       base::tryCatch({
         grDevices::png(
-          file = base::paste0(input$project_name, " -- Correlation (Full).png"),
+          file = base::paste0(input$project_name, " -- Pearson correlation coefficient (Full).png"),
           width = 1000,
           height = 480
         )
@@ -662,7 +662,7 @@ CoReLaTiOnSS <- function(input, rv) {
       })
 
       base::tryCatch({
-        grDevices::pdf(file = base::paste0(input$project_name, " -- Correlation (Full).pdf"))
+        grDevices::pdf(file = base::paste0(input$project_name, " -- Pearson correlation coefficient (Full).pdf"))
         P <- corrplot::corrplot(
           M,
           method = "color",
