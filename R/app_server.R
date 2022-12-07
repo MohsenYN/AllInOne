@@ -370,10 +370,14 @@ app_server <- function(input, output, session) {
                 choices = list(
                   Tab = "\t", Comma = ",", Semicolon = ";", Space = " ")
                 , selected = ','),
-              shiny::checkboxInput(
+              shinyWidgets::prettyCheckbox(
                 inputId = 'dataC_header',
                 label = 'Header',
-                value = T
+                value = T,
+                shape = 'curve',
+                animation = 'tada',
+                icon = shiny::icon('ok', lib = 'glyphicon'),
+                status = 'danger',fill = T, outline = T, bigger = T
               )
             ) }
         })
@@ -393,10 +397,14 @@ app_server <- function(input, output, session) {
                 choices = list(
                   Empty = '', Tab = "\t", Comma = ",", Semicolon = ";", Space = " "),
                 selected = '\t'),
-              shiny::checkboxInput(
+              shinyWidgets::prettyCheckbox(
                 inputId = 'dataC_header',
                 label = 'Header',
-                value = T
+                value = T,
+                shape = 'curve',
+                animation = 'tada',
+                icon = shiny::icon('ok', lib = 'glyphicon'),
+                status = 'danger',fill = T, outline = T, bigger = T
               )
             )
           }
@@ -449,7 +457,10 @@ app_server <- function(input, output, session) {
 
       shiny::updateNumericInput(inputId = 'notif_delay', value = notif_delay)
       shiny::updateSelectInput(inputId = 'notif_size', selected = notif_size)
-      shiny::updateCheckboxInput(inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd)
+      # shiny::updateCheckboxInput(inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd)
+      shinyWidgets::updatePrettyCheckbox(
+        inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd
+      )
 
       ########General
       ########  Options
@@ -973,7 +984,15 @@ app_server <- function(input, output, session) {
             ), selected = 'spatial', multiple = F),
 
           if (!base::is.null(rv$spat_buffer)) {
-            shiny::checkboxInput('use_spat', 'Use recent spatial analysis as dataset')
+              shinyWidgets::prettyCheckbox(
+                inputId = 'use_spat',
+                label = 'Use recent spatial analysis as dataset',
+                value = F,
+                shape = 'curve',
+                animation = 'tada',
+                icon = shiny::icon('ok', lib = 'glyphicon'),
+                status = 'danger',fill = T, outline = T, bigger = T
+              )
           },
           shiny::uiOutput('use_spat_checkbox_ui'),
 
@@ -1879,7 +1898,16 @@ app_server <- function(input, output, session) {
     base::options(shiny.maxRequestSize = 50 * 1024^2)
     shiny::showModal(shiny::modalDialog(
       shiny::fileInput('file', 'Upload Dataset File :'),
-      shiny::checkboxInput('use_sampledb', "Sample Dataset", value = F),
+
+              shinyWidgets::prettyCheckbox(
+                inputId = 'use_sampledb',
+                label = 'Sample Dataset',
+                value = F,
+                shape = 'curve',
+                animation = 'tada',
+                icon = shiny::icon('ok', lib = 'glyphicon'),
+                status = 'danger',fill = T, outline = T, bigger = T
+              ),
       shiny::textInput('project_name', "Project Name", value = "Untitled"),
       # shiny::textInput('Results_dir', "Insert a directory for outputs", placeholder = "C:/User/Desktop/Results"),
       shiny::uiOutput('dataC_sheet'),

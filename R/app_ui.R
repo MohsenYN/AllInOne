@@ -19,7 +19,9 @@ interface <- shiny::fluidPage(
   waiter::use_waiter(),
   shinyjs::useShinyjs(),
   shiny::tags$head(
-    shiny::tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css?v16")
+    shiny::tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css?v16"),
+    shiny::tags$link(rel = "stylesheet", type = "text/css",
+                     href = "https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css")
   ),
 { shiny::tags$head(
   shiny::tags$script(shiny::HTML('Shiny.addCustomMessageHandler("testmessage",
@@ -86,20 +88,23 @@ menu_setting <- shiny::tagList(
       width = '100%'
     )),
   shiny::column(
-    width = 8,
-    shiny::checkboxInput(
-      inputId = 'Ign_Res_Wrd',
+    width = 12,
+    shinyWidgets::switchInput(
+      inputId = "Ign_Res_Wrd",
       label = shiny::tags$span(
-        'Ignore special character',
+        'Special character',
         shiny::tags$i(
           class = "glyphicon glyphicon-info-sign",
           style = "color: var(--Just-color);",
-          title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
+          title = 'Some characters(" \ | ? * : < > space, etc) are not allowed in the column names.
        By checking the box, AllInOne ignores the limitation. however, it is highly recommended not to check the box!'
         )),
       value = F,
-      width = '100%'
-    ))
+      width = '100%',
+      onLabel = "Allowed",
+      offLabel = "Restricted",
+    )
+  )
 )
 
 menu_plots <- shiny::tagList(
