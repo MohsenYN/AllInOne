@@ -133,7 +133,7 @@ menu_plots <- shiny::tagList(
       shiny::HTML('
         <div class="form-group shiny-input-container">
           <label class="control-label" id="idd-label" for="setting_color_picker">Add color</label>
-          <input id="setting_color_picker" type="text" class="form-control" value="#FFFFFF"/>
+          <input id="setting_color_picker" type="color" class="form-control" value="#FFFFFF"/>
         </div>
       ')
     ),
