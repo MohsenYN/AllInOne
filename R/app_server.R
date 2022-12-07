@@ -375,7 +375,7 @@ app_server <- function(input, output, session) {
                 label = 'Header',
                 value = T,
                 shape = 'curve',
-                animation = 'tada',
+                animation = 'jelly',
                 icon = shiny::icon('ok', lib = 'glyphicon'),
                 status = 'danger',fill = T, outline = T, bigger = T
               )
@@ -402,7 +402,7 @@ app_server <- function(input, output, session) {
                 label = 'Header',
                 value = T,
                 shape = 'curve',
-                animation = 'tada',
+                animation = 'jelly',
                 icon = shiny::icon('ok', lib = 'glyphicon'),
                 status = 'danger',fill = T, outline = T, bigger = T
               )
@@ -984,15 +984,19 @@ app_server <- function(input, output, session) {
             ), selected = 'spatial', multiple = F),
 
           if (!base::is.null(rv$spat_buffer)) {
-              shinyWidgets::prettyCheckbox(
-                inputId = 'use_spat',
-                label = 'Use recent spatial analysis as dataset',
-                value = F,
-                shape = 'curve',
-                animation = 'tada',
-                icon = shiny::icon('ok', lib = 'glyphicon'),
-                status = 'danger',fill = T, outline = T, bigger = T
-              )
+            shiny::HTML('
+              <div class="form-group shiny-input-container">
+                <div class="pretty p-image p-tada">
+                  <input id="use_spat" type="checkbox"/>
+                  <div class="state">
+                    <img class="image" src="www/favicon.ico">
+                    <label>
+                      <span>Use recent spatial analysis as dataset</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            ')
           },
           shiny::uiOutput('use_spat_checkbox_ui'),
 
@@ -1898,16 +1902,19 @@ app_server <- function(input, output, session) {
     base::options(shiny.maxRequestSize = 50 * 1024^2)
     shiny::showModal(shiny::modalDialog(
       shiny::fileInput('file', 'Upload Dataset File :'),
-
-              shinyWidgets::prettyCheckbox(
-                inputId = 'use_sampledb',
-                label = 'Sample Dataset',
-                value = F,
-                shape = 'curve',
-                animation = 'tada',
-                icon = shiny::icon('ok', lib = 'glyphicon'),
-                status = 'danger',fill = T, outline = T, bigger = T
-              ),
+      shiny::HTML('
+        <div class="form-group shiny-input-container">
+          <div class="pretty p-image p-tada">
+            <input id="use_sampledb" type="checkbox"/>
+            <div class="state">
+              <img class="image" src="www/favicon.ico">
+              <label>
+                <span>Sample Dataset</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      '),
       shiny::textInput('project_name', "Project Name", value = "Untitled"),
       # shiny::textInput('Results_dir', "Insert a directory for outputs", placeholder = "C:/User/Desktop/Results"),
       shiny::uiOutput('dataC_sheet'),
