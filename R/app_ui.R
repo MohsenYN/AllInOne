@@ -100,6 +100,7 @@ menu_setting <- shiny::tagList(
       width = '100%',
       onLabel = "Allowed",
       offLabel = "Restricted",
+      size = 'mini'
     )
   )
 )
@@ -389,7 +390,7 @@ golem_add_external_resources <- function() {
     "SampleDB",
     app_sys("app/SampleDB")
   )
-  colourpicker::colourInput(" ", " ")
+  colourpicker::colourInput("َAllInOne_id_test_", " ")
 
   tags$head(
     favicon(),
