@@ -1,7 +1,7 @@
 Package: AllInOne
 Type: package
 Title: An Open-Source, Friendly, Analytical Package, for Pre-processing Phenotypic Data.
-Version: 1.0.6
+Version: 1.0.6-1
 Authors@R: c(person(given = "Mohsen",
                family = "Yoosefzadeh Najafabadi",
                role = c("aut","cre"),
@@ -60,7 +60,8 @@ Imports:
     readxl ,
     waiter,
     glmnet,
-    colourpicker
+    colourpicker,
+    shinyWidgets
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/MohsenYN/AllInOne

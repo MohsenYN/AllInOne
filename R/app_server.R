@@ -370,10 +370,14 @@ app_server <- function(input, output, session) {
                 choices = list(
                   Tab = "\t", Comma = ",", Semicolon = ";", Space = " ")
                 , selected = ','),
-              shiny::checkboxInput(
+              shinyWidgets::prettyCheckbox(
                 inputId = 'dataC_header',
                 label = 'Header',
-                value = T
+                value = T,
+                shape = 'curve',
+                animation = 'jelly',
+                icon = shiny::icon('ok', lib = 'glyphicon'),
+                status = 'danger',fill = T, outline = T, bigger = T
               )
             ) }
         })
@@ -393,10 +397,14 @@ app_server <- function(input, output, session) {
                 choices = list(
                   Empty = '', Tab = "\t", Comma = ",", Semicolon = ";", Space = " "),
                 selected = '\t'),
-              shiny::checkboxInput(
+              shinyWidgets::prettyCheckbox(
                 inputId = 'dataC_header',
                 label = 'Header',
-                value = T
+                value = T,
+                shape = 'curve',
+                animation = 'jelly',
+                icon = shiny::icon('ok', lib = 'glyphicon'),
+                status = 'danger',fill = T, outline = T, bigger = T
               )
             )
           }
@@ -449,7 +457,9 @@ app_server <- function(input, output, session) {
 
       shiny::updateNumericInput(inputId = 'notif_delay', value = notif_delay)
       shiny::updateSelectInput(inputId = 'notif_size', selected = notif_size)
-      shiny::updateCheckboxInput(inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd)
+      shinyWidgets::updatePrettyCheckbox(
+        inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd
+      )
 
       ########General
       ########  Options
@@ -911,12 +921,12 @@ app_server <- function(input, output, session) {
           }
         }
         output$cor_intera_indep <- shiny::renderUI({
-          if (input$cor_opt == 'Inter correlation') {
+          if (input$cor_opt == 'Partial Pearson correlation 1D/I') {
             shiny::radioButtons(
               inputId = 'indep_cor',
               label = 'Select one independent variable',
               choices = indep_cols)
-          }else if (input$cor_opt == 'Intra correlation') {
+          }else if (input$cor_opt == 'Partial Pearson correlation 2D/I') {
             shiny::checkboxGroupInput(
               inputId = 'indep_cor',
               label = 'Select independent variable(s)',
@@ -924,13 +934,13 @@ app_server <- function(input, output, session) {
           }
         })
         output$cor_intera_dep <- shiny::renderUI({
-          if (input$cor_opt == 'Inter correlation') {
+          if (input$cor_opt == 'Partial Pearson correlation 1D/I') {
             shiny::radioButtons(
               inputId = 'dep_cor',
               label = 'Select one dependent/response variable',
               choices = dep_cols)
           }
-          else if (input$cor_opt == 'Intra correlation') {
+          else if (input$cor_opt == 'Partial Pearson correlation 2D/I') {
             shiny::checkboxGroupInput(
               inputId = 'dep_cor',
               label = 'Select two dependent/response variables',
@@ -942,9 +952,9 @@ app_server <- function(input, output, session) {
           shiny::radioButtons(
             inputId = 'cor_opt',
             label = 'Correlation methods',
-            choices = base::c('Non-independent-based correlation',
-                              'Inter correlation',
-                              'Intra correlation')),
+            choices = base::c('Pearson correlation',
+                              'Partial Pearson correlation 1D/I',
+                              'Partial Pearson correlation 2D/I')),
           shiny::uiOutput('cor_intera_indep'),
           shiny::uiOutput('cor_intera_dep'),
           footer = shiny::tagList(shiny::actionButton('indep_cor_btn', 'OK'),
@@ -973,7 +983,19 @@ app_server <- function(input, output, session) {
             ), selected = 'spatial', multiple = F),
 
           if (!base::is.null(rv$spat_buffer)) {
-            shiny::checkboxInput('use_spat', 'Use recent spatial analysis as dataset')
+            shiny::HTML('
+              <div class="form-group shiny-input-container">
+                <div class="pretty p-image p-tada">
+                  <input id="use_spat" type="checkbox"/>
+                  <div class="state">
+                    <img class="image" src="www/favicon.ico">
+                    <label>
+                      <span>Use recent spatial analysis as dataset</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            ')
           },
           shiny::uiOutput('use_spat_checkbox_ui'),
 
@@ -1403,8 +1425,8 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$indep_cor_btn, {
-    if ((input$cor_opt == 'Intra correlation' && base::length(input$indep_cor) == 0) |
-      (input$cor_opt == 'Intra correlation' && base::length(input$dep_cor) != 2)) {
+    if ((input$cor_opt == 'Partial Pearson correlation 2D/I' && base::length(input$indep_cor) == 0) |
+      (input$cor_opt == 'Partial Pearson correlation 2D/I' && base::length(input$dep_cor) != 2)) {
       shiny_showNotification(rv, 'Please selecet two dependent variables and at least one independent variable')
     }else {
       if (base::dir.exists(app_sys("app/Results/Correlation")))
@@ -1879,7 +1901,19 @@ app_server <- function(input, output, session) {
     base::options(shiny.maxRequestSize = 50 * 1024^2)
     shiny::showModal(shiny::modalDialog(
       shiny::fileInput('file', 'Upload Dataset File :'),
-      shiny::checkboxInput('use_sampledb', "Sample Dataset", value = F),
+      shiny::HTML('
+        <div class="form-group shiny-input-container">
+          <div class="pretty p-image p-tada">
+            <input id="use_sampledb" type="checkbox"/>
+            <div class="state">
+              <img class="image" src="www/favicon.ico">
+              <label>
+                <span>Sample Dataset</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      '),
       shiny::textInput('project_name', "Project Name", value = "Untitled"),
       # shiny::textInput('Results_dir', "Insert a directory for outputs", placeholder = "C:/User/Desktop/Results"),
       shiny::uiOutput('dataC_sheet'),
@@ -1896,7 +1930,7 @@ app_server <- function(input, output, session) {
   shiny::observeEvent(input$active_opt_ind_var, {
     if (base::is.null(rv$data)) {
       session$sendCustomMessage(type = 'testmessage',
-                                message = "Please select the main detaset first !")
+                                message = "Please select the main dataset first !")
     } else {
       temp_indep = input$main_db_indep_val
       if (rv$Pre_Select_vars)if (base::is.null(temp_indep)) {
@@ -1963,7 +1997,7 @@ app_server <- function(input, output, session) {
     if (base::is.null(rv$data)) {
 
       session$sendCustomMessage(type = 'testmessage',
-                                message = "Please select the main detaset first !")
+                                message = "Please select the main dataset first !")
 
     } else if (rv$review_flag) {
       session$sendCustomMessage(type = 'testmessage',
@@ -1996,7 +2030,7 @@ app_server <- function(input, output, session) {
     if (base::is.null(rv$data)) {
 
       session$sendCustomMessage(type = 'testmessage',
-                                message = "Please select the main detaset first !")
+                                message = "Please select the main dataset first !")
 
     } else if (rv$review_flag) {
       session$sendCustomMessage(type = 'testmessage',

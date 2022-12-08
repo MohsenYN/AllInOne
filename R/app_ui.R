@@ -16,10 +16,9 @@ interface <- shiny::fluidPage(
     top = "center",
     css = "padding: 0 !important; border: 3px solid #000000;"
   ),
-  waiter::use_waiter(),
-  shinyjs::useShinyjs(),
   shiny::tags$head(
-    shiny::tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css?v16")
+    shiny::tags$link(rel = "stylesheet", type = "text/css",
+                     href = "https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css")
   ),
 { shiny::tags$head(
   shiny::tags$script(shiny::HTML('Shiny.addCustomMessageHandler("testmessage",
@@ -86,20 +85,24 @@ menu_setting <- shiny::tagList(
       width = '100%'
     )),
   shiny::column(
-    width = 8,
-    shiny::checkboxInput(
-      inputId = 'Ign_Res_Wrd',
+    width = 12,
+    shinyWidgets::switchInput(
+      inputId = "Ign_Res_Wrd",
       label = shiny::tags$span(
-        'Ignore special character',
+        'Special characters',
         shiny::tags$i(
           class = "glyphicon glyphicon-info-sign",
           style = "color: var(--Just-color);",
-          title = 'Some characters(" \ | ? * : < > and space) are not allowed in the column names.
+          title = 'Some characters(" \ | ? * : < > space, etc) are not allowed in the column names.
        By checking the box, AllInOne ignores the limitation. however, it is highly recommended not to check the box!'
         )),
       value = F,
-      width = '100%'
-    ))
+      width = '100%',
+      onLabel = "Allowed",
+      offLabel = "Restricted",
+      size = 'mini'
+    )
+  )
 )
 
 menu_plots <- shiny::tagList(
@@ -140,40 +143,41 @@ menu_plots <- shiny::tagList(
 
 menu_setting_cor <- shiny::tagList(
   shiny::column(
-    width = 12,
-    shiny::tags$div(
-      align = 'left',
-      class = 'multicol',
-      shiny::checkboxGroupInput(
-        width = '100%',
-        inputId = 'setting_cor_plot',
-        label = tags$span(
-          'Select correlation plot',
-          tags$i(
-            class = "glyphicon glyphicon-info-sign",
-            style = "color: var(--Just-color);",
-            title = 'Select what kind of correlation plots do you want to have?')),
-        choices = c(
-          'Circle' = 'circle',
-          'Color' = 'color',
-          'Full' = 'full',
-          'Hculst' = 'hclust',
-          'Lower' = 'lower',
-          'Number' = 'number',
-          'pie' = 'pie',
-          'Upper' = 'upper',
-          'upper and hclust (AXIS)' = 'axis',
-          'upper and hclust (BR)' = 'br',
-          'upper and hclust (BW)' = 'bw',
-          'upper and hclust (COLA)' = 'cola',
-          'upper and hclust (COLB)' = 'colb',
-          'upper and hclust (SIG)' = 'sig',
-          'upper and hclust (SIGBLANK)' = 'sigblank'
-        ),
-        selected = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank')
+    width = 8,
+    shinyWidgets::pickerInput(
+      width = '100%',
+      inputId = 'setting_cor_plot',
+      label = tags$span(
+        'Select correlation plot',
+        tags$i(
+          class = "glyphicon glyphicon-info-sign",
+          style = "color: var(--Just-color);",
+          title = 'Select what kind of correlation plots do you want to have?')),
+      choices = c(
+        'Circle' = 'circle',
+        'Color' = 'color',
+        'Full' = 'full',
+        'Hculst' = 'hclust',
+        'Lower' = 'lower',
+        'Number' = 'number',
+        'pie' = 'pie',
+        'Upper' = 'upper',
+        'upper and hclust (AXIS)' = 'axis',
+        'upper and hclust (BR)' = 'br',
+        'upper and hclust (BW)' = 'bw',
+        'upper and hclust (COLA)' = 'cola',
+        'upper and hclust (COLB)' = 'colb',
+        'upper and hclust (SIG)' = 'sig',
+        'upper and hclust (SIGBLANK)' = 'sigblank'
+      ),
+      selected = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank'),
+      multiple = T,
+      options = list(
+        `actions-box` = TRUE,
+        size = 10,
+        `selected-text-format` = "count > 3"
       )
     )
-
   )
 )
 
@@ -386,13 +390,16 @@ golem_add_external_resources <- function() {
     "SampleDB",
     app_sys("app/SampleDB")
   )
+  colourpicker::colourInput("َAllInOne_id_test_", " ")
 
   tags$head(
     favicon(),
     bundle_resources(
       path = app_sys("app/www"),
       app_title = "AllInOne"
-    )
+    ),
+    waiter::use_waiter(),
+    shinyjs::useShinyjs(),
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )
