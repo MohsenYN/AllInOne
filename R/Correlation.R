@@ -1,6 +1,6 @@
-#' General, Inter, and Intra Correlation
+#' General, Inter, and Partial Pearson correlation 2D/I
 #'
-#' @description Generates 1) general correlation based on the selected dependent variables, 2) inter correlation for the selected independent and dependent variable, and 3) Intra correlation between two dependent variables in selected independent variable.
+#' @description Generates 1) general correlation based on the selected dependent variables, 2) Partial Pearson correlation 1D/I for the selected independent and dependent variable, and 3) Partial Pearson correlation 2D/I between two dependent variables in selected independent variable.
 #'
 #' @param input object including user's input values
 #' @param rv object including reactive variables
@@ -35,7 +35,7 @@ CoReLaTiOnSS <- function(input, rv) {
 
   colors <- grDevices::colorRampPalette(rv$setting_colors)
   colors = colors(200)
-  if (input$cor_opt == 'Non-independent-based correlation') {
+  if (input$cor_opt == 'Pearson correlation') {
     cor_ <- Hmisc::rcorr(as.matrix(SelectedTraits))
     M <- cor_$r
     PV <- cor_$P
@@ -54,7 +54,7 @@ CoReLaTiOnSS <- function(input, rv) {
     utils::write.csv(M, base::paste0(input$project_name, ' -- Pearson correlation coefficient table.csv'), row.names = F)
     utils::write.csv(cor_$P, base::paste0(input$project_name, ' -- P-value.csv'), row.names = F)
   }
-  else if (input$cor_opt == 'Inter correlation') {
+  else if (input$cor_opt == 'Partial Pearson correlation 1D/I') {
     y = COL_INDEP
     Independent <- dat %>% dplyr::mutate_at(dplyr::vars(y), as.factor)
 
@@ -83,7 +83,7 @@ CoReLaTiOnSS <- function(input, rv) {
 
 
   }
-  else if (input$cor_opt == 'Intra correlation') {
+  else if (input$cor_opt == 'Partial Pearson correlation 2D/I') {
     FTrait = input$dep_cor[1]
     STrait = input$dep_cor[2]
 
@@ -240,7 +240,7 @@ CoReLaTiOnSS <- function(input, rv) {
     )
   }
 
-  if (input$cor_opt != 'Intra correlation') {
+  if (input$cor_opt != 'Partial Pearson correlation 2D/I') {
     if ('circle' %in% rv$setting_cor_plot) {
     grDevices::png(
       file = base::paste0(input$project_name, " -- Pearson correlation coefficient (circle).png"),

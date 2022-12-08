@@ -389,7 +389,7 @@ golem_add_external_resources <- function() {
     "SampleDB",
     app_sys("app/SampleDB")
   )
-  colourpicker::colourInput("ggggtgg", "ggggtgg")
+  colourpicker::colourInput(" ", " ")
 
   tags$head(
     favicon(),
