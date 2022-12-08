@@ -223,7 +223,7 @@ Mixed_Analysis <- function(input, rv) {
 
     utils::write.csv(
       base::as.data.frame(res$vc.ge),
-      base::paste0(project_name, " -- Variance poportaion for ", response, ".csv"),
+      base::paste0(project_name, " -- Variance proportion for ", response, ".csv"),
       row.names = FALSE)
   }
 

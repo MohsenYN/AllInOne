@@ -39,13 +39,19 @@ information_ui <- shiny::fluidRow(
     shiny::hr(),
     shiny::h3(shiny::strong('Information')),
     shiny::tags$blockquote(
-
       shiny::tags$ol(
         shiny::tags$li("AllInOne is an open-Source, R-Shiny user interface package designed in the Plant Agriculture department at the University of Guelph to provide a broad range of pre-processing analysis features for phenotypic datasets. This app uses different R packages, such as mice, VIM, lme4, bestNormalize, etc., to enable plant scientists to use all the mentioned packages simultaneously in an interactive environment. Furthermore, it allows plant scientists to edit, organize, subset, and sort datasets in a live mode."),
         shiny::br(),
         shiny::tags$li("A wide range of datasets can be easily uploaded in AllInOne. AllInOne now works well with the three most common file formats such as .txt, .csv, and .xlsx, so there is no need to change the dataset format before using it."),
         shiny::br(),
-        shiny::tags$li("Visualization is the most important part of AllInOne. Some of the expected graphs are shown below:"),
+        shiny::h3(shiny::strong('Important Notes:')),
+        shiny::tags$ol(
+          shiny::tags$li('Please make sure that you should leave all the missing data points empty (not filled with "." or "NA", etc.).'),
+          shiny::tags$li('Spaces in column names are not allowed (e.g., "Yield (KG)" should be "Yield(KG))".'),
+          shiny::br()),
+        style = "font-size: 18px"),
+      shiny::hr(),
+        shiny::h3(shiny::strong("Visualization is the most important part of AllInOne. Some of the expected graphs are shown below:")),
         shiny::hr(),
         shiny::tags$ul(
           shiny::h3(shiny::strong("Missing Pattern "), shiny::tags$a("(Video Tutorial, soon...)", href = '', style = "font-size: 22px"), shiny::strong(" : "))),
@@ -117,13 +123,6 @@ information_ui <- shiny::fluidRow(
         shiny::hr()), style = "font-size: 16px; line-height: 1.7;"),
     shiny::hr(),
 
-    shiny::h3(shiny::strong('Important Notes:')),
-    shiny::tags$ol(
-      shiny::tags$li('Please make sure that you should leave all the missing data points empty (not filled with "." or "NA", etc.).'),
-      shiny::tags$li('Spaces in column names are not allowed (e.g., "Yield (KG)" should be "Yield(KG))".'),
-      shiny::br()),
-    style = "font-size: 18px"),
-  shiny::hr(),
   shiny::h3(shiny::strong('Contact Information and Help:')),
   shiny::tags$blockquote(
     shiny::tags$p(shiny::strong('Main Contact:', style = "font-size: 20px")),

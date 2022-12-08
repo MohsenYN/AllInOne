@@ -1930,7 +1930,7 @@ app_server <- function(input, output, session) {
   shiny::observeEvent(input$active_opt_ind_var, {
     if (base::is.null(rv$data)) {
       session$sendCustomMessage(type = 'testmessage',
-                                message = "Please select the main detaset first !")
+                                message = "Please select the main dataset first !")
     } else {
       temp_indep = input$main_db_indep_val
       if (rv$Pre_Select_vars)if (base::is.null(temp_indep)) {
@@ -1997,7 +1997,7 @@ app_server <- function(input, output, session) {
     if (base::is.null(rv$data)) {
 
       session$sendCustomMessage(type = 'testmessage',
-                                message = "Please select the main detaset first !")
+                                message = "Please select the main dataset first !")
 
     } else if (rv$review_flag) {
       session$sendCustomMessage(type = 'testmessage',
@@ -2030,7 +2030,7 @@ app_server <- function(input, output, session) {
     if (base::is.null(rv$data)) {
 
       session$sendCustomMessage(type = 'testmessage',
-                                message = "Please select the main detaset first !")
+                                message = "Please select the main dataset first !")
 
     } else if (rv$review_flag) {
       session$sendCustomMessage(type = 'testmessage',
