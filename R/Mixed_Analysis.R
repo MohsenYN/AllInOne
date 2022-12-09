@@ -218,8 +218,8 @@ Mixed_Analysis <- function(input, rv) {
       base::invisible(base::print(var))
     }
 
-    filesave('png', project_name, ' -- Variance Porportion', p1, rv)
-    filesave('pdf', project_name, ' -- Variance Porportion', p1, rv)
+    filesave('png', project_name, ' -- Variance Proportion', p1, rv)
+    filesave('pdf', project_name, ' -- Variance Proportion', p1, rv)
 
     utils::write.csv(
       base::as.data.frame(res$vc.ge),
