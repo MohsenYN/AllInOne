@@ -2557,6 +2557,113 @@ app_server <- function(input, output, session) {
     }
   })
 
+
+  output$o_sum_scatter_figure <- plotly::renderPlotly({
+    if (input$sum_scatter_select_j != '**' & input$sum_scatter_select_k != '**') {
+
+      Y_axis = input$sum_scatter_select_i
+      X_axis = input$sum_scatter_select_j
+      Color = input$sum_scatter_select_k
+
+      levels_j = base::length(base::unique(rv$data[[Color]]))
+      colors_f <- grDevices::colorRampPalette(rv$setting_colors)
+      colors_ = colors_f(levels_j)
+
+      if (levels_j <= rv$Maximum_Level_For_Group_By) {
+        p <- ggplot2::ggplot(rv$data, ggplot2::aes(x = get(X_axis), y = get(Y_axis), fill = get(Color), color = get(Color))) +
+          ggplot2::geom_tile() +
+          ggplot2::labs(x = X_axis,
+               y = Y_axis,
+               title = "....") +
+          ggplot2::theme_classic()
+
+        plotly::ggplotly(p)
+      }
+    }
+  })
+
+  output$o_sum_scatter <- shiny::renderUI({
+    if (!rv$review_flag) {
+
+      rv$independent_variables <-
+        rv$data %>% dplyr::select(input$main_db_indep_val)
+
+      rv$dependent_variables <-
+        rv$data %>% dplyr::select(input$main_db_dep_val)
+
+      indep_c = base::colnames(rv$independent_variables)
+
+      shiny::tagList(
+        shiny::column(width = 4, shiny::selectInput(
+          inputId = 'sum_scatter_select_i',
+          label = 'Dependent vaiable',
+          choices = base::colnames(rv$dependent_variables)
+        )),
+        shiny::column(width = 4, shiny::selectInput(
+          inputId = 'sum_scatter_select_j',
+          label = 'Independent vaiable',
+          choices = c('None' = '**', indep_c)
+        )),
+        shiny::column(width = 4, shiny::selectInput(
+          inputId = 'sum_scatter_select_k',
+          label = 'Independent vaiable',
+          choices = c('None' = '**', indep_c)
+        )),
+        shiny::column(width = 12,plotly::plotlyOutput('o_sum_scatter_figure'))
+      )
+    }
+  })
+
+  output$o_sum_scatter2_figure <- rbokeh::renderRbokeh({
+    if (input$sum_scatter2_select_j != '**' & input$sum_scatter2_select_k != '**' & input$sum_scatter2_select_i != '**') {
+
+      Y_axis = input$sum_scatter2_select_i
+      X_axis = input$sum_scatter2_select_j
+      Color = input$sum_scatter2_select_k
+      legend_location_ = input$sum_scatter2_select_leg
+      levels_j = base::length(base::unique(rv$data[[Color]]))
+
+      if (levels_j <= rv$Maximum_Level_For_Group_By) {
+        # Scatterplot
+        # legend_location should eb select by users there are 'top_right', 'top_left', 'bottom_left', 'bottom_right' options.
+        # x , y and color should be selected by users
+        # hover is the list from x and y
+        dat = rv$data
+        rbokeh::figure(legend_location = legend_location_) %>%
+          rbokeh::ly_points(x = X_axis, y = Y_axis, color = Color,
+                            data = dat, hover = list(X_axis, Y_axis))
+
+      }
+    }
+  })
+
+  output$o_sum_scatter2 <- shiny::renderUI({
+    if (!rv$review_flag) {
+
+      shiny::tagList(
+        shiny::column(width = 4, shiny::selectInput(
+          inputId = 'sum_scatter2_select_i',
+          label = 'Dependent vaiable',
+          choices = c('None' = '**', base::colnames(rv$data))
+        )),
+        shiny::column(width = 4, shiny::selectInput(
+          inputId = 'sum_scatter2_select_j',
+          label = 'Independent vaiable',
+          choices = c('None' = '**', base::colnames(rv$data))
+        )),
+        shiny::column(width = 4, shiny::selectInput(
+          inputId = 'sum_scatter2_select_k',
+          label = 'Independent vaiable',
+          choices = c('None' = '**', base::colnames(rv$data))
+        )),
+        shiny::column(width = 4,shinyWidgets::pickerInput(
+          inputId = 'sum_scatter2_select_leg', label = 'Legend location', multiple = F,
+          choices = base::c('None' = '', 'top_right', 'top_left', 'bottom_left', 'bottom_right'))),
+        shiny::column(width = 12,rbokeh::rbokehOutput('o_sum_scatter2_figure', width = 700, height = 500))
+      )
+    }
+  })
+
   # observeEvent(input$glance_outlier_refine_btn,{
   #   rv$outliers_row = NULL
   #   rv$selected.col = NULL

@@ -143,7 +143,7 @@ menu_plots <- shiny::tagList(
 
 menu_setting_cor <- shiny::tagList(
   shiny::column(
-    width = 8,
+    width = 4,
     shinyWidgets::pickerInput(
       width = '100%',
       inputId = 'setting_cor_plot',
@@ -292,6 +292,14 @@ body <- shinydashboard::dashboardBody(
         shiny::tabPanel(
           title = "Violin",
           shiny::uiOutput("o_sum_violin")
+        ),
+        shiny::tabPanel(
+          title = "Scatter",
+          shiny::uiOutput("o_sum_scatter2")
+        ),
+        shiny::tabPanel(
+          title = "Live Mode",
+          shiny::uiOutput("o_sum_scatter")
         )
       )
     ),
