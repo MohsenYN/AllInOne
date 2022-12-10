@@ -123,10 +123,6 @@ PoSiBlEoUtLieR <- function(input, rv) {
 
   else if (input$outlier_method == 'B') {
 
-    if (!load_pkg('olsrr')) {
-      return(0)
-    }
-
     # vars = base::unique(base::c(input$outlier_rand_interact, input$outlier_rand))
     vars = input$outlier_rand
 

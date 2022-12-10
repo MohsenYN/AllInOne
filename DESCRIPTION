@@ -61,7 +61,9 @@ Imports:
     waiter,
     glmnet,
     colourpicker,
-    shinyWidgets
+    shinyWidgets,
+    Hmisc,
+    olsrr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/MohsenYN/AllInOne
