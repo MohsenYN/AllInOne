@@ -20,8 +20,7 @@ app_server <- function(input, output, session) {
     User_Config_notif_delay = 8, User_Config_notif_size = 4,
     Path_For_Saving_Results = '', Show_Errors = T, Pre_Select_vars = T, glance_outlier = NULL,
     setting_cor_plot = c('circle', 'color', 'full', 'hclust', 'lower', 'number', 'pie', 'upper', 'axis', 'br', 'bw', 'cola', 'colb', 'sig', 'sigblank'),
-    setting_colors_list = base::c('#0000FF', '#FF0000', '#00FF00', '#FFFF00'),
-    setting_colors = base::c('#0000FF', '#FF0000', '#00FF00', '#FFFF00')
+    setting_colors_list = base::c('#00008b', '#8b0000'), setting_colors = base::c('#00008b', '#8b0000')
 
   )
 
