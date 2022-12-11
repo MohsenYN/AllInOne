@@ -66,7 +66,9 @@ Imports:
     olsrr,
     rbokeh,
     plotly,
-    lmerTest
+    lmerTest,
+    viridis,
+    SpATS
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/MohsenYN/AllInOne
