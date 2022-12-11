@@ -64,7 +64,8 @@ Imports:
     shinyWidgets,
     Hmisc,
     olsrr,
-    rbokeh
+    rbokeh,
+    plotly
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/MohsenYN/AllInOne
