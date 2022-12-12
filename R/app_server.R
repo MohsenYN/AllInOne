@@ -2678,9 +2678,9 @@ app_server <- function(input, output, session) {
       input$sum_scatter2_select_k != '' &
       input$sum_scatter2_select_i != '') {
 
-      Y_axis = input$sum_scatter2_select_i
+      Y_axis = input$sum_scatter2_select_k
       X_axis = input$sum_scatter2_select_j
-      Color = input$sum_scatter2_select_k
+      Color = input$sum_scatter2_select_i
       legend_location_ = input$sum_scatter2_select_leg
       levels_j = base::length(base::unique(rv$data[[Color]]))
 
@@ -2714,20 +2714,21 @@ app_server <- function(input, output, session) {
           choices = base::c('None' = '', 'top_right', 'top_left', 'bottom_left', 'bottom_right'))),
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter2_select_j',
-          label = 'Independent vaiable',
+          label = 'X_Axis Value',
           choices = base::c('None' = '', base::colnames(rv$data)),
           selected = input$sum_scatter2_select_j
         )),
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter2_select_k',
-          label = 'Independent vaiable',
+          label = 'Y_Axis Value',
           choices = base::c('None' = '', base::colnames(rv$data)),
           selected = input$sum_scatter2_select_k
         )),
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter2_select_i',
-          label = 'Dependent vaiable',
-          choices = base::c('None' = '', base::colnames(rv$data))
+          label = 'Categorised by',
+          choices = base::c('None' = '', base::colnames(rv$data)),
+          selected = input$sum_scatter2_select_i
         )),
         shiny::column(
           width = 12,
