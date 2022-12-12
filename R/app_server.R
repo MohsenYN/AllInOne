@@ -2674,7 +2674,7 @@ app_server <- function(input, output, session) {
   })
 
   output$o_sum_scatter2_figure <- rbokeh::renderRbokeh({
-    if (input$sum_scatter2_select_j != '**' & input$sum_scatter2_select_k != '**' & input$sum_scatter2_select_i != '**') {
+    if (input$sum_scatter2_select_j != '' & input$sum_scatter2_select_k != '' & input$sum_scatter2_select_i != '') {
 
       Y_axis = input$sum_scatter2_select_i
       X_axis = input$sum_scatter2_select_j
@@ -2700,25 +2700,46 @@ app_server <- function(input, output, session) {
     if (!rv$review_flag) {
 
       shiny::tagList(
-        shiny::column(width = 4, shiny::selectInput(
-          inputId = 'sum_scatter2_select_i',
-          label = 'Dependent vaiable',
-          choices = c('None' = '**', base::colnames(rv$data))
+        shiny::column(width = 4, shiny::numericInput(
+          inputId = 'sum_scatter2_select_w',
+          label = 'Width',
+          value = base::ifelse(base::is.null(input$sum_scatter2_select_w), 800, input$sum_scatter2_select_w),
+          step = 100
         )),
+        shiny::column(width = 4, shiny::numericInput(
+          inputId = 'sum_scatter2_select_h',
+          label = 'Height',
+          value = base::ifelse(base::is.null(input$sum_scatter2_select_h), 500, input$sum_scatter2_select_h),
+          step = 100
+        )),
+        shiny::column(width = 4,shiny::selectInput(
+          inputId = 'sum_scatter2_select_leg', label = 'Legend location', selected = input$sum_scatter2_select_leg,
+          choices = base::c('None' = '', 'top_right', 'top_left', 'bottom_left', 'bottom_right'))),
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter2_select_j',
           label = 'Independent vaiable',
-          choices = c('None' = '**', base::colnames(rv$data))
+          choices = base::c('None' = '', base::colnames(rv$data)),
+          selected = input$sum_scatter2_select_j
         )),
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter2_select_k',
           label = 'Independent vaiable',
-          choices = c('None' = '**', base::colnames(rv$data))
+          choices = base::c('None' = '', base::colnames(rv$data)),
+          selected = input$sum_scatter2_select_k
         )),
-        shiny::column(width = 4,shinyWidgets::pickerInput(
-          inputId = 'sum_scatter2_select_leg', label = 'Legend location', multiple = F,
-          choices = base::c('None' = '', 'top_right', 'top_left', 'bottom_left', 'bottom_right'))),
-        shiny::column(width = 12,rbokeh::rbokehOutput('o_sum_scatter2_figure', width = 700, height = 500))
+        shiny::column(width = 4, shiny::selectInput(
+          inputId = 'sum_scatter2_select_i',
+          label = 'Dependent vaiable',
+          choices = base::c('None' = '', base::colnames(rv$data))
+        )),
+        shiny::column(
+          width = 12,
+          rbokeh::rbokehOutput(
+            outputId = 'o_sum_scatter2_figure',
+            width = input$sum_scatter2_select_w,
+            height = input$sum_scatter2_select_h
+          )
+        )
       )
     }
   })
