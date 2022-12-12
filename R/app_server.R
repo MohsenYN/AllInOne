@@ -2620,8 +2620,8 @@ app_server <- function(input, output, session) {
   output$o_sum_scatter_figure <- plotly::renderPlotly({
     if (input$sum_scatter_select_j != '**' & input$sum_scatter_select_k != '**') {
 
-      Y_axis = input$sum_scatter_select_i
-      X_axis = input$sum_scatter_select_j
+      X_axis = input$sum_scatter_select_i
+      Y_axis = input$sum_scatter_select_j
       Color = input$sum_scatter_select_k
 
       levels_j = base::length(base::unique(rv$data[[Color]]))
@@ -2655,17 +2655,17 @@ app_server <- function(input, output, session) {
       shiny::tagList(
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter_select_i',
-          label = 'Dependent vaiable',
+          label = 'X_axis value',
           choices = base::colnames(rv$dependent_variables)
         )),
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter_select_j',
-          label = 'Independent vaiable',
+          label = 'Y_axis value',
           choices = c('None' = '**', indep_c)
         )),
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter_select_k',
-          label = 'Independent vaiable',
+          label = 'Categorised by',
           choices = c('None' = '**', indep_c)
         )),
         shiny::column(width = 12, plotly::plotlyOutput('o_sum_scatter_figure'))
@@ -2697,21 +2697,6 @@ app_server <- function(input, output, session) {
     if (!rv$review_flag) {
 
       shiny::tagList(
-        shiny::column(width = 4, shiny::numericInput(
-          inputId = 'sum_scatter2_select_w',
-          label = 'Width',
-          value = base::ifelse(base::is.null(input$sum_scatter2_select_w), 800, input$sum_scatter2_select_w),
-          step = 100
-        )),
-        shiny::column(width = 4, shiny::numericInput(
-          inputId = 'sum_scatter2_select_h',
-          label = 'Height',
-          value = base::ifelse(base::is.null(input$sum_scatter2_select_h), 500, input$sum_scatter2_select_h),
-          step = 100
-        )),
-        shiny::column(width = 4, shiny::selectInput(
-          inputId = 'sum_scatter2_select_leg', label = 'Legend location', selected = input$sum_scatter2_select_leg,
-          choices = base::c('None' = '', 'top_right', 'top_left', 'bottom_left', 'bottom_right'))),
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter2_select_j',
           label = 'X_Axis Value',
@@ -2729,6 +2714,22 @@ app_server <- function(input, output, session) {
           label = 'Categorised by',
           choices = base::c('None' = '', base::colnames(rv$data)),
           selected = input$sum_scatter2_select_i
+        )),
+        shiny::column(width = 4, shiny::numericInput(
+          inputId = 'sum_scatter2_select_w',
+          label = 'Width',
+          value = base::ifelse(base::is.null(input$sum_scatter2_select_w), 800, input$sum_scatter2_select_w),
+          step = 100
+        )),
+        shiny::column(width = 4, shiny::numericInput(
+          inputId = 'sum_scatter2_select_h',
+          label = 'Height',
+          value = base::ifelse(base::is.null(input$sum_scatter2_select_h), 500, input$sum_scatter2_select_h),
+          step = 100
+        )),
+        shiny::column(width = 4, shiny::selectInput(
+          inputId = 'sum_scatter2_select_leg', label = 'Legend location', selected = input$sum_scatter2_select_leg,
+          choices = base::c('None' = '', 'top_right', 'top_left', 'bottom_left', 'bottom_right')
         )),
         shiny::column(
           width = 12,
