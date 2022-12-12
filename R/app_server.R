@@ -70,10 +70,10 @@ app_server <- function(input, output, session) {
     rv$setting_colors = base::c(rv$setting_colors, input$setting_color_picker)
   })
 
-  observeEvent(input$setting_colors_list,{
-    if(length(input$setting_colors_list > 0))  {
+  observeEvent(input$setting_colors_list, {
+    if (length(input$setting_colors_list > 0)) {
       rv$setting_colors = input$setting_colors_list
-    }else{
+    }else {
       shiny_showNotification(rv, 'There should be at least one color!')
     }
   })
@@ -376,7 +376,7 @@ app_server <- function(input, output, session) {
                 shape = 'curve',
                 animation = 'jelly',
                 icon = shiny::icon('ok', lib = 'glyphicon'),
-                status = 'danger',fill = T, outline = T, bigger = T
+                status = 'danger', fill = T, outline = T, bigger = T
               )
             ) }
         })
@@ -403,7 +403,7 @@ app_server <- function(input, output, session) {
                 shape = 'curve',
                 animation = 'jelly',
                 icon = shiny::icon('ok', lib = 'glyphicon'),
-                status = 'danger',fill = T, outline = T, bigger = T
+                status = 'danger', fill = T, outline = T, bigger = T
               )
             )
           }
@@ -435,55 +435,55 @@ app_server <- function(input, output, session) {
 
   shiny::observeEvent(input$setting_file$data, {
     tryCatch({
-    address = input$setting_file$data
-    postfix = base::substring(
-      address,
-      base::nchar(address) - 3,
-      base::nchar(address)
-    )
-    if (postfix == ".csv") {
-      setting_dat <- as.data.frame(
-        utils::read.csv(
-          address,
-          fileEncoding = "UTF-8-BOM"
+      address = input$setting_file$data
+      postfix = base::substring(
+        address,
+        base::nchar(address) - 3,
+        base::nchar(address)
+      )
+      if (postfix == ".csv") {
+        setting_dat <- as.data.frame(
+          utils::read.csv(
+            address,
+            fileEncoding = "UTF-8-BOM"
+          )
         )
-      )
-      ########General
-      ########  Options
-      notif_delay = as.numeric(setting_dat[['General']][1])
-      notif_size = as.numeric(setting_dat[['General']][2])
-      Ign_Res_Wrd = as.logical(setting_dat[['General']][3])
+        ########General
+        ########  Options
+        notif_delay = as.numeric(setting_dat[['General']][1])
+        notif_size = as.numeric(setting_dat[['General']][2])
+        Ign_Res_Wrd = as.logical(setting_dat[['General']][3])
 
-      shiny::updateNumericInput(inputId = 'notif_delay', value = notif_delay)
-      shiny::updateSelectInput(inputId = 'notif_size', selected = notif_size)
-      shinyWidgets::updatePrettyCheckbox(
-        inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd
-      )
+        shiny::updateNumericInput(inputId = 'notif_delay', value = notif_delay)
+        shiny::updateSelectInput(inputId = 'notif_size', selected = notif_size)
+        shinyWidgets::updatePrettyCheckbox(
+          inputId = 'Ign_Res_Wrd', value = Ign_Res_Wrd
+        )
 
-      ########General
-      ########  Options
-      str_ = setting_dat[['General']][4]
-      setting_cor_plot = base::strsplit(str_, ',')[[1]]
+        ########General
+        ########  Options
+        str_ = setting_dat[['General']][4]
+        setting_cor_plot = base::strsplit(str_, ',')[[1]]
 
-      shiny::updateSelectInput(inputId = 'setting_cor_plot', selected = setting_cor_plot)
+        shiny::updateSelectInput(inputId = 'setting_cor_plot', selected = setting_cor_plot)
 
-      ######################################################################################
-      ########General
-      ########  Plot
-      Max_levels_GB = base::as.numeric(setting_dat[['Plots']][1])
-      str_ = setting_dat[['Plots']][2]
-      rv$setting_colors_list = base::strsplit(str_, ',')[[1]]
-      str_ = setting_dat[['Plots']][3]
-      rv$setting_colors = base::strsplit(str_, ',')[[1]]
+        ######################################################################################
+        ########General
+        ########  Plot
+        Max_levels_GB = base::as.numeric(setting_dat[['Plots']][1])
+        str_ = setting_dat[['Plots']][2]
+        rv$setting_colors_list = base::strsplit(str_, ',')[[1]]
+        str_ = setting_dat[['Plots']][3]
+        rv$setting_colors = base::strsplit(str_, ',')[[1]]
 
-      shiny::updateNumericInput(inputId = 'Max_levels_GB', value = Max_levels_GB)
+        shiny::updateNumericInput(inputId = 'Max_levels_GB', value = Max_levels_GB)
 
-    }
-    else {
-      shiny_showNotification(rv, 'Failed to import setting file')
-    }
+      }
+      else {
+        shiny_showNotification(rv, 'Failed to import setting file')
+      }
     }, error = function(e) {
-      shiny_showNotification(rv, paste0(e$message,' **Failed to import setting file**'))
+      shiny_showNotification(rv, paste0(e$message, ' **Failed to import setting file**'))
     })
   })
 
@@ -2125,33 +2125,33 @@ app_server <- function(input, output, session) {
     content = function(path) {
 
       ########General
-    ########  Options
-    notif_delay = input$notif_delay
-    notif_size = input$notif_size
-    Ign_Res_Wrd = input$Ign_Res_Wrd
+      ########  Options
+      notif_delay = input$notif_delay
+      notif_size = input$notif_size
+      Ign_Res_Wrd = input$Ign_Res_Wrd
 
-    ########  Correlation
-    setting_cor_plot = rv$setting_cor_plot
+      ########  Correlation
+      setting_cor_plot = rv$setting_cor_plot
 
-    ########Plots
-    Max_levels_GB = input$Max_levels_GB
-    setting_colors_list = input$setting_colors_list
+      ########Plots
+      Max_levels_GB = input$Max_levels_GB
+      setting_colors_list = input$setting_colors_list
 
-    l = list()
+      l = list()
 
-    ########General
-    ########  Options
-    l[['General']][1] = notif_delay
-    l[['General']][2] = notif_size
-    l[['General']][3] = Ign_Res_Wrd
-    ########  Correlation
-    l[['General']][4] = paste(setting_cor_plot, collapse = ',')
+      ########General
+      ########  Options
+      l[['General']][1] = notif_delay
+      l[['General']][2] = notif_size
+      l[['General']][3] = Ign_Res_Wrd
+      ########  Correlation
+      l[['General']][4] = paste(setting_cor_plot, collapse = ',')
 
-    ########Plots
-    l[['Plots']][1] = Max_levels_GB
-    l[['Plots']][2] = paste(rv$setting_colors_list, collapse = ',')
-    l[['Plots']][3] = paste(rv$setting_colors, collapse = ',')
-    l[['Plots']][4] = 'NULL'
+      ########Plots
+      l[['Plots']][1] = Max_levels_GB
+      l[['Plots']][2] = paste(rv$setting_colors_list, collapse = ',')
+      l[['Plots']][3] = paste(rv$setting_colors, collapse = ',')
+      l[['Plots']][4] = 'NULL'
 
       utils::write.csv(l, path, row.names = F)
     }
@@ -2530,8 +2530,8 @@ app_server <- function(input, output, session) {
                 subtitle = i
               ) +
               ggplot2::guides(fill = ggplot2::guide_legend(j)) +
-              ggplot2::theme_classic()+
-              ggplot2::scale_fill_manual( values = colors_f(base::length(base::levels(ME))) )
+              ggplot2::theme_classic() +
+              ggplot2::scale_fill_manual(values = colors_f(base::length(base::levels(ME))))
           }
       }
 
@@ -2632,8 +2632,8 @@ app_server <- function(input, output, session) {
         p <- ggplot2::ggplot(rv$data, ggplot2::aes(x = get(X_axis), y = get(Y_axis), fill = get(Color), color = get(Color))) +
           ggplot2::geom_tile() +
           ggplot2::labs(x = X_axis,
-               y = Y_axis,
-               title = "....") +
+                        y = Y_axis,
+                        title = "....") +
           ggplot2::theme_classic()
 
         plotly::ggplotly(p)
@@ -2668,13 +2668,15 @@ app_server <- function(input, output, session) {
           label = 'Independent vaiable',
           choices = c('None' = '**', indep_c)
         )),
-        shiny::column(width = 12,plotly::plotlyOutput('o_sum_scatter_figure'))
+        shiny::column(width = 12, plotly::plotlyOutput('o_sum_scatter_figure'))
       )
     }
   })
 
   output$o_sum_scatter2_figure <- rbokeh::renderRbokeh({
-    if (input$sum_scatter2_select_j != '' & input$sum_scatter2_select_k != '' & input$sum_scatter2_select_i != '') {
+    if (input$sum_scatter2_select_j != '' &
+      input$sum_scatter2_select_k != '' &
+      input$sum_scatter2_select_i != '') {
 
       Y_axis = input$sum_scatter2_select_i
       X_axis = input$sum_scatter2_select_j
@@ -2683,15 +2685,10 @@ app_server <- function(input, output, session) {
       levels_j = base::length(base::unique(rv$data[[Color]]))
 
       if (levels_j <= rv$Maximum_Level_For_Group_By) {
-        # Scatterplot
-        # legend_location should eb select by users there are 'top_right', 'top_left', 'bottom_left', 'bottom_right' options.
-        # x , y and color should be selected by users
-        # hover is the list from x and y
         dat = rv$data
         rbokeh::figure(legend_location = legend_location_) %>%
           rbokeh::ly_points(x = X_axis, y = Y_axis, color = Color,
                             data = dat, hover = list(X_axis, Y_axis))
-
       }
     }
   })
@@ -2712,7 +2709,7 @@ app_server <- function(input, output, session) {
           value = base::ifelse(base::is.null(input$sum_scatter2_select_h), 500, input$sum_scatter2_select_h),
           step = 100
         )),
-        shiny::column(width = 4,shiny::selectInput(
+        shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter2_select_leg', label = 'Legend location', selected = input$sum_scatter2_select_leg,
           choices = base::c('None' = '', 'top_right', 'top_left', 'bottom_left', 'bottom_right'))),
         shiny::column(width = 4, shiny::selectInput(
@@ -2767,12 +2764,12 @@ app_server <- function(input, output, session) {
         res = find_outliers_beta(db, input$glance_outlier_minp, input$glance_outlier_maxp)
         Num = base::length(res)
         res = as.data.frame(res)
-        if(Num > 0)
+        if (Num > 0)
           colnames(res) = 1:length(res)
         rv$glance_outlier = res
         res = t(res)
         shiny::tagList(
-          if(Num > 0)
+          if (Num > 0)
             shiny::helpText(
               shiny::HTML(paste0(
                 'We found <b><i>',
@@ -2780,14 +2777,14 @@ app_server <- function(input, output, session) {
                 i, '</i></b> trait based on <b><i>',
                 j, '</i></b> variable')))
           ,
-          if(Num == 0)
+          if (Num == 0)
             shiny::helpText(
               shiny::HTML(paste0(
                 'Wow! There is no outlier in <b><i>',
                 i, '</i></b> trait based on <b><i>',
                 j, '</i></b> variable')))
           ,
-          if(Num > 0) DT::renderDataTable(
+          if (Num > 0) DT::renderDataTable(
             res,
             options = base::list(
               scrollX = TRUE,
@@ -2822,9 +2819,9 @@ app_server <- function(input, output, session) {
           label = 'Independent vaiable',
           choices = c('None' = '**', indep_c)
         )),
-        shiny::column(width = 2, shiny::numericInput('glance_outlier_minp','minp',0.25,0,1, 0.05))
+        shiny::column(width = 2, shiny::numericInput('glance_outlier_minp', 'minp', 0.25, 0, 1, 0.05))
         ,
-        shiny::column(width = 2, shiny::numericInput('glance_outlier_maxp','maxp',0.75,0,1, 0.05))
+        shiny::column(width = 2, shiny::numericInput('glance_outlier_maxp', 'maxp', 0.75, 0, 1, 0.05))
         ,
         # shiny::column(width = 2,
         #               class = "structure_change_type_col",
