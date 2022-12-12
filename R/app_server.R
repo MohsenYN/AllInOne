@@ -2618,7 +2618,7 @@ app_server <- function(input, output, session) {
 
 
   output$o_sum_scatter_figure <- plotly::renderPlotly({
-    if (input$sum_scatter_select_j != '**' & input$sum_scatter_select_k != '**') {
+    if (input$sum_scatter_select_j != '' & input$sum_scatter_select_k != '' & input$sum_scatter_select_i != '') {
 
       X_axis = input$sum_scatter_select_i
       Y_axis = input$sum_scatter_select_j
@@ -2656,17 +2656,17 @@ app_server <- function(input, output, session) {
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter_select_i',
           label = 'X_axis value',
-          choices = base::colnames(rv$dependent_variables)
+          choices = c('None' = '', base::colnames(rv$data))
         )),
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter_select_j',
           label = 'Y_axis value',
-          choices = c('None' = '**', indep_c)
+          choices = c('None' = '', base::colnames(rv$data))
         )),
         shiny::column(width = 4, shiny::selectInput(
           inputId = 'sum_scatter_select_k',
           label = 'Categorised by',
-          choices = c('None' = '**', indep_c)
+          choices = c('None' = '', base::colnames(rv$data))
         )),
         shiny::column(width = 12, plotly::plotlyOutput('o_sum_scatter_figure'))
       )
