@@ -434,7 +434,7 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$setting_file$data, {
-    # tryCatch({
+    tryCatch({
     address = input$setting_file$data
     postfix = base::substring(
       address,
@@ -482,9 +482,9 @@ app_server <- function(input, output, session) {
     else {
       shiny_showNotification(rv, 'Failed to import setting file')
     }
-    # }, error = function(e) {
-    #   shiny_showNotification(rv, e$message)
-    # })
+    }, error = function(e) {
+      shiny_showNotification(rv, paste0(e$message,' **Failed to import setting file**'))
+    })
   })
 
   shiny::observeEvent(
@@ -1789,12 +1789,25 @@ app_server <- function(input, output, session) {
         message = 'Interaction is done! Please review independent variables.')
 
       shiny::showModal(shiny::modalDialog(
-        shiny::checkboxGroupInput(
-          inputId = 'main_db_indep_val',
-          label = 'Selected Independent/Factor Variables',
-          choices = base::names(dplyr::select(rv$data, dplyr::all_of(base::c(input$main_db_indep_val, interacted_name)))),
-          selected = new_main_db_indep_val
-        ), easyClose = FALSE,
+        shiny::column(
+          width = 7,
+          shinyWidgets::pickerInput(
+            inputId = 'main_db_indep_val',
+            label = tags$span(
+              'Selected independent/factor variables',
+              tags$i(
+                class = "glyphicon glyphicon-info-sign",
+                style = "color: var(--Just-color);",
+                title = 'The new column is automatically added to the independent/factor variables list')),
+            choices = base::names(dplyr::select(rv$data, dplyr::all_of(base::c(input$main_db_indep_val, interacted_name)))),
+            selected = new_main_db_indep_val,
+            multiple = T,
+            options = list(
+              `actions-box` = TRUE,
+              size = 10,
+              `selected-text-format` = "count > 3"
+            )
+          )), easyClose = FALSE,
         footer = shiny::actionButton('apply_db', "Apply"))
       )
     } else if (ath_flag) {
@@ -1818,7 +1831,7 @@ app_server <- function(input, output, session) {
     }else if (base::length(input$main_db_indep_val) == 0) {
       shiny_showNotification(
         rv,
-        'At least one independent variable should be selected'
+        'At least one independent/dependent variable should be selected'
       )
     }else if (base::length(input$main_db_dep_val) == 0) {
       shiny_showNotification(
@@ -1963,27 +1976,46 @@ app_server <- function(input, output, session) {
           'Disease')
       }
       coln = base::colnames(rv$data)
-      cls = ''
-      if (base::length(coln) > 10)
-        cls = 'multicol'
       shiny::showModal(
         shiny::modalDialog(
-          shiny::tags$div(align = 'left',
-                          class = cls,
-                          shiny::checkboxGroupInput(
-                            inputId = 'main_db_indep_val',
-                            label = 'Select independent/factor variables',
-                            choices = coln,
-                            selected = temp_indep
-                          )),
-          shiny::tags$div(align = 'left',
-                          class = cls,
-                          shiny::checkboxGroupInput(
-                            inputId = 'main_db_dep_val',
-                            label = 'Select dependent/response variables',
-                            choices = coln,
-                            selected = temp_dep
-                          )),
+          shiny::column(
+            width = 6,
+            shinyWidgets::pickerInput(
+              inputId = 'main_db_indep_val',
+              label = tags$span(
+                'Select independent/factor variables',
+                tags$i(
+                  class = "glyphicon glyphicon-info-sign",
+                  style = "color: var(--Just-color);",
+                  title = 'Select independent/factor variables')),
+              choices = coln,
+              selected = temp_indep,
+              multiple = T,
+              options = list(
+                `actions-box` = TRUE,
+                size = 10,
+                `selected-text-format` = "count > 3"
+              )
+            )),
+          shiny::column(
+            width = 6,
+            shinyWidgets::pickerInput(
+              inputId = 'main_db_dep_val',
+              label = tags$span(
+                'Select dependent/response variables',
+                tags$i(
+                  class = "glyphicon glyphicon-info-sign",
+                  style = "color: var(--Just-color);",
+                  title = 'Select dependent/response variables')),
+              choices = coln,
+              selected = temp_dep,
+              multiple = T,
+              options = list(
+                `actions-box` = TRUE,
+                size = 10,
+                `selected-text-format` = "count > 3"
+              )
+            )),
           easyClose = FALSE,
           footer = shiny::actionButton('apply_db', 'OK')
         )
@@ -2006,7 +2038,8 @@ app_server <- function(input, output, session) {
 
       shiny::showModal(
         shiny::modalDialog(
-          shiny::checkboxGroupInput(
+          shinyWidgets::pickerInput(
+            multiple = T,
             inputId = 'main_db_interaction_col',
             label = 'Select variables to interact',
             choices = base::names(rv$data),
@@ -2331,18 +2364,44 @@ app_server <- function(input, output, session) {
 
     shiny::showModal(
       shiny::modalDialog(
-        shiny::checkboxGroupInput(
-          inputId = 'main_db_indep_val',
-          label = 'Select independent/factor variables',
-          choices = base::names(rv$data),
-          selected = temp_indep
-        ),
-        shiny::checkboxGroupInput(
-          inputId = 'main_db_dep_val',
-          label = 'Select dependent/response variables',
-          choices = base::names(rv$data),
-          selected = temp_dep
-        ),
+        shiny::column(
+          width = 6,
+          shinyWidgets::pickerInput(
+            inputId = 'main_db_indep_val',
+            label = tags$span(
+              'Select independent/factor variables',
+              tags$i(
+                class = "glyphicon glyphicon-info-sign",
+                style = "color: var(--Just-color);",
+                title = 'Select independent/factor variables')),
+            choices = base::names(rv$data),
+            selected = temp_indep,
+            multiple = T,
+            options = list(
+              `actions-box` = TRUE,
+              size = 10,
+              `selected-text-format` = "count > 3"
+            )
+          )),
+        shiny::column(
+          width = 6,
+          shinyWidgets::pickerInput(
+            inputId = 'main_db_dep_val',
+            label = tags$span(
+              'Select dependent/response variables',
+              tags$i(
+                class = "glyphicon glyphicon-info-sign",
+                style = "color: var(--Just-color);",
+                title = 'Select dependent/response variables')),
+            choices = base::names(rv$data),
+            selected = temp_dep,
+            multiple = T,
+            options = list(
+              `actions-box` = TRUE,
+              size = 10,
+              `selected-text-format` = "count > 3"
+            )
+          )),
         easyClose = FALSE,
         footer = shiny::actionButton('apply_db', 'OK')
       )
@@ -2772,4 +2831,5 @@ app_server <- function(input, output, session) {
       )
     }
   })
+  shinyjs::addClass(selector = "body", class = "sidebar-collapse")
 }
