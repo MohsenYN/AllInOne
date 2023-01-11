@@ -818,7 +818,7 @@ app_server <- function(input, output, session) {
             shiny::tagList(
               shiny::selectInput('outlier_resp',
                                  'Dependant/response variable',
-                                 choices = input$main_db_dep_val
+                                 choices = input$main_db_dep_val, multiple = T
               ),
               shiny::checkboxGroupInput('outlier_rand',
                                         'Select the independent variable(s)',
@@ -2317,19 +2317,46 @@ app_server <- function(input, output, session) {
             shiny::tagList(args1)
       })
     }else {
-      k = base::as.numeric(input$outl_select_input)
+      if (length(input$outlier_resp) == 1) {
+        k = base::as.numeric(input$outl_select_input)
+        len = base::length(rv$outliers)
+        for (x in base::seq(2, len, 3)) {
+          if (base::as.numeric(rv$outliers[x]) == k) {
+            outlier_resp <- rv$outliers[x - 1]
+          }
+        }
 
-      output$content_7 <- shiny::renderUI({
-        if (input$active_opt_2 == 'outlier')
-          if (base::length(base::unique(base::sort(rv$outliers_row))))
-            shiny::tagList(
-              shiny::textInput(base::paste0("OTL_", input$outlier_resp),
-                               label = input$outlier_resp,
-                               value = rv$data[[input$outlier_resp]][k]
-              ),
-              shiny::actionButton("OTL_apply_changes", "Apply Change(s) / Ignore")
-            )
-      })
+        output$content_7 <- shiny::renderUI({
+          if (input$active_opt_2 == 'outlier')
+            if (base::length(base::unique(base::sort(rv$outliers_row))))
+              shiny::tagList(
+                shiny::textInput(base::paste0("OTL_", outlier_resp),
+                                 label = outlier_resp,
+                                 value = rv$data[[outlier_resp]][k]
+                ),
+                shiny::actionButton("OTL_apply_changes", "Apply Change(s) / Ignore")
+              )
+        })
+      }else if (length(input$outlier_resp) == -1) {
+        k = base::as.numeric(input$outl_select_input)
+        len = base::length(rv$outliers)
+        for (x in base::seq(2, len, 3)) {
+          if (base::as.numeric(rv$outliers[x]) == k) {
+            outlier_resp <- rv$outliers[x - 1]
+          }
+        }
+        output$content_7 <- shiny::renderUI({
+          if (input$active_opt_2 == 'outlier')
+            if (base::length(base::unique(base::sort(rv$outliers_row))))
+              shiny::tagList(
+                shiny::textInput(base::paste0("OTL_", outlier_resp),
+                                 label = outlier_resp,
+                                 value = rv$data[[outlier_resp]][k]
+                ),
+                shiny::actionButton("OTL_apply_changes", "Apply Change(s) / Ignore")
+              )
+        })
+      }
     }
   })
 
@@ -2618,7 +2645,9 @@ app_server <- function(input, output, session) {
 
 
   output$o_sum_scatter_figure <- plotly::renderPlotly({
-    if (input$sum_scatter_select_j != '' & input$sum_scatter_select_k != '' & input$sum_scatter_select_i != '') {
+    if (input$sum_scatter_select_j != '' &
+      input$sum_scatter_select_k != '' &
+      input$sum_scatter_select_i != '') {
 
       X_axis = input$sum_scatter_select_i
       Y_axis = input$sum_scatter_select_j
