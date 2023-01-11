@@ -157,6 +157,10 @@ Mixed_Analysis <- function(input, rv) {
 
     data_buf = dplyr::select(rv$data, dplyr::all_of(c(input$main_db_indep_val, response, Cof)))
 
+    if (!base::is.null(rv$spat_buffer))
+      if (input$use_spat)
+        data_buf = dplyr::select(rv$spat_buffer, dplyr::all_of(c(input$main_db_indep_val, response, Cof)))
+
     if (base::is.null(Cof))
       B2 <- lme4::lmer(formula = base::paste0(response, ' ~ ', intercep, ' + ', formula_str), data = stats::na.omit(data_buf))
     else {
