@@ -1122,7 +1122,8 @@ app_server <- function(input, output, session) {
         shiny::showModal(shiny::modalDialog(
           shiny::selectInput('blue_resp',
                              'Dependent/response variable',
-                             choices = dep_cols
+                             choices = dep_cols,
+                             multiple = T
           ),
 
           shiny::numericInput(
