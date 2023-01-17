@@ -12,7 +12,7 @@ The **AllInOne** is an open-Source, R-Shiny user interface package designed in t
 
 **If you enjoy working with AllInOne, give us a star on GitHub and Cite the package, please :)**
 
-[RIS file avialable here][https://github.com/MohsenYN/AllInOne/blob/main/CiteAllInOne.ris]
+[RIS file avialable here](https://github.com/MohsenYN/AllInOne/blob/main/CiteAllInOne.ris)
 
 
 ## **Demo**
