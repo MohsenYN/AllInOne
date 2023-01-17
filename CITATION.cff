@@ -9,8 +9,7 @@ authors:
   - given-names: Mohsen
     family-names: Yoosefzadeh Najafabadi
     email: myoosefz@uoguelph.ca
-    name-particle: Mohsen
-    affiliation: University of Guelph
+    affiliation: Department of Plant Agriculture, University of Guelph, Guelph, ON N1G 2W1, Canada
     orcid: 'https://orcid.org/0000-0003-3631-4493'
   - orcid: 'https://orcid.org/0000-0003-2087-4306'
     email: Alihdr@stu.usc.ac.ir
@@ -20,7 +19,7 @@ authors:
     family-names: Rajcan
     email: Irajcan@uoguelph.ca
     orcid: 'https://orcid.org/0000-0001-5156-2482'
-    affiliation: University of Guelph
+    affiliation: Department of Plant Agriculture, University of Guelph, Guelph, ON N1G 2W1, Canada
 identifiers:
   - type: url
     value: 'https://github.com/MohsenYN/AllInOne'
