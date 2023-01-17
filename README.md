@@ -2,12 +2,6 @@
 
 # **AllInOne** <img src="inst/app/www/LogoReadme.png" width="100px" align="right"/>
 
-<p align="center"> 
-  Visitor count<br>
-  <img src="https://profile-counter.glitch.me/insolitum/count.svg" />
-</p>
-
-
 <br/>
 <br/>
 
