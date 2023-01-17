@@ -12,6 +12,11 @@ The **AllInOne** is an open-Source, R-Shiny user interface package designed in t
 
 **If you enjoy working with AllInOne, give us a star on GitHub and Cite the package, please :)**
 
+<!-- BEGIN LATEST DOWNLOAD BUTTON -->
+[![Download zip](https://custom-icon-badges.herokuapp.com/badge/-Download-blue?style=for-the-badge&logo=download&logoColor=white "Download zip")]([https://github.com/MohsenYN/AllInOne/CiteAllInOne.ris)]
+<!-- END LATEST DOWNLOAD BUTTON -->
+
+
 ## **Demo**
 
 Just click [HERE](https://allinone.shinyapps.io/allinone/).
