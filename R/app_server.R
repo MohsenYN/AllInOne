@@ -818,7 +818,7 @@ app_server <- function(input, output, session) {
             shiny::tagList(
               shiny::selectInput('outlier_resp',
                                  'Dependant/response variable',
-                                 choices = input$main_db_dep_val
+                                 choices = input$main_db_dep_val, multiple = T
               ),
               shiny::checkboxGroupInput('outlier_rand',
                                         'Select the independent variable(s)',
@@ -1122,7 +1122,8 @@ app_server <- function(input, output, session) {
         shiny::showModal(shiny::modalDialog(
           shiny::selectInput('blue_resp',
                              'Dependent/response variable',
-                             choices = dep_cols
+                             choices = dep_cols,
+                             multiple = T
           ),
 
           shiny::numericInput(
@@ -2316,21 +2317,96 @@ app_server <- function(input, output, session) {
           if (base::length(base::unique(base::sort(rv$outliers_row))))
             shiny::tagList(args1)
       })
-    }else {
-      k = base::as.numeric(input$outl_select_input)
+    }
 
+    else if (input$outlier_method == 'B') {
+      k = input$outl_select_input
+      COLN = base::colnames(rv$data)
+      o_cln <- NULL
+      len = base::length(rv$outliers)
+      for (x in base::seq(2, len, 3)) {
+        if (base::as.numeric(rv$outliers[x]) == input$outl_select_input) {
+          o_cln <- base::append(o_cln, rv$outliers[x - 1])
+        }
+      }
+      args1 = ''
+      for (i in COLN) {
+        if (i %in% o_cln) {
+          str_temp = base::paste0('<b><h4>', i, ' (', input$indep_outlier_2, ')</h4></b>')
+          args1 = base::append(
+            args1,
+            base::list(shiny::textInput(
+              base::paste0("OTL_", i),
+              label = shiny::HTML(str_temp),
+              value = rv$data[input$outl_select_input, base::paste0(i)]
+            )))
+        }else {
+          if (!is.null(input[[base::paste0("OTL_", i)]])) {
+            str_temp = base::paste0('<h4>', i, ' (', input$indep_outlier_2, ')</h4>')
+            args1 = base::append(
+              args1,
+              base::list(shiny::textInput(
+                base::paste0("OTL_", i),
+                label = shiny::HTML(str_temp),
+                value = rv$data[input$outl_select_input, base::paste0(i)]
+              )))
+          }
+        }
+      }
+      args1 = base::append(
+        args1,
+        base::list(
+          shiny::actionButton("OTL_apply_changes", "Apply Change(s) / Ignore")
+        )
+      )
       output$content_7 <- shiny::renderUI({
         if (input$active_opt_2 == 'outlier')
           if (base::length(base::unique(base::sort(rv$outliers_row))))
-            shiny::tagList(
-              shiny::textInput(base::paste0("OTL_", input$outlier_resp),
-                               label = input$outlier_resp,
-                               value = rv$data[[input$outlier_resp]][k]
-              ),
-              shiny::actionButton("OTL_apply_changes", "Apply Change(s) / Ignore")
-            )
+            shiny::tagList(args1)
       })
     }
+    # else {
+    #   if (length(input$outlier_resp) == 1) {
+    #     k = base::as.numeric(input$outl_select_input)
+    #     len = base::length(rv$outliers)
+    #     for (x in base::seq(2, len, 3)) {
+    #       if (base::as.numeric(rv$outliers[x]) == k) {
+    #         outlier_resp <- rv$outliers[x - 1]
+    #       }
+    #     }
+    #
+    #     output$content_7 <- shiny::renderUI({
+    #       if (input$active_opt_2 == 'outlier')
+    #         if (base::length(base::unique(base::sort(rv$outliers_row))))
+    #           shiny::tagList(
+    #             shiny::textInput(base::paste0("OTL_", outlier_resp),
+    #                              label = outlier_resp,
+    #                              value = rv$data[[outlier_resp]][k]
+    #             ),
+    #             shiny::actionButton("OTL_apply_changes", "Apply Change(s) / Ignore")
+    #           )
+    #     })
+    #   }else if (length(input$outlier_resp) == -1) {
+    #     k = base::as.numeric(input$outl_select_input)
+    #     len = base::length(rv$outliers)
+    #     for (x in base::seq(2, len, 3)) {
+    #       if (base::as.numeric(rv$outliers[x]) == k) {
+    #         outlier_resp <- rv$outliers[x - 1]
+    #       }
+    #     }
+    #     output$content_7 <- shiny::renderUI({
+    #       if (input$active_opt_2 == 'outlier')
+    #         if (base::length(base::unique(base::sort(rv$outliers_row))))
+    #           shiny::tagList(
+    #             shiny::textInput(base::paste0("OTL_", outlier_resp),
+    #                              label = outlier_resp,
+    #                              value = rv$data[[outlier_resp]][k]
+    #             ),
+    #             shiny::actionButton("OTL_apply_changes", "Apply Change(s) / Ignore")
+    #           )
+    #     })
+    #   }
+    # }
   })
 
   shiny::observeEvent(input$outl_select_input, {
@@ -2618,7 +2694,9 @@ app_server <- function(input, output, session) {
 
 
   output$o_sum_scatter_figure <- plotly::renderPlotly({
-    if (input$sum_scatter_select_j != '' & input$sum_scatter_select_k != '' & input$sum_scatter_select_i != '') {
+    if (input$sum_scatter_select_j != '' &
+      input$sum_scatter_select_k != '' &
+      input$sum_scatter_select_i != '') {
 
       X_axis = input$sum_scatter_select_i
       Y_axis = input$sum_scatter_select_j
