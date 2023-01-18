@@ -9,7 +9,7 @@ information_ui <- shiny::fluidRow(
   shiny::tags$body(
     shiny::h2(shiny::strong('Welcome to the AllInOne')),
     shiny::h3(shiny::strong('An Open-Source Friendly Analytical Package for Pre-processing Phenotypic Data')),
-    shiny::h4(shiny::strong('Version 1.0.7')),
+    shiny::h4(shiny::strong('Version 1.8.0')),
     shiny::hr(),
     shiny::tags$blockquote(
       shiny::img(src = 'www/AllInOne.gif', align = "right", width = "40%", height = "40%")
