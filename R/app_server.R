@@ -1218,24 +1218,26 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$indep_mixed_btn, {
-    shiny::removeModal()
-    if (base::dir.exists(app_sys("app/Results/Mixed Analysis")))
-      base::unlink(app_sys("app/Results/Mixed Analysis"), recursive = TRUE)
-    waiter$show()
-    base::tryCatch({
+    if (base::length(input$blue_resp) > 0) {
+      shiny::removeModal()
+      if (base::dir.exists(app_sys("app/Results/Mixed Analysis")))
+        base::unlink(app_sys("app/Results/Mixed Analysis"), recursive = TRUE)
+      waiter$show()
+      base::tryCatch({
 
-      Mixed_Analysis(input, rv)
+        Mixed_Analysis(input, rv)
 
-    }, error = function(e) {
+      }, error = function(e) {
 
-      if (rv$Show_Errors)
-        shiny_showNotification(rv, e$message)
-      else
-        shiny_showNotification(rv, 'Something is wrong! Would you like to check the dataset? ')
-      # base::setwd("../../")
-    })
-    waiter$hide()
-    show_slider('Mixed Analysis')
+        if (rv$Show_Errors)
+          shiny_showNotification(rv, e$message)
+        else
+          shiny_showNotification(rv, 'Something is wrong! Would you like to check the dataset? ')
+        # base::setwd("../../")
+      })
+      waiter$hide()
+      show_slider('Mixed Analysis')
+    }
   })
 
   output$help_fix <- shiny::renderUI({
@@ -1529,7 +1531,7 @@ app_server <- function(input, output, session) {
   shiny::observeEvent(input$run_outlier, {
     flag = T
     if (input$outlier_method == 'B') {
-      if (is.null(input$outlier_rand)) {
+      if (is.null(input$outlier_rand) || length(input$outlier_resp) == 0) {
         flag = F
       }
     }
@@ -1582,8 +1584,8 @@ app_server <- function(input, output, session) {
         # base::setwd("../../")
       })
       waiter$hide()
+      show_slider('Outlier')
     }
-    show_slider('Outlier')
   })
 
   shiny::observeEvent(input$interacted_name, {
