@@ -18,6 +18,7 @@ Mixed_Analysis <- function(input, rv) {
   if (is.null(input$blue_fix)) {
     fix_part = F
   }
+  type = ''
   if (random_part & fix_part)
     type = 'Mix'
   else if (!random_part & fix_part)
@@ -304,5 +305,7 @@ Mixed_Analysis <- function(input, rv) {
     }
   }
 
+  else
+    shiny_showNotification(rv, 'Error in inputs')
   set_wd('Mixed Analysis', rv, input$save_results)
 }
