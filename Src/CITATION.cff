@@ -1,0 +1,120 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: AllInOne
+message: Make Your Couch a Data Pre-Processing Center
+type: software
+authors:
+  - given-names: Mohsen
+    family-names: Yoosefzadeh Najafabadi
+    email: myoosefz@uoguelph.ca
+    affiliation: Department of Plant Agriculture, University of Guelph, Guelph, ON N1G 2W1, Canada
+    orcid: 'https://orcid.org/0000-0003-3631-4493'
+  - orcid: 'https://orcid.org/0000-0003-2087-4306'
+    email: Alihdr@stu.usc.ac.ir
+    family-names: Heidari
+    given-names: Ali
+  - given-names: Istvan
+    family-names: Rajcan
+    email: Irajcan@uoguelph.ca
+    orcid: 'https://orcid.org/0000-0001-5156-2482'
+    affiliation: Department of Plant Agriculture, University of Guelph, Guelph, ON N1G 2W1, Canada
+identifiers:
+  - type: url
+    value: 'https://github.com/MohsenYN/AllInOne'
+repository-code: 'https://github.com/MohsenYN/AllInOne'
+url: 'https://allinone.shinyapps.io/allinone/'
+abstract: >-
+  Plant breeding is a great mixture of art and science that
+  has been around for centuries and plays an important role
+  in solving many of the world’s agricultural problems. The
+  ultimate goal for most plant breeding programs is to
+  develop new varieties that are better adapted for certain
+  environments, more resistant to biotic/abiotic stresses,
+  and/or have increased yields. The process usually starts
+  with selecting and crossing two varieties as parental
+  lines with specific features to create a population with a
+  high recombination rate. Afterward, the created population
+  is evaluated for several generations to select the
+  superior varieties based on the plant breeding goal. The
+  first evaluation of the breeding population mainly relies
+  on the phenotypic data derived from different plant
+  varieties growing in multi-locations for several years.
+  The collected phenotypic data can be further used in
+  combination with the environment and omics data to
+  increase the accuracy of the breeding decisions.
+  Therefore, the accuracy, quality, and nature of phenotypic
+  data are the three most important factors in capturing
+  true signals and avoiding false interpretations. In
+  addition, the proper selection of statistical analysis
+  methods is of high paramount in making the right decision
+  to select superior genotypes based on a trait of
+  interest. 
+
+  The accuracy of phenotypic data highly depends on how
+  plant breeders collect data. Conventional data collection
+  methods can bring more noise to the phenotypic data than
+  high throughput methods. In addition, the contribution of
+  more data collectors in measuring phenotypic data may
+  decrease the level of accuracy. Moreover, the existence
+  and abundance of genotypes that exhibit a particular
+  phenotypic characteristic is an important determinant of
+  the extent to which analysis methods can be used to select
+  superior genotypes. Therefore, as plant breeders have been
+  dealing with a large number of genotypes in different
+  locations over several years, it is necessary to
+  pre-process the phenotypic datasets before selecting any
+  methods or making any decision. Pre-processing is one of
+  the important procedures for increasing the quality and
+  accuracy of the field phenotypic data, which is usually
+  done in several steps, such as 1) detecting missing
+  patterns in the dataset, 2) imputing missing data using
+  different statistical methods, 3) data visualization in
+  order to check data patterns and distribution, 4)
+  detecting and refining outliers, 5) estimating
+  correlations between dependant variables and also with and
+  within independent variables, 6) normalizing data based on
+  the optimum normalization methods for a given dataset, 6)
+  estimating heritability and conducting spatial analysis,
+  and finally, 7) calculating best linear unbiased
+  prediction (BLUP) or/and best linear unbiased estimator
+  (BLUE) based on the goal of the plant breeding program. 
+
+  Several packages in different languages (mainly in R) have
+  been created to handle different pre-processing steps,
+  such as 1) MICE to deal with missing data, 2)
+  Bestormalizer to normalize the datasets using different
+  methods, 3) lme4 and ASReml R to handle variance analysis
+  using different experimental designs, 4) ggplot for data
+  visualization, etc. However, none of them are able to
+  handle at least most of the pre-processing steps in plant
+  breeding phenotypic datasets. In addition, they all
+  require medium to advanced coding knowledge to run and
+  adjust the functions based on the breeding preference.
+  Furthermore, more sophisticated packages such as ASReml R
+  are not free and require an annual renewal fee. Moreover,
+  none of them provided a dynamical graphical interference
+  for creating plots, detecting and refining outliers in a
+  live mode, and using different datasets without directly
+  importing from a file. 
+
+  Here, we introduce the AllInOne package as an open-Source,
+  breeder-friendly, analytical R package for pre-processing
+  phenotypic data. The basis of AllInOne is to utilize
+  different R packages and develop the pipeline for
+  pre-processing the phenotypic datasets in an accurate,
+  easy, and timely manner without any coding skills
+  required. In addition, several new features and abilities
+  were added in AllInOne that can complement previously
+  developed packages in this area.
+keywords:
+  - Pre-processing
+  - plant breeding
+  - data collection
+  - curation
+  - R shiny package
+  - agriculture
+license: MIT
+version: 1.8
+date-released: '2023-1-18'
