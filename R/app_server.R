@@ -919,13 +919,25 @@ app_server <- function(input, output, session) {
             )
           }
         }
+        output$partial_advanced_ui <- renderUI({
+              if (!is.null(input$partial_advanced) && input$partial_advanced) {
+                shiny::radioButtons(
+                inputId = 'indep_cor_2',
+                label = 'Select second independent variable',
+                choices = indep_cols)
+              }
+            })
         output$cor_intera_indep <- shiny::renderUI({
-          if (input$cor_opt == 'Partial Pearson correlation 1D/I') {
-            shiny::radioButtons(
+          if (input$cor_opt == 'Pearson correlation 1D/I') {
+            shiny::tagList(
+              shiny::radioButtons(
               inputId = 'indep_cor',
               label = 'Select one independent variable',
-              choices = indep_cols)
-          }else if (input$cor_opt == 'Partial Pearson correlation 2D/I') {
+              choices = indep_cols),
+              shiny::checkboxInput(inputId = 'partial_advanced', label = 'Advanced Correlation'),
+              shiny::uiOutput('partial_advanced_ui')
+            )
+          }else if (input$cor_opt == 'Pearson correlation 2D/I') {
             shiny::checkboxGroupInput(
               inputId = 'indep_cor',
               label = 'Select independent variable(s)',
@@ -933,13 +945,13 @@ app_server <- function(input, output, session) {
           }
         })
         output$cor_intera_dep <- shiny::renderUI({
-          if (input$cor_opt == 'Partial Pearson correlation 1D/I') {
+          if (input$cor_opt == 'Pearson correlation 1D/I') {
             shiny::radioButtons(
               inputId = 'dep_cor',
               label = 'Select one dependent/response variable',
               choices = dep_cols)
           }
-          else if (input$cor_opt == 'Partial Pearson correlation 2D/I') {
+          else if (input$cor_opt == 'Pearson correlation 2D/I') {
             shiny::checkboxGroupInput(
               inputId = 'dep_cor',
               label = 'Select two dependent/response variables',
@@ -952,8 +964,8 @@ app_server <- function(input, output, session) {
             inputId = 'cor_opt',
             label = 'Correlation methods',
             choices = base::c('Pearson correlation',
-                              'Partial Pearson correlation 1D/I',
-                              'Partial Pearson correlation 2D/I')),
+                              'Pearson correlation 1D/I',
+                              'Pearson correlation 2D/I')),
           shiny::uiOutput('cor_intera_indep'),
           shiny::uiOutput('cor_intera_dep'),
           footer = shiny::tagList(shiny::actionButton('indep_cor_btn', 'OK'),
@@ -1427,8 +1439,8 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$indep_cor_btn, {
-    if ((input$cor_opt == 'Partial Pearson correlation 2D/I' && base::length(input$indep_cor) == 0) |
-      (input$cor_opt == 'Partial Pearson correlation 2D/I' && base::length(input$dep_cor) != 2)) {
+    if ((input$cor_opt == 'Pearson correlation 2D/I' && base::length(input$indep_cor) == 0) |
+      (input$cor_opt == 'Pearson correlation 2D/I' && base::length(input$dep_cor) != 2)) {
       shiny_showNotification(rv, 'Please selecet two dependent variables and at least one independent variable')
     }else {
       if (base::dir.exists(app_sys("app/Results/Correlation")))
@@ -1913,7 +1925,7 @@ app_server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$active_opt_db, {
-    base::options(shiny.maxRequestSize = 50 * 1024^2)
+    base::options(shiny.maxRequestSize = 500 * 1024^2)
     shiny::showModal(shiny::modalDialog(
       shiny::fileInput('file', 'Upload Dataset File :'),
       shiny::HTML('
