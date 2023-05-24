@@ -7,9 +7,11 @@
 
 # [<img src="inst/app/www/AllInOneRM.gif" width="400px" align="center"/>](https://github.com/MohsenYN)
 
-The **AllInOne** is an open-Source, R-Shiny user interface package designed in the [Plant Agriculture](https://www.plant.uoguelph.ca/) department at the [University of Guelph](https://www.uoguelph.ca) to provide a broad range of pre-processing analysis features for phenotypic datasets. This app uses different R packages, such as mice, VIM, lme4, bestNormalize, etc., to enable plant scientists to use all the mentioned packages simultaneously in an interactive environment. Furthermore, it allows plant scientists to edit, organize, subset, and sort datasets in a live mode.
+### **IMPORTANT NOTE: We have recently submitted the full paper of AllInOne - Pre-Processing, and have consequently added a 'Src' folder to the associated files. This may cause issues when you download and run AllInOne - Pre-Processing locally, so please ensure you remove the 'Src' folder before doing so. Thank you for your cooperation!  **
 
-**If you enjoy working with AllInOne, give us a star on GitHub and Cite the package, please :)**
+The **AllInOne - Pre-Processing** is an open-Source, R-Shiny user interface package designed in the [Plant Agriculture](https://www.plant.uoguelph.ca/) department at the [University of Guelph](https://www.uoguelph.ca) to provide a broad range of pre-processing analysis features for phenotypic datasets. This app uses different R packages, such as mice, VIM, lme4, bestNormalize, etc., to enable plant scientists to use all the mentioned packages simultaneously in an interactive environment. Furthermore, it allows plant scientists to edit, organize, subset, and sort datasets in a live mode.
+
+**If you enjoy working with AllInOne - Pre-Processing, give us a star on GitHub and Cite the package, please :)**
 
 [RIS file avialable here](https://github.com/MohsenYN/AllInOne/blob/main/CiteAllInOne.ris)
 
@@ -49,15 +51,15 @@ install.packages(c("remotes","golem","shinydashboard","shinydisconnect","shinyjs
 
 ### **Install using source**
 
-You can install the AllInOne using its source on your system like so:
+You can install the AllInOne - Pre-Processing using its source on your system like so:
 
 ``` r
-remotes::install_local('path/to/AllInOne/', force = TRUE)
+remotes::install_local('path/to/AllInOne-Pre-Processing/', force = TRUE)
 ```
 
 ### **Install from GitHub**
 
-You can install the AllInOne from GitHub like so:
+You can install the AllInOne - Pre-Processing from GitHub like so:
 
 ``` r
 remotes::install_github('MohsenYN/AllInOne')
