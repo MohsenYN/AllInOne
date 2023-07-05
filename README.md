@@ -7,7 +7,6 @@
 
 # [<img src="inst/app/www/AllInOneRM.gif" width="400px" align="center"/>](https://github.com/MohsenYN)
 
-### **IMPORTANT NOTE: We have recently submitted the full paper of AllInOne - Pre-Processing, and have consequently added a 'Src' folder to the associated files. This may cause issues when you download and run AllInOne - Pre-Processing locally, so please ensure you remove the 'Src' folder before doing so. Thank you for your cooperation!  **
 
 The **AllInOne - Pre-Processing** is an open-Source, R-Shiny user interface package designed in the [Plant Agriculture](https://www.plant.uoguelph.ca/) department at the [University of Guelph](https://www.uoguelph.ca) to provide a broad range of pre-processing analysis features for phenotypic datasets. This app uses different R packages, such as mice, VIM, lme4, bestNormalize, etc., to enable plant scientists to use all the mentioned packages simultaneously in an interactive environment. Furthermore, it allows plant scientists to edit, organize, subset, and sort datasets in a live mode.
 
