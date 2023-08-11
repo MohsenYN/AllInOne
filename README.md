@@ -12,7 +12,7 @@ The **AllInOne - Pre-Processing** is an open-Source, R-Shiny user interface pack
 
 **If you enjoy working with AllInOne - Pre-Processing, give us a star on GitHub and Cite the package, please :)**
 
-** Here is the paper of [AllInOne - Pre-Processing](https://www.sciencedirect.com/science/article/pii/S2352711023001607)
+Here is the [AllInOne - Pre-Processing](https://www.sciencedirect.com/science/article/pii/S2352711023001607) research paper.
 
 ## **Demo**
 
