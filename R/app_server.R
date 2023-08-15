@@ -2259,8 +2259,8 @@ app_server <- function(input, output, session) {
         editable = TRUE,
         selection = base::list(
           mode = "multiple",
-          selected = base::list(rows = rv$outliers_row, cols = base::as.numeric(k)),
-          target = 'row+column'
+          selected = base::list(rows = rv$outliers_row, cols = base::as.numeric(k))
+          #,target = 'row+column'
         ),
         filter = base::list(position = 'top', plain = TRUE),
         options = base::list(

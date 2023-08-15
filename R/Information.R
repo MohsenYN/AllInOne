@@ -9,7 +9,8 @@ information_ui <- shiny::fluidRow(
   shiny::tags$body(
     shiny::h2(shiny::strong('Welcome to the AllInOne')),
     shiny::h3(shiny::strong('An Open-Source Friendly Analytical Package for Pre-processing Phenotypic Data')),
-    shiny::h4(shiny::strong('Version 1.9.0')),
+    shiny::h4(shiny::strong('Version 1.9.5')),
+    shiny::h4(tags$a(shiny::strong('Direct access to the AllInOne Pre-processing research paper', style = "font-size: 16px"), href = 'https://www.sciencedirect.com/science/article/pii/S2352711023001607')),
     shiny::hr(),
     shiny::tags$blockquote(
       shiny::img(src = 'www/AllInOne.gif', align = "right", width = "40%", height = "40%")
@@ -131,12 +132,6 @@ information_ui <- shiny::fluidRow(
     shiny::tags$p('Soybean Breeding & Computational Biology - Department of Plant Agriculture', style = "font-size: 14px"),
     shiny::tags$p('University of Guelph', style = "font-size: 14px"),
     shiny::tags$a('myoosefz@uoguelph.ca', href = 'mailto:myoosefz@uoguelph.ca', style = "font-size: 14px"),
-    shiny::tags$p(' ', style = "font-size: 14px"),
-    shiny::tags$p(shiny::strong('Alternative Contact:', style = "font-size: 20px")),
-    shiny::tags$a(shiny::strong('Ali Heidari', style = "font-size: 16px"), href = 'https://www.Alihdr.ir'),
-    shiny::tags$p('Master of Science in Bioinformatics', style = "font-size: 14px"),
-    shiny::tags$p('University of Science and Culture', style = "font-size: 14px"),
-    shiny::tags$a('alihdr@stu.usc.ac.ir', href = 'mailto:alihdr@stu.usc.ac.ir', style = "font-size: 14px"),
     shiny::tags$p(' ', style = "font-size: 14px"),
     shiny::tags$a(shiny::strong('Istvan Rajcan', style = "font-size: 16px"), href = 'https://www.plant.uoguelph.ca/irajcan'),
     shiny::tags$p('Professor & Graduate Program Coordinator', style = "font-size: 14px"),

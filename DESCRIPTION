@@ -1,7 +1,7 @@
 Package: AllInOne
 Type: package
 Title: An Open-Source, Friendly, Analytical Package, for Pre-processing Phenotypic Data.
-Version: 1.9.0
+Version: 1.9.5
 Authors@R: c(person(given = "Mohsen",
                family = "Yoosefzadeh Najafabadi",
                role = c("aut","cre"),
