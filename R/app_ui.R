@@ -345,7 +345,7 @@ body <- shinydashboard::dashboardBody(
     )
 
   ),
-  shiny::a(href = "https://www.uoguelph.ca/oac/", shiny::img(src = "www/OACL.png", class = "MYNGuelph"))
+  shiny::a(href = "https://github.com/MohsenYN/AllInOne", shiny::img(src = "www/LogoReadme.png", class = "MYNGuelph"))
 )
 
 Header <- shinydashboard::dashboardHeader(
